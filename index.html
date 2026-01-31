@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home for Deranged Scientists - Software Development & Consulting</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: #f5f3eb;
+            color: #2d4a3e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo {
+            max-width: 350px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 2rem;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: #4a6a5a;
+            margin-bottom: 3rem;
+            font-style: italic;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(45, 74, 62, 0.1);
+        }
+
+        .section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #2d4a3e;
+            border-bottom: 2px solid #7fb069;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .projects-list {
+            list-style: none;
+            text-align: left;
+        }
+
+        .projects-list li {
+            padding: 1rem;
+            border-left: 4px solid #7fb069;
+            margin-bottom: 1rem;
+            background: #f9f9f7;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .projects-list a {
+            color: #2d4a3e;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .projects-list a:hover {
+            color: #7fb069;
+        }
+
+        .project-description {
+            font-size: 0.95rem;
+            color: #5a7a6a;
+            margin-top: 0.5rem;
+        }
+
+        .contact {
+            margin-top: 1rem;
+        }
+
+        .contact a {
+            color: #2d4a3e;
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
+        .contact a:hover {
+            color: #7fb069;
+        }
+
+        footer {
+            margin-top: auto;
+            padding-top: 2rem;
+            color: #6a8a7a;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+
+            .logo {
+                max-width: 280px;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="images/HDS Logo.png" alt="Home for Deranged Scientists Logo" class="logo">
+
+        <section class="section">
+            <h2>Projects</h2>
+            <ul class="projects-list">
+                <li>
+                    <a href="https://how-soon.app" target="_blank" rel="noopener">How Soon</a>
+                    <p class="project-description">Track and visualize time until your important events</p>
+                </li>
+            </ul>
+        </section>
+
+        <section class="section contact">
+            <h2>Contact</h2>
+            <p>Got a wild idea? Let's talk.</p>
+            <p style="margin-top: 1rem;">
+                <a href="mailto:scientists@homeforderangedscientists.net">scientists@homeforderangedscientists.net</a>
+            </p>
+        </section>
+    </div>
+
+    <footer>
+        &copy; 2026 Home for Deranged Scientists
+    </footer>
+</body>
+</html>
