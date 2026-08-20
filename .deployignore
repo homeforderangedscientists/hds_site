@@ -30,3 +30,16 @@ cgi-bin/
 .well-known/
 error_log
 .htpasswd
+
+# Verified present in the live DreamHost docroot
+# (/home/sml_hds/homeforderangedscientists.com) on 2026-08-20 and NOT in this
+# repo. Without these, the first deploy would have silently deleted all of
+# them -- and the count was under the 10-file blast-radius threshold, so the
+# guard would NOT have fired.
+#   .dh-diag      DreamHost-managed symlink -> /dh/web/diag
+#   blog/         separate directory, not part of this site's source
+#   favicon.*     served at the docroot, never added to the repo
+.dh-diag
+blog/
+favicon.gif
+favicon.ico

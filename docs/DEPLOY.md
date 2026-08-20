@@ -154,6 +154,44 @@ Both the `index.html` check and the marker check are skipped when the run is
 dispatched with `first_deploy=true` (see "First deploy" above) — there is
 nothing to verify against on a truly empty docroot.
 
+## This host: DreamHost shared
+
+Verified 2026-08-20 against `iad1-shared-e1-06.dreamhost.com`:
+
+- **Docroot** is `/home/sml_hds/homeforderangedscientists.com` — DreamHost names
+  docroots after the domain, not `public_html`. Note that `~/hds_site` is a
+  separate git working copy and is **not** web-served; do not point `DEPLOY_PATH`
+  at it.
+- **`SITE_URL` is `https://www.homeforderangedscientists.com`** — the apex
+  redirects to `www`, and the smoke test's `curl` does not follow redirects, so
+  the non-`www` form would fail the check against a perfectly healthy site.
+- **Server-side files not in this repo** live in that docroot (`blog/`,
+  `favicon.gif`, `favicon.ico`, `.dh-diag`). They are protected in
+  `.deployignore`. Their count was under the 10-file blast-radius threshold, so
+  the guard would **not** have caught their deletion — the exclusions are what
+  protects them, not the guard.
+
+### If DreamHost migrates your account
+
+DreamHost occasionally moves shared accounts between servers. If that happens,
+both the hostname and the host key change, and every deploy will fail at
+"Configure SSH" with a host-key mismatch. **That is the pin working correctly,
+not a bug.** To recover, confirm the new server name in the DreamHost panel, then:
+
+```bash
+ssh-keyscan -p 22 <NEW-HOST> | grep -v '^#'
+gh secret set SSH_KNOWN_HOSTS   # paste the new output
+gh secret set SSH_HOST          # the new hostname
+```
+
+### Unrelated observation
+
+`https://homeforderangedscientists.net` currently serves DreamHost's default
+self-signed `sni.dreamhost.com` certificate, so browsers show a security warning
+there. That domain is not what this pipeline deploys, but the site's contact
+address is `@homeforderangedscientists.net`, so it is worth fixing separately in
+the DreamHost panel (Secure Hosting → add a Let's Encrypt certificate).
+
 ## If you change the site's title
 
 The preflight check greps the remote `index.html` for the literal string
