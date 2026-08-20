@@ -70,11 +70,14 @@ Runs on every push and PR. Touches no secrets, so it is safe to run on untrusted
 2. **HTML validity** — `html-validate` against `index.html`, config committed as
    `.htmlvalidate.json` so local and CI agree.
 3. **Asset/link check** — parse every `src`/`href` in `index.html`; for
-   repo-relative targets, assert the file exists on disk. **Must URL-decode before
-   the filesystem check** — the logo is `images/HDS Logo.png`, with a literal
-   space, so the HTML reference is percent-encoded and a naive checker reports a
-   false failure. External `http(s)` links are reported but never fail the build
-   (network flake is not a code defect).
+   repo-relative targets, assert the file exists on disk. **The checker must
+   percent-decode before the filesystem check, and must tolerate an already-decoded
+   literal space.** Verified against the current source: `index.html` references
+   `src="images/HDS Logo.png"` with a *literal* space, not `%20`. Both spellings
+   are valid HTML and both must resolve, so the checker decodes and then falls back
+   to the raw string. `mailto:` and other non-http schemes are skipped entirely.
+   External `http(s)` links are reported but never fail the build (network flake is
+   not a code defect).
 4. **`.htaccess` guard** — assert the file exists, is non-empty, and contains
    `RewriteEngine On`. Losing it silently is a plausible outcome of an editing
    mistake, and nothing else in the pipeline would notice.
