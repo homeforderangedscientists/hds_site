@@ -13,18 +13,13 @@ HTML="${5:-index.html}"
 SHORT="${COMMIT:0:7}"
 NOW="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
-cat > build-info.json <<JSON
-{
-  "commit": "$COMMIT",
-  "ref": "$REF",
-  "deployed_at": "$NOW",
-  "deployed_by": "$ACTOR",
-  "run_id": "$RUN_ID"
-}
-JSON
+jq -n --arg commit "$COMMIT" --arg ref "$REF" --arg deployed_at "$NOW" \
+      --arg deployed_by "$ACTOR" --arg run_id "$RUN_ID" \
+      '{commit: $commit, ref: $ref, deployed_at: $deployed_at, deployed_by: $deployed_by, run_id: $run_id}' \
+      > build-info.json
 
-# Validate the heredoc actually produced JSON. A shell-quoting bug here would
-# otherwise ship a corrupt file and break verification in a confusing way.
+# Validate the generated file actually produced JSON. A quoting bug here
+# would otherwise ship a corrupt file and break verification in a confusing way.
 python3 -m json.tool build-info.json > /dev/null || {
     echo "FAIL: build-info.json is not valid JSON" >&2
     exit 1
@@ -37,12 +32,16 @@ fi
 
 STAMP="<!-- build: $SHORT $NOW -->"
 python3 - "$HTML" "$STAMP" <<'PY'
+import re
 import sys
 path, stamp = sys.argv[1], sys.argv[2]
 with open(path, encoding="utf-8") as fh:
     html = fh.read()
 if "</head>" not in html:
     sys.exit("FAIL: no </head> in %s" % path)
+# Drop any pre-existing build stamp comment(s) so re-running this script
+# against the same file replaces the stamp instead of accumulating copies.
+html = re.sub(r"[ \t]*<!-- build: \S+ \S+ -->\n?", "", html)
 with open(path, "w", encoding="utf-8") as fh:
     fh.write(html.replace("</head>", "    %s\n</head>" % stamp, 1))
 PY
