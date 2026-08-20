@@ -50,3 +50,143 @@ jobs:
         run: |
           set -euo pipefail
           ./scripts/check-htaccess.sh .htaccess
+
+  deploy:
+    name: Deploy to Apache
+    needs: checks
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ vars.SITE_URL }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Generate build stamp
+        run: |
+          set -euo pipefail
+          ./scripts/make-build-info.sh \
+            "${{ github.sha }}" \
+            "${{ github.ref }}" \
+            "${{ github.actor }}" \
+            "${{ github.run_id }}"
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          test -s ~/.ssh/known_hosts || { echo "SSH_KNOWN_HOSTS secret is empty" >&2; exit 1; }
+
+      - name: Preflight remote docroot
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          FIRST_DEPLOY: ${{ inputs.first_deploy }}
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" \
+            "$SSH_USER@$SSH_HOST" \
+            "DEPLOY_PATH='$DEPLOY_PATH' FIRST_DEPLOY='$FIRST_DEPLOY' bash -s" <<'REMOTE'
+          set -euo pipefail
+          if [ ! -d "$DEPLOY_PATH" ]; then
+              echo "FAIL: DEPLOY_PATH '$DEPLOY_PATH' is not a directory" >&2
+              exit 1
+          fi
+          if [ "$FIRST_DEPLOY" != "true" ] && [ ! -f "$DEPLOY_PATH/index.html" ]; then
+              echo "FAIL: '$DEPLOY_PATH' has no index.html - wrong path?" >&2
+              echo "      Re-run with first_deploy=true if this is genuinely the first deploy." >&2
+              exit 1
+          fi
+          echo "OK: docroot $DEPLOY_PATH verified"
+          REMOTE
+
+      - name: Snapshot current docroot
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          SHORT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" \
+            "$SSH_USER@$SSH_HOST" \
+            "DEPLOY_PATH='$DEPLOY_PATH' SHORT_SHA='${SHORT_SHA:0:7}' bash -s" <<'REMOTE'
+          set -euo pipefail
+          BACKUP_DIR="$(dirname "$DEPLOY_PATH")/.hds-deploy-backups"
+          mkdir -p "$BACKUP_DIR"
+          STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
+          ARCHIVE="$BACKUP_DIR/${STAMP}-${SHORT_SHA}.tgz"
+          tar czf "$ARCHIVE" -C "$DEPLOY_PATH" .
+          echo "OK: snapshot $ARCHIVE ($(du -h "$ARCHIVE" | cut -f1))"
+          # Keep only the 3 most recent snapshots.
+          ls -1t "$BACKUP_DIR"/*.tgz 2>/dev/null | tail -n +4 | while read -r old; do
+              echo "    pruning $old"
+              rm -f "$old"
+          done
+          REMOTE
+
+      - name: Dry-run rsync and check blast radius
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          FORCE_DELETE: ${{ inputs.force_delete }}
+        run: |
+          set -euo pipefail
+          rsync -azn --delete --delay-updates --itemize-changes \
+            --exclude-from=.deployignore \
+            -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT" \
+            ./ "$SSH_USER@$SSH_HOST:$DEPLOY_PATH/" | tee /tmp/dryrun.txt
+
+          echo "--- Planned deletions ---"
+          grep '^\*deleting' /tmp/dryrun.txt || echo "(none)"
+          DELETIONS="$(grep -c '^\*deleting' /tmp/dryrun.txt || true)"
+          echo "Deletion count: $DELETIONS"
+
+          if [ "$DELETIONS" -gt 10 ] && [ "$FORCE_DELETE" != "true" ]; then
+              echo "FAIL: $DELETIONS deletions exceeds the threshold of 10." >&2
+              echo "      This usually means DEPLOY_PATH is wrong." >&2
+              echo "      If the deletions above are intended, re-run via" >&2
+              echo "      workflow_dispatch with force_delete=true." >&2
+              exit 1
+          fi
+
+      - name: Deploy
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          set -euo pipefail
+          rsync -az --delete --delay-updates --itemize-changes \
+            --exclude-from=.deployignore \
+            -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT" \
+            ./ "$SSH_USER@$SSH_HOST:$DEPLOY_PATH/"
+
+      - name: Smoke test
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: |
+          set -euo pipefail
+          ./scripts/smoke-test.sh \
+            "$SITE_URL" \
+            "${{ github.sha }}" \
+            "Home for Deranged Scientists"
+
+      - name: Clean up SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
