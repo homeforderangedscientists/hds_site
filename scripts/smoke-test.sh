@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# Verify the deploy landed, from outside, against the public URL.
+#
+# Checks 1 and 2 pass just as happily against a stale cached copy of last
+# month's site. Check 3 - comparing the served commit to the one we just
+# deployed - is the only one that distinguishes "a website exists" from
+# "my deploy landed". Do not drop it.
+set -euo pipefail
+
+BASE_URL="${1:?usage: smoke-test.sh <base-url> <expected-sha> <expected-string>}"
+EXPECTED_SHA="${2:?missing expected sha}"
+EXPECTED_STRING="${3:?missing expected string}"
+
+BASE_URL="${BASE_URL%/}"
+ATTEMPTS=6
+SLEEP=5
+
+echo "==> Smoke testing $BASE_URL (expecting commit $EXPECTED_SHA)"
+
+for attempt in $(seq 1 "$ATTEMPTS"); do
+    echo "--- attempt $attempt/$ATTEMPTS"
+    ok=1
+
+    # 1. Homepage responds 200.
+    code="$(curl -sS -o /tmp/smoke-body.html -w '%{http_code}' \
+             -H 'Cache-Control: no-cache' "$BASE_URL/" || echo 000)"
+    if [ "$code" != "200" ]; then
+        echo "    homepage: HTTP $code (want 200)"; ok=0
+    else
+        echo "    homepage: HTTP 200"
+    fi
+
+    # 2. Body contains the expected marker string.
+    if [ "$ok" = "1" ]; then
+        if grep -qF "$EXPECTED_STRING" /tmp/smoke-body.html; then
+            echo "    content:  found '$EXPECTED_STRING'"
+        else
+            echo "    content:  MISSING '$EXPECTED_STRING'"; ok=0
+        fi
+    fi
+
+    # 3. The served build stamp matches the commit we just deployed.
+    if [ "$ok" = "1" ]; then
+        served="$(curl -sS -H 'Cache-Control: no-cache' \
+                   "$BASE_URL/build-info.json?_cb=$EXPECTED_SHA" \
+                   | jq -r '.commit // "unparseable"' 2>/dev/null || echo unreachable)"
+        if [ "$served" = "$EXPECTED_SHA" ]; then
+            echo "    commit:   $served (matches)"
+            echo "==> Smoke test PASSED"
+            exit 0
+        fi
+        echo "    commit:   served '$served', expected '$EXPECTED_SHA'"
+    fi
+
+    if [ "$attempt" -lt "$ATTEMPTS" ]; then
+        echo "    retrying in ${SLEEP}s..."
+        sleep "$SLEEP"
+    fi
+done
+
+echo "==> Smoke test FAILED after $ATTEMPTS attempts" >&2
+echo "    The rsync may have succeeded while the site did not update." >&2
+echo "    Check the docroot path, then consider restoring a snapshot (docs/DEPLOY.md)." >&2
+exit 1
