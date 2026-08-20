@@ -524,8 +524,14 @@ EOF
 
 - [ ] **Step 2: Confirm .htaccess is NOT excluded**
 
-Run: `grep -c 'htaccess' .deployignore`
-Expected: `0`. If this is ever non-zero, the deploy will silently strip the site's rewrite rules.
+Run: `grep -vE '^\s*(#|$)' .deployignore | grep -c 'htaccess'`
+Expected: `0`.
+
+The comment lines must be stripped BEFORE grepping. The file's header comment
+deliberately names `.htaccess` — that warning is the whole point of the comment,
+and an assertion over the raw file would force the warning to be reworded into
+uselessness. Only *pattern* lines matter here. If this is ever non-zero, the
+deploy will silently strip the site's rewrite rules.
 
 - [ ] **Step 3: Confirm the exclude list behaves under rsync**
 
@@ -552,7 +558,13 @@ cat > .htmlvalidate.json <<'EOF'
 EOF
 ```
 
-Rationale: `no-inline-style` is off because this site deliberately embeds its CSS in a `<style>` block, and `require-sri` does not apply to a page with no external scripts. Turning these off is a deliberate choice recorded here, not an accident.
+Rationale, corrected after review: all three rules are **already off** under
+`html-validate:recommended`, so these lines are explicit no-ops, not loosenings —
+they are kept to pin intent if the preset's defaults ever change. Note that
+`no-inline-style` targets `style=""` **attributes**, not `<style>` blocks; the
+real reason it must stay off is that `index.html` contains an inline
+`<p style="margin-top: 1rem;">`. `require-sri` does not apply to a page with no
+external scripts.
 
 - [ ] **Step 5: Run html-validate locally and fix any real findings**
 

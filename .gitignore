@@ -416,3 +416,9 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# SDD scratch
+.superpowers/
+
+# Generated at deploy time, never committed
+build-info.json
