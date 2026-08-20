@@ -1,0 +1,52 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      force_delete:
+        description: "Allow rsync to delete more than 10 files"
+        type: boolean
+        default: false
+      first_deploy:
+        description: "Skip the 'docroot already has index.html' preflight check"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    name: Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Lint workflows
+        run: |
+          set -euo pipefail
+          docker run --rm -v "$PWD:/repo" -w /repo \
+            rhysd/actionlint:1.7.7 -color
+
+      - name: Validate HTML
+        run: |
+          set -euo pipefail
+          npx --yes html-validate@9 index.html
+
+      - name: Check asset references
+        run: |
+          set -euo pipefail
+          python3 scripts/check-assets.py index.html
+
+      - name: Guard .htaccess
+        run: |
+          set -euo pipefail
+          ./scripts/check-htaccess.sh .htaccess
