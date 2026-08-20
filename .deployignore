@@ -14,3 +14,19 @@
 docs/
 scripts/
 CLAUDE.md
+
+# --- Server-managed paths ---
+#
+# Everything below protects files that live on the SERVER and are not part of
+# this repo at all. rsync --delete only deletes receiver-side files that
+# match a source-side path it is otherwise mirroring; a path excluded here is
+# never considered for deletion, even though the repo has no corresponding
+# file. Without these entries, a shared host's cgi-bin, its Let's Encrypt
+# ACME challenge directory, log files, and htpasswd files would be wiped out
+# by the next deploy. If your host manages other paths in the docroot
+# (stats directories, mail webmail links, host-specific config), add them
+# here too.
+cgi-bin/
+.well-known/
+error_log
+.htpasswd

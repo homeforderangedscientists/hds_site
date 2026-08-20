@@ -48,11 +48,18 @@ jobs:
           set -euo pipefail
           ./scripts/check-htaccess.sh .htaccess
 
+      - name: Run script tests
+        run: |
+          set -euo pipefail
+          ./scripts/test-check-assets.sh
+          ./scripts/test-check-htaccess.sh
+
   deploy:
     name: Deploy to Apache
     needs: checks
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     concurrency:
       group: deploy-production
       cancel-in-progress: false
@@ -76,7 +83,8 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_PORT: ${{ vars.SSH_PORT }}
+          SITE_URL: ${{ vars.SITE_URL }}
         run: |
           set -euo pipefail
           # rsync tokenizes the -e transport string on whitespace itself, so a
@@ -84,6 +92,12 @@ jobs:
           # Validate once here, fail closed, and every later use is safe.
           if ! [[ "$SSH_PORT" =~ ^[0-9]+$ ]]; then
               echo "FAIL: SSH_PORT must be numeric (got a non-numeric value)" >&2
+              exit 1
+          fi
+          # Fail closed now rather than after rsync has already written to the
+          # live site - smoke-test.sh's own check for this comes too late.
+          if [ -z "$SITE_URL" ]; then
+              echo "FAIL: SITE_URL variable is empty or unset" >&2
               exit 1
           fi
           mkdir -p ~/.ssh
@@ -98,7 +112,7 @@ jobs:
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_PORT: ${{ vars.SSH_PORT }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
           FIRST_DEPLOY: ${{ inputs.first_deploy }}
         run: |
@@ -124,13 +138,13 @@ jobs:
           fi
           echo "OK: docroot $DEPLOY_PATH verified"
           REMOTE
-          } | ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" bash -s
+          } | ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" -o ConnectTimeout=15 -o BatchMode=yes "$SSH_USER@$SSH_HOST" bash -s
 
       - name: Snapshot current docroot
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_PORT: ${{ vars.SSH_PORT }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
           SHORT_SHA: ${{ github.sha }}
         run: |
@@ -152,20 +166,20 @@ jobs:
               rm -f "$old"
           done
           REMOTE
-          } | ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" bash -s
+          } | ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" -o ConnectTimeout=15 -o BatchMode=yes "$SSH_USER@$SSH_HOST" bash -s
 
       - name: Dry-run rsync and check blast radius
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_PORT: ${{ vars.SSH_PORT }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
           FORCE_DELETE: ${{ inputs.force_delete }}
         run: |
           set -euo pipefail
           rsync -azn --delete --delete-delay --delay-updates --itemize-changes \
             --exclude-from=.deployignore \
-            -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT" \
+            -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT -o ConnectTimeout=15 -o BatchMode=yes" \
             ./ "$SSH_USER@$SSH_HOST:$DEPLOY_PATH/" | tee /tmp/dryrun.txt
 
           echo "--- Planned deletions ---"
@@ -190,13 +204,13 @@ jobs:
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_PORT: ${{ vars.SSH_PORT }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
           set -euo pipefail
           rsync -az --delete --delete-delay --delay-updates --itemize-changes \
             --exclude-from=.deployignore \
-            -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT" \
+            -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT -o ConnectTimeout=15 -o BatchMode=yes" \
             ./ "$SSH_USER@$SSH_HOST:$DEPLOY_PATH/"
 
       - name: Smoke test

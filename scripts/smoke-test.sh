@@ -30,7 +30,7 @@ for attempt in $(seq 1 "$ATTEMPTS"); do
 
     # 1. Homepage responds 200.
     code="$(curl -sS -o "$HOME_BODY" -w '%{http_code}' \
-             -H 'Cache-Control: no-cache' "$BASE_URL/" || echo 000)"
+             -H 'Cache-Control: no-cache' "$BASE_URL/" || true)"
     if [ "$code" != "200" ]; then
         echo "    homepage: HTTP $code (want 200)"; ok=0
     else
@@ -50,7 +50,7 @@ for attempt in $(seq 1 "$ATTEMPTS"); do
     if [ "$ok" = "1" ]; then
         info_code="$(curl -sS -o "$BUILD_INFO_BODY" -w '%{http_code}' \
                    -H 'Cache-Control: no-cache' \
-                   "$BASE_URL/build-info.json?_cb=$EXPECTED_SHA" || echo 000)"
+                   "$BASE_URL/build-info.json?_cb=$EXPECTED_SHA" || true)"
         if [ "$info_code" != "200" ]; then
             echo "    commit:   build-info.json HTTP $info_code (want 200)"
         else

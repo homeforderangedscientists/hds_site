@@ -60,7 +60,7 @@ ssh-keygen -lf <(ssh-keyscan -p <PORT> <HOST> 2>/dev/null)
 
 ### 3. Populate GitHub secrets and variables
 
-The workflow reads exactly six secrets and one variable. Names must match
+The workflow reads exactly five secrets and two variables. Names must match
 exactly — these are what `.github/workflows/deploy.yml` references:
 
 ```bash
@@ -68,8 +68,8 @@ gh secret set SSH_PRIVATE_KEY  < ~/.ssh/hds_deploy
 gh secret set SSH_KNOWN_HOSTS  # paste the ssh-keyscan output from step 2
 gh secret set SSH_HOST         # e.g. homeforderangedscientists.net
 gh secret set SSH_USER
-gh secret set SSH_PORT         # bare integer only, e.g. 22 -- see note below
 gh secret set DEPLOY_PATH      # absolute docroot, e.g. /home/<user>/public_html
+gh variable set SSH_PORT       # bare integer only, e.g. 22 -- see note below
 gh variable set SITE_URL       # e.g. https://homeforderangedscientists.net
 ```
 
