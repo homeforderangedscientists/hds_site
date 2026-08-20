@@ -27,8 +27,13 @@ class RefCollector(HTMLParser):
 
 
 def resolve(base_dir, ref):
-    """Return True if a local ref resolves. Tries decoded then raw."""
-    path = ref.lstrip("/")
+    """Return True if a local ref resolves. Tries decoded then raw.
+
+    Query strings and fragments are stripped first: they are not part of the
+    filesystem path (style.css?v=2 and style.css#section both mean style.css).
+    """
+    path = ref.split("#", 1)[0].split("?", 1)[0]
+    path = path.lstrip("/")
     for candidate in (unquote(path), path):
         if os.path.isfile(os.path.join(base_dir, candidate)):
             return True
@@ -48,7 +53,9 @@ def main():
     missing = 0
     for ref in parser.refs:
         scheme = urlparse(ref).scheme.lower()
-        if scheme in SKIP_SCHEMES:
+        if scheme in SKIP_SCHEMES or ref.startswith("//"):
+            # Protocol-relative URLs (//cdn.example.com/lib.js) have no
+            # scheme per urlparse, but they are external, not local.
             print(f"SKIP (external) {ref}")
         elif ref.startswith("#") or not ref.strip():
             print(f"SKIP (anchor)   {ref}")

@@ -28,5 +28,13 @@ check "mailto skipped" 0 \
 check "anchor skipped" 0 '<a href="#top">x</a>'
 check "root-relative resolves" 0 \
   '<link href="/style.css">' 'touch style.css'
+check "query string resolves" 0 \
+  '<link href="style.css?v=2">' 'touch style.css'
+check "fragment resolves" 0 \
+  '<a href="style.css#section">x</a>' 'touch style.css'
+check "protocol-relative skipped" 0 \
+  '<script src="//cdn.example.com/lib.js"></script>'
+check "missing file with query string fails" 1 \
+  '<link href="nope.css?v=2">'
 
 exit "$fail"
