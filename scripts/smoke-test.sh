@@ -15,6 +15,13 @@ BASE_URL="${BASE_URL%/}"
 ATTEMPTS=6
 SLEEP=5
 
+HOME_BODY="$(mktemp)"
+BUILD_INFO_BODY="$(mktemp)"
+cleanup() {
+    rm -f "$HOME_BODY" "$BUILD_INFO_BODY"
+}
+trap cleanup EXIT
+
 echo "==> Smoke testing $BASE_URL (expecting commit $EXPECTED_SHA)"
 
 for attempt in $(seq 1 "$ATTEMPTS"); do
@@ -22,7 +29,7 @@ for attempt in $(seq 1 "$ATTEMPTS"); do
     ok=1
 
     # 1. Homepage responds 200.
-    code="$(curl -sS -o /tmp/smoke-body.html -w '%{http_code}' \
+    code="$(curl -sS -o "$HOME_BODY" -w '%{http_code}' \
              -H 'Cache-Control: no-cache' "$BASE_URL/" || echo 000)"
     if [ "$code" != "200" ]; then
         echo "    homepage: HTTP $code (want 200)"; ok=0
@@ -32,7 +39,7 @@ for attempt in $(seq 1 "$ATTEMPTS"); do
 
     # 2. Body contains the expected marker string.
     if [ "$ok" = "1" ]; then
-        if grep -qF "$EXPECTED_STRING" /tmp/smoke-body.html; then
+        if grep -qF "$EXPECTED_STRING" "$HOME_BODY"; then
             echo "    content:  found '$EXPECTED_STRING'"
         else
             echo "    content:  MISSING '$EXPECTED_STRING'"; ok=0
@@ -41,15 +48,20 @@ for attempt in $(seq 1 "$ATTEMPTS"); do
 
     # 3. The served build stamp matches the commit we just deployed.
     if [ "$ok" = "1" ]; then
-        served="$(curl -sS -H 'Cache-Control: no-cache' \
-                   "$BASE_URL/build-info.json?_cb=$EXPECTED_SHA" \
-                   | jq -r '.commit // "unparseable"' 2>/dev/null || echo unreachable)"
-        if [ "$served" = "$EXPECTED_SHA" ]; then
-            echo "    commit:   $served (matches)"
-            echo "==> Smoke test PASSED"
-            exit 0
+        info_code="$(curl -sS -o "$BUILD_INFO_BODY" -w '%{http_code}' \
+                   -H 'Cache-Control: no-cache' \
+                   "$BASE_URL/build-info.json?_cb=$EXPECTED_SHA" || echo 000)"
+        if [ "$info_code" != "200" ]; then
+            echo "    commit:   build-info.json HTTP $info_code (want 200)"
+        else
+            served="$(jq -r '.commit // "unparseable"' "$BUILD_INFO_BODY" 2>/dev/null || echo unparseable)"
+            if [ "$served" = "$EXPECTED_SHA" ]; then
+                echo "    commit:   $served (matches)"
+                echo "==> Smoke test PASSED"
+                exit 0
+            fi
+            echo "    commit:   served '$served', expected '$EXPECTED_SHA'"
         fi
-        echo "    commit:   served '$served', expected '$EXPECTED_SHA'"
     fi
 
     if [ "$attempt" -lt "$ATTEMPTS" ]; then
