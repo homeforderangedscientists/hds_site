@@ -20,6 +20,18 @@ Install the public half on the server:
 ssh-copy-id -i ~/.ssh/hds_deploy.pub -p <PORT> <USER>@<HOST>
 ```
 
+If `ssh-copy-id` is not available (it ships with OpenSSH but some hosts and
+Windows setups lack it), append the key by hand — this is exactly what
+`ssh-copy-id` does:
+
+```bash
+cat ~/.ssh/hds_deploy.pub | ssh -p <PORT> <USER>@<HOST> \
+  'mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys'
+```
+
+Some shared hosts also expose an "SSH Access → Manage SSH Keys" page in cPanel,
+which does the same thing through a web form.
+
 Verify it works before going further:
 
 ```bash
@@ -56,10 +68,30 @@ gh secret set SSH_PRIVATE_KEY  < ~/.ssh/hds_deploy
 gh secret set SSH_KNOWN_HOSTS  # paste the ssh-keyscan output from step 2
 gh secret set SSH_HOST         # e.g. homeforderangedscientists.net
 gh secret set SSH_USER
-gh secret set SSH_PORT         # 22 unless your host differs
+gh secret set SSH_PORT         # bare integer only, e.g. 22 -- see note below
 gh secret set DEPLOY_PATH      # absolute docroot, e.g. /home/<user>/public_html
 gh variable set SITE_URL       # e.g. https://homeforderangedscientists.net
 ```
+
+### Finding your docroot path
+
+`DEPLOY_PATH` is the directory whose contents are served as the site — the one
+that already contains the live `index.html`. On most shared hosts it is
+`~/public_html` or `~/www`. To confirm rather than guess:
+
+```bash
+ssh -i ~/.ssh/hds_deploy -p <PORT> <USER>@<HOST> \
+  'ls -d ~/public_html ~/www ~/htdocs 2>/dev/null; echo "---"; ls -la ~/public_html/index.html 2>/dev/null'
+```
+
+Whichever directory holds the `index.html` you can see on the live site is the
+one you want. Use its **absolute** path (run `readlink -f <dir>` on the server
+to get it) — not `~/public_html`, which the workflow would not expand.
+
+`SSH_PORT` must be a **bare integer** with no spaces, quotes, or extra options.
+The deploy job validates this and fails immediately if it is anything else —
+rsync splits its transport option on whitespace, so a port value containing a
+space could otherwise inject arbitrary ssh options.
 
 `DEPLOY_PATH` must have **no trailing slash** and must be the directory whose
 contents are already served — the one that already contains `index.html`.
@@ -179,18 +211,34 @@ not wait for the smoke test to pass before writing. A failed smoke test means
 something bad may now be live, not that nothing happened. Diagnose before
 re-pushing.
 
-To restore a snapshot:
+To restore a snapshot, SSH in and list the archives:
 
 ```bash
 ssh -i ~/.ssh/hds_deploy -p <PORT> <USER>@<HOST>
 ls -1t "$(dirname <DEPLOY_PATH>)/.hds-deploy-backups"/*.tgz
-tar xzf <chosen-archive> -C <DEPLOY_PATH>
 ```
 
-Then confirm from outside — do not trust the extraction alone:
+**Do not simply `tar xzf` into the docroot.** Extracting an archive overwrites
+and adds files, but it never *removes* them. If the bad deploy added files that
+the snapshot does not contain, those files survive and stay live — you would
+believe you had rolled back when you had not. Extract to a staging directory and
+mirror it in with `--delete`, which is a true restore:
 
 ```bash
-curl -sS https://<site>/build-info.json | jq .commit
+RESTORE_TMP="$(mktemp -d)"
+tar xzf <chosen-archive> -C "$RESTORE_TMP"
+rsync -a --delete "$RESTORE_TMP"/ <DEPLOY_PATH>/
+rm -rf "$RESTORE_TMP"
+```
+
+Run `rsync -an --delete "$RESTORE_TMP"/ <DEPLOY_PATH>/` first if you want to see
+what it will change before it changes it.
+
+Then confirm from outside — do not trust the extraction alone. Use the same URL
+you put in `SITE_URL` (it already includes `https://`, so do not add it again):
+
+```bash
+curl -sS <SITE_URL>/build-info.json | jq .commit
 ```
 
 Alternatively, re-run the workflow at the last good commit from the GitHub UI
