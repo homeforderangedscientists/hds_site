@@ -1,0 +1,14 @@
+# rsync --exclude-from list for deploys to the Apache docroot.
+#
+# Enumerated deliberately. A blanket dotfile pattern (.*) would exclude
+# the Apache rewrite config file (the site's only rewrite config), so
+# patterns are listed one by one and that file is never included here.
+.git/
+.github/
+.gitignore
+.deployignore
+.htmlvalidate.json
+.DS_Store
+docs/
+scripts/
+CLAUDE.md
