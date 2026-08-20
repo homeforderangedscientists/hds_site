@@ -76,8 +76,16 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
           set -euo pipefail
+          # rsync tokenizes the -e transport string on whitespace itself, so a
+          # SSH_PORT containing a space would inject arbitrary ssh options.
+          # Validate once here, fail closed, and every later use is safe.
+          if ! [[ "$SSH_PORT" =~ ^[0-9]+$ ]]; then
+              echo "FAIL: SSH_PORT must be numeric (got a non-numeric value)" >&2
+              exit 1
+          fi
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key

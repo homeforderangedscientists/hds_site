@@ -122,6 +122,30 @@ Both the `index.html` check and the marker check are skipped when the run is
 dispatched with `first_deploy=true` (see "First deploy" above) — there is
 nothing to verify against on a truly empty docroot.
 
+## If you change the site's title
+
+The preflight check greps the remote `index.html` for the literal string
+`Home for Deranged Scientists` to prove the docroot belongs to THIS site rather
+than another one on the same host. That string is hardcoded in
+`.github/workflows/deploy.yml`.
+
+**If you change that text in `index.html`, update the workflow's marker in the
+same commit.** Otherwise every deploy fails preflight until you do. This fails
+loudly rather than silently, which is the safe direction, but it will look
+mysterious if you have forgotten this note.
+
+The marker is deliberately not derived from the local `index.html` — that would
+make the check pass trivially, and it would break on the very deploy that
+changed the title.
+
+## Two deploys at once
+
+The `deploy` job declares `concurrency: deploy-production` with
+`cancel-in-progress: false`. Two quick pushes to `main` therefore queue: the
+second waits for the first to finish rather than running a second `rsync`
+against the same docroot simultaneously. Pull-request checks are deliberately
+NOT in this queue, so PR feedback never waits behind a deploy.
+
 ## When rsync wants to delete more than 10 files
 
 The job stops and prints the deletion list. This almost always means
