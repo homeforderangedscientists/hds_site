@@ -524,8 +524,14 @@ EOF
 
 - [ ] **Step 2: Confirm .htaccess is NOT excluded**
 
-Run: `grep -c 'htaccess' .deployignore`
-Expected: `0`. If this is ever non-zero, the deploy will silently strip the site's rewrite rules.
+Run: `grep -vE '^\s*(#|$)' .deployignore | grep -c 'htaccess'`
+Expected: `0`.
+
+The comment lines must be stripped BEFORE grepping. The file's header comment
+deliberately names `.htaccess` — that warning is the whole point of the comment,
+and an assertion over the raw file would force the warning to be reworded into
+uselessness. Only *pattern* lines matter here. If this is ever non-zero, the
+deploy will silently strip the site's rewrite rules.
 
 - [ ] **Step 3: Confirm the exclude list behaves under rsync**
 
