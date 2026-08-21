@@ -36,5 +36,9 @@ check "protocol-relative skipped" 0 \
   '<script src="//cdn.example.com/lib.js"></script>'
 check "missing file with query string fails" 1 \
   '<link href="nope.css?v=2">'
+check "directory with index.html resolves" 0 \
+  '<a href="/ethos/">x</a>' 'mkdir -p ethos && touch ethos/index.html'
+check "directory without index.html fails" 1 \
+  '<a href="/ethos/">x</a>' 'mkdir -p ethos'
 
 exit "$fail"
