@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Appendix B — Glossary — Home for Deranged Scientists</title>
+<meta name="description" content="Appendix B — Glossary of the Engineer + Agent Playbook.">
+<link rel="stylesheet" href="../assets/docs.css">
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+<div class="doc-layout">
+<nav class="doc-rail" aria-label="Contents">
+<a class="doc-home" href="../">&larr; Home for Deranged Scientists</a>
+<p class="rail-doc"><a href="index.html">The Engineer + Agent Playbook</a></p>
+<h2 class="rail-heading">Contents</h2>
+<ol class="rail-list">
+<li class="rail-l1"><a href="#appendix-b-glossary">Appendix B — Glossary</a></li>
+</ol>
+</nav>
+<main class="doc-main" id="content">
+<header class="doc-masthead">
+<p class="doc-eyebrow">The Engineer + Agent Playbook</p>
+<h1 class="doc-title">Appendix B — Glossary</h1>
+<p class="doc-meta">Appendix B — Glossary</p>
+</header>
+<div class="doc-body">
+<h1 id="appendix-b-glossary">Appendix B — Glossary</h1>
+<p>Terms with local meaning — reach for this when a word is doing more work than it seems to.</p>
+<ul>
+<li><strong>Blast radius</strong> — the scope of consequences if an action goes wrong; used to decide whether to confirm with the user before running a destructive command. See <a href="#9-trust-boundaries">§9</a>.</li>
+<li><strong>Blue-green deploy</strong> — a deployment pattern that runs the new version (&quot;green&quot;) alongside the old (&quot;blue&quot;), health-checks it, flips traffic, and keeps the old version warm for rollback. <em>(See DevOps Playbook Phase 4.)</em></li>
+<li><strong>Conventional commits</strong> — a commit-message convention (<code>feat:</code>, <code>fix:</code>, <code>chore:</code> …) that machine tools can parse to decide version bumps and changelog sections. <em>(See DevOps Playbook Phase 5.)</em></li>
+<li><strong>Health endpoint</strong> — an HTTP endpoint that reports the service&#39;s own dependency status and build identity (git SHA, version), distinct from a lightweight status check used by load balancers. <em>(See DevOps Playbook Phase 7.1 and Gotcha #8.)</em></li>
+<li><strong>release-please</strong> — a GitHub Action that reads conventional commits, opens Release PRs, and publishes GitHub Releases automatically. <em>(See DevOps Playbook Phase 5 and Gotchas #3–#5.)</em></li>
+<li><strong>Brainstorm</strong> — the second step of the loop; a skill invocation that turns a vague idea into a written spec. See <a href="#5-the-loop">§5</a>.</li>
+<li><strong>Diagnostic surface (the lab)</strong> — the persisted traces, replay playgrounds, and exportable diagnostics that let a bug be diagnosed by <em>reading evidence</em> instead of re-reasoning about source. Built before the fix when a bug class recurs. See <a href="#10-diagnosis--build-the-lab">§10</a>.</li>
+<li><strong>Elicitation</strong> — a pre-code session in which the human makes the agent state its model of the product out loud, grills it, and corrects it while corrections cost one sentence. See <a href="#4-the-first-conversation">§4</a>.</li>
+<li><strong>Explore</strong> — the first step of the loop; the greps, directory listings, and survey-agent passes that reconcile the plan with the actual codebase before planning begins. See <a href="#5-the-loop">§5</a>.</li>
+<li><strong>Instructions file (CLAUDE.md, AGENTS.md)</strong> — the project-instructions file the harness loads automatically as system context at the start of every conversation. <code>CLAUDE.md</code> in Claude Code; <code>AGENTS.md</code> is the emerging cross-tool convention (honored by Codex, opencode, and a growing list); <code>GEMINI.md</code> and <code>.cursorrules</code> fill the same role elsewhere. The playbook says &quot;instructions file&quot; in rules and CLAUDE.md in field notes — that&#39;s what the file was called when the scar formed. See <a href="#2-the-model-and-the-harness">§2</a> and <a href="#3-the-workspace">§3</a>.</li>
+<li><strong>Field note</strong> — a short inline vignette that grounds a rule in a real event from the case studies; appears in the human layer of every two-layer chapter. See <a href="#how-to-read-this-playbook">How to read this playbook</a>.</li>
+<li><strong>File-boundary parallelism</strong> — a parallel-agent coordination model where each agent owns a disjoint set of files, assigned before any work begins, with shared touchpoints deferred to a post-parallel merge pass. The alternative to branch-level or worktree-level isolation. See <a href="#13-parallel-agents--worktrees">§13</a>.</li>
+<li><strong>Flexible skill</strong> — a skill whose steps are guidelines to adapt to context, as opposed to a rigid skill that must be followed exactly. See <a href="#7-skills-as-institutional-knowledge">§7</a>.</li>
+<li><strong>Hook</strong> — a shell command the harness executes automatically on a named event (e.g., <code>post-tool-use</code>, <code>pre-commit</code>) without waiting for an explicit agent invocation. See <a href="#3-the-workspace">§3</a>.</li>
+<li><strong>Memory</strong> — one of four typed persistent notes (user, feedback, project, reference) that an agent writes and reads across conversations to preserve context beyond a single session. See <a href="#6-memory-hygiene">§6</a>.</li>
+<li><strong>Model tier</strong> — the capability/price class of the model doing a given piece of work; chosen by the shape of the work (mechanics go cheap behind gates, voice and synthesis go expensive), not by diff size. See <a href="#2-the-model-and-the-harness">§2</a>.</li>
+<li><strong>Probe</strong> — the command whose output proves a belief about the system (the API call that returns the branch-protection object, the test error that arrives in the tracker). Beliefs about protections carry their probes; audits re-run them. See <a href="#6-memory-hygiene">§6</a> and <a href="#15-audits">§15</a>.</li>
+<li><strong>Merge point</strong> — a shared file (config registry, main entrypoint, integration test, dependency manifest) that every parallel agent&#39;s work eventually has to touch. In a well-planned fan-out, merge points are owned by a single single-threaded pass after the parallel phase finishes, not edited by the parallel agents. See <a href="#13-parallel-agents--worktrees">§13</a>.</li>
+<li><strong>Pin</strong> — a one-sentence extractable lesson marked inline with <code>*Pin:*</code>. The distilled version of a chapter&#39;s argument, written to survive when the surrounding narrative is forgotten — small enough to remember, specific enough to act on, structured so an agent can lift it into memory unchanged. When a pin contradicts the surrounding prose, the pin wins. See <a href="#how-to-read-this-playbook">How to read this playbook</a>.</li>
+<li><strong>Plan</strong> — a written, step-by-step implementation guide derived from a spec that defines how to build something before any code is touched. See <a href="#14-plan-quality">§14</a>.</li>
+<li><strong>Report-only fleet</strong> — a set of parallel agents dispatched to audit and report (docs-vs-code, security, debt, devops) without fixing; isolated from the working tree because &quot;report-only&quot; describes the assignment, not the side effects. See <a href="#13-parallel-agents--worktrees">§13</a> and <a href="#15-audits">§15</a>.</li>
+<li><strong>Rescue protocol</strong> — the three-horizon recovery playbook (next hour, next day, next week) for teams whose agent partnership has broken down. Not an essay — a checklist. See <a href="#12-the-rescue-protocol">§12</a>.</li>
+<li><strong>Revert question</strong> — &quot;would these tests pass if the change were reverted?&quot; — the ten-second check that separates verification from verification theater. See <a href="#8-verification-before-completion">§8</a>.</li>
+<li><strong>Rigid skill</strong> — a skill whose steps must be followed exactly in order, with no discretionary adaptation. See <a href="#7-skills-as-institutional-knowledge">§7</a>.</li>
+<li><strong>settings.json</strong> — the harness-level configuration file that controls which tools are available, what permissions are granted, and which hooks are registered. See <a href="#3-the-workspace">§3</a>.</li>
+<li><strong>Skill</strong> — an invokable, named procedure with a defined discipline; the harness construct, not the colloquial sense of &quot;ability.&quot; See <a href="#7-skills-as-institutional-knowledge">§7</a>.</li>
+<li><strong>Spec</strong> — a written design contract that describes what to build, captured before planning begins; a plan covers how to satisfy a spec. See <a href="#14-plan-quality">§14</a>.</li>
+<li><strong>Subagent</strong> — a fresh child agent dispatched with a curated context window, used to protect the parent&#39;s context or to run isolated work in parallel. See <a href="#13-parallel-agents--worktrees">§13</a>.</li>
+<li><strong>Two-stage review</strong> — the delegated-work review pattern: a spec-compliance reviewer (does the diff deliver every requirement, and does the verification witness it?) followed by a code-quality reviewer (what is wrong now or will be wrong someday?), neither fed the implementer&#39;s self-report. See <a href="#13-parallel-agents--worktrees">§13</a>.</li>
+<li><strong>The loop</strong> — the canonical development cycle: explore → brainstorm → plan → TDD → verify → commit → retro; every feature passes through every step. See <a href="#5-the-loop">§5</a>.</li>
+<li><strong>Three-layer thesis</strong> — the playbook&#39;s core division of labor: the pipeline handles mechanics, the agent handles elaboration, the human handles craft. Every rule in the document is, at root, a maneuver to keep each layer in its lane. See <a href="#the-thesis">The thesis</a>.</li>
+<li><strong>Two-layer format</strong> — the playbook&#39;s chapter convention: an imperative rule at the top (the agent layer) followed by narrative explanation and a field note (the human layer). See <a href="#how-to-read-this-playbook">How to read this playbook</a>.</li>
+<li><strong>Wave pattern</strong> — a parallel-work rhythm in which the cheapest, most mechanical items run first — as a load test for the build, config, and test harness — before committing agents to heavyweight implementations. &quot;Check the parachute before jumping.&quot; See <a href="#13-parallel-agents--worktrees">§13</a>.</li>
+</ul>
+
+
+</div>
+<nav class="doc-pager" aria-label="Document sections">
+<a class="pager-prev" href="appendix-a-agents.html"><span class="pager-dir">Previous</span><span class="pager-name">Appendix A — For Agents</span></a>
+<a class="pager-next" href="appendix-c-case-studies.html"><span class="pager-dir">Next</span><span class="pager-name">Appendix C — Case Studies</span></a>
+</nav>
+<footer class="doc-footer">
+<p>Part of the Engineer + Agent Playbook.</p>
+<p>&copy; 2026 Home for Deranged Scientists</p>
+</footer>
+</main>
+</div>
+</body>
+</html>
