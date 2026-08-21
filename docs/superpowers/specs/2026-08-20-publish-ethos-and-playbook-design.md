@@ -156,9 +156,21 @@ claim it:
   own container rather than the page.
 - Cluster emoji (⭐ 🧩 🛡 🌱 🔨 🧭) never carry meaning alone — they always sit
   beside the cluster's written name.
-- Contrast: body and rail text meet WCAG AA against `#f5f3eb`. **`#7fb069` on
-  cream does not** — accent green is used for borders and decoration, never for
-  body-sized text.
+- Contrast, **measured against `#f5f3eb`** rather than assumed:
+
+  | Colour | Ratio | Verdict |
+  |---|---|---|
+  | `#2d4a3e` forest | 8.75:1 | AA body text |
+  | `#4a6a5a` muted | 5.40:1 | AA body text |
+  | `#5a7a6a` muted | 4.27:1 | large text only (≥18.66px bold / 24px) |
+  | `#6a8a7a` muted | 3.42:1 | large text only |
+  | `#7fb069` accent | 2.27:1 | **fails AA — decoration only** |
+
+  So body copy and contents-rail links use `#2d4a3e` or `#4a6a5a` only.
+  `#7fb069` is restricted to borders, rules, and the active-item marker, never
+  to text. `#5a7a6a` / `#6a8a7a` may be used for large display text only.
+  (Note: the browser mockup used `#6a8a7a` for rail items; the built pages must
+  not — the rail is small text.)
 
 ## CI
 
