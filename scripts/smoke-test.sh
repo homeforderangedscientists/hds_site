@@ -46,7 +46,40 @@ for attempt in $(seq 1 "$ATTEMPTS"); do
         fi
     fi
 
-    # 3. The served build stamp matches the commit we just deployed.
+    # 3. /ethos/ clean URL resolves via DirectoryIndex.
+    if [ "$ok" = "1" ]; then
+        ethos_code="$(curl -sS -o /dev/null -w '%{http_code}' \
+                 -H 'Cache-Control: no-cache' "$BASE_URL/ethos/" || true)"
+        if [ "$ethos_code" != "200" ]; then
+            echo "    ethos:    HTTP $ethos_code (want 200) for $BASE_URL/ethos/"; ok=0
+        else
+            echo "    ethos:    HTTP 200 for $BASE_URL/ethos/"
+        fi
+    fi
+
+    # 4. /playbook/ clean URL resolves via DirectoryIndex.
+    if [ "$ok" = "1" ]; then
+        playbook_code="$(curl -sS -o /dev/null -w '%{http_code}' \
+                 -H 'Cache-Control: no-cache' "$BASE_URL/playbook/" || true)"
+        if [ "$playbook_code" != "200" ]; then
+            echo "    playbook: HTTP $playbook_code (want 200) for $BASE_URL/playbook/"; ok=0
+        else
+            echo "    playbook: HTTP 200 for $BASE_URL/playbook/"
+        fi
+    fi
+
+    # 5. Docs stylesheet is served.
+    if [ "$ok" = "1" ]; then
+        docs_css_code="$(curl -sS -o /dev/null -w '%{http_code}' \
+                 -H 'Cache-Control: no-cache' "$BASE_URL/assets/docs.css" || true)"
+        if [ "$docs_css_code" != "200" ]; then
+            echo "    docs.css: HTTP $docs_css_code (want 200) for $BASE_URL/assets/docs.css"; ok=0
+        else
+            echo "    docs.css: HTTP 200 for $BASE_URL/assets/docs.css"
+        fi
+    fi
+
+    # 6. The served build stamp matches the commit we just deployed.
     if [ "$ok" = "1" ]; then
         info_code="$(curl -sS -o "$BUILD_INFO_BODY" -w '%{http_code}' \
                    -H 'Cache-Control: no-cache' \
