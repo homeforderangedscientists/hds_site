@@ -36,12 +36,28 @@ jobs:
       - name: Validate HTML
         run: |
           set -euo pipefail
+          # Assert the glob actually matched pages. Without this the step can pass
+          # vacuously: xargs with empty input runs html-validate with no file
+          # arguments, which prints usage and exits 0. `xargs -r` does NOT fix that
+          # -- it skips the command and still exits 0. Only counting does.
+          COUNT="$(find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' | wc -l | tr -d ' ')"
+          echo "HTML pages found: $COUNT"
+          if [ "$COUNT" -lt 12 ]; then
+              echo "FAIL: expected at least 12 HTML pages, found $COUNT" >&2
+              exit 1
+          fi
           find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' -print0 \
             | xargs -0 npx --yes html-validate@9.7.1
 
       - name: Check asset references
         run: |
           set -euo pipefail
+          COUNT="$(find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' | wc -l | tr -d ' ')"
+          echo "HTML pages found: $COUNT"
+          if [ "$COUNT" -lt 12 ]; then
+              echo "FAIL: expected at least 12 HTML pages, found $COUNT" >&2
+              exit 1
+          fi
           find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' -print0 \
             | xargs -0 -n1 python3 scripts/check-assets.py
 
