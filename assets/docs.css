@@ -80,8 +80,8 @@ a:hover { color: var(--ink-soft); }
 .rail-list li { margin: 0.3rem 0; line-height: 1.4; }
 .rail-list a { color: var(--ink-soft); text-decoration: none; }
 .rail-list a:hover { color: var(--ink); text-decoration: underline; }
-.rail-l1 { font-weight: 700; margin-top: 0.9rem !important; }
-.rail-l1 a { color: var(--ink); }
+.rail-l2 { font-weight: 700; margin-top: 0.9rem !important; }
+.rail-l2 a { color: var(--ink); }
 .rail-l3 { padding-left: 0.85rem; font-size: 0.95em; }
 
 /* ---- masthead ---- */

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Unit tests for build_pages_lib. Run: python3 scripts/test-build-pages.py"""
+import importlib.util
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -16,6 +18,17 @@ from build_pages_lib import (
     split_sections,
     strip_leading_heading,
 )
+
+# build-pages.py's filename has a hyphen, so it can't be reached with a plain
+# `import build-pages` (that's not a valid identifier). importlib.util can
+# still load it from its path -- doing so does not execute its
+# `if __name__ == "__main__":` block, since the loaded module's __name__
+# is "build_pages_script", not "__main__".
+_spec = importlib.util.spec_from_file_location(
+    "build_pages_script", Path(__file__).resolve().parent / "build-pages.py"
+)
+build_pages_script = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(build_pages_script)
 
 
 class TestSplitSections(unittest.TestCase):
@@ -340,6 +353,91 @@ class TestUnresolvedAnchors(unittest.TestCase):
         pages = {"playbook/index.html": '<a href="nowhere.html#slug">jump</a>'}
         got = find_unresolved_anchors(pages)
         self.assertEqual(got, [("playbook/index.html", 'href="nowhere.html#slug"')])
+
+
+class TestPlaybookUnmatchedSectionGuard(unittest.TestCase):
+    """collect_playbook_pages must fail loudly if a top-level section in the
+    source markdown doesn't match any entry in PLAYBOOK_PAGES -- EXCEPT the
+    document's own title section, which is always sections[0] and is allowed
+    to fall through into the front matter of playbook/index.html.
+
+    These tests point the script's ROOT at a scratch directory holding a
+    synthetic content/engineer-agent-playbook-v2.md, so they run against the
+    real collect_playbook_pages() -- not a reimplementation of its logic --
+    without touching the committed content or shelling out to npx/marked
+    (the guard fires before any markdown is rendered).
+    """
+
+    def _run(self, section_titles, stub_render=False):
+        """Build a minimal playbook doc from `section_titles` (first title is
+        the doc's own title section) and run collect_playbook_pages on it.
+
+        With stub_render=True, render_markdown is swapped for a stub that
+        returns plain text with no subprocess call, so a document that
+        passes both guards can be run all the way through without shelling
+        out to npx/marked (irrelevant to what this guard tests).
+        """
+        md = "\n\n".join(f"# {title}\n\nplaceholder text." for title in section_titles)
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_root = Path(tmp)
+            (tmp_root / "content").mkdir()
+            (tmp_root / "content" / "engineer-agent-playbook-v2.md").write_text(
+                md, encoding="utf-8"
+            )
+            old_root = build_pages_script.ROOT
+            old_render = build_pages_script.render_markdown
+            build_pages_script.ROOT = tmp_root
+            if stub_render:
+                build_pages_script.render_markdown = (
+                    lambda md, label=None: f"<p>{md.strip()}</p>"
+                )
+            try:
+                return build_pages_script.collect_playbook_pages(tmp_root / "out")
+            finally:
+                build_pages_script.ROOT = old_root
+                build_pages_script.render_markdown = old_render
+
+    def _all_configured_titles(self):
+        return [full for _key, _fn, full in build_pages_script.PLAYBOOK_PAGES]
+
+    def test_extra_unmatched_section_fails_loudly(self):
+        # Every configured page present, plus one section with no home: the
+        # "Part VI" scenario from the task -- a new top-level section added
+        # to the source doc without a matching PLAYBOOK_PAGES entry.
+        titles = (["The Engineer + Agent Playbook"] + self._all_configured_titles()
+                  + ["Part VI — New Frontier"])
+        with self.assertRaises(SystemExit) as ctx:
+            self._run(titles)
+        message = str(ctx.exception)
+        self.assertIn("Part VI — New Frontier", message)
+        self.assertIn("PLAYBOOK_PAGES", message)
+        self.assertIn("scripts/build-pages.py", message)
+
+    def test_only_the_first_section_may_fall_through(self):
+        # A second, later "extra" section is what's disallowed -- not falling
+        # through per se. Two unmatched sections after the title: both should
+        # be named in the failure.
+        titles = (["The Engineer + Agent Playbook"] + self._all_configured_titles()
+                  + ["Part VI — New Frontier", "Part VII — Further Still"])
+        with self.assertRaises(SystemExit) as ctx:
+            self._run(titles)
+        message = str(ctx.exception)
+        self.assertIn("Part VI — New Frontier", message)
+        self.assertIn("Part VII — Further Still", message)
+
+    def test_title_only_fall_through_is_fine(self):
+        # No stray section: the doc's own title section is the only thing
+        # that falls through to the front matter, and that's legitimate --
+        # both guards must let it through. render_markdown is stubbed (see
+        # _run) so this runs the real function to completion without
+        # depending on npx/marked being available.
+        titles = ["The Engineer + Agent Playbook"] + self._all_configured_titles()
+        try:
+            pages = self._run(titles, stub_render=True)
+        except SystemExit as exc:
+            self.fail(f"unexpected SystemExit from a fully-matched document: {exc}")
+        self.assertIn("playbook/index.html", pages)
+        self.assertIn("playbook/foundations.html", pages)
 
 
 if __name__ == "__main__":

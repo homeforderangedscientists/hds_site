@@ -202,18 +202,30 @@ def collect_playbook_pages(out_root):
     # string prefix of "Part II"/"Part III"/"Part IV".
     by_prefix = {}
     front = []
-    for title, section_md in sections:
+    unmatched = []
+    for i, (title, section_md) in enumerate(sections):
         key = title.split("—", 1)[0].strip()
         match = next((p for p in PLAYBOOK_PAGES if p[0] == key), None)
         if match:
             by_prefix[match[1]] = (match[2], section_md)
         else:
             front.append(section_md)
+            if i > 0:
+                unmatched.append(title)
 
     missing = [p[1] for p in PLAYBOOK_PAGES if p[1] not in by_prefix]
     if missing:
         sys.exit(f"FAIL: no source section matched these pages: {missing}\n"
                  f"      Section titles found: {[t for t, _ in sections]}")
+
+    if unmatched:
+        sys.exit(f"FAIL: unmatched top-level section(s) in "
+                 f"engineer-agent-playbook-v2.md: {unmatched}\n"
+                 f"      Only the document's own title section (the first "
+                 f"section) may fall through to the front matter; every "
+                 f"other top-level section must have a corresponding entry "
+                 f"in PLAYBOOK_PAGES (scripts/build-pages.py). Add one for "
+                 f"each section listed above.")
 
     pages = {}
     order = [p[1] for p in PLAYBOOK_PAGES]
