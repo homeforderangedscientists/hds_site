@@ -18,7 +18,7 @@ MARKED = "marked@18.0.10"
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def render_markdown(md):
+def render_markdown(md, label=None):
     """Markdown -> HTML fragment via the pinned marked CLI."""
     with tempfile.NamedTemporaryFile("w", suffix=".md", encoding="utf-8",
                                      delete=False) as fh:
@@ -27,10 +27,11 @@ def render_markdown(md):
     try:
         proc = subprocess.run(
             ["npx", "--yes", MARKED, "-i", tmp],
-            capture_output=True, text=True,
+            capture_output=True, text=True, encoding="utf-8",
         )
     finally:
         Path(tmp).unlink(missing_ok=True)
     if proc.returncode != 0:
-        sys.exit(f"FAIL: {MARKED} exited {proc.returncode}\n{proc.stderr}")
+        where = f" ({label})" if label else ""
+        sys.exit(f"FAIL: {MARKED} exited {proc.returncode}{where}\n{proc.stderr}")
     return proc.stdout
