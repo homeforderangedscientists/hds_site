@@ -23,6 +23,14 @@ jobs:
   checks:
     name: Checks
     runs-on: ubuntu-latest
+    env:
+      # Floor for the HTML gates below. Without a floor they pass vacuously:
+      # xargs with empty input runs the command with no file arguments and
+      # html-validate then exits 0. (`xargs -r` does NOT fix that - it skips
+      # the command and still exits 0.) Today the repo has exactly this many
+      # pages; if a page is legitimately removed, lower this number here - it
+      # is referenced by both gate steps, so there is only one place to change.
+      MIN_HTML_PAGES: 12
     steps:
       - name: Check out
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -36,14 +44,10 @@ jobs:
       - name: Validate HTML
         run: |
           set -euo pipefail
-          # Assert the glob actually matched pages. Without this the step can pass
-          # vacuously: xargs with empty input runs html-validate with no file
-          # arguments, which prints usage and exits 0. `xargs -r` does NOT fix that
-          # -- it skips the command and still exits 0. Only counting does.
           COUNT="$(find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' | wc -l | tr -d ' ')"
           echo "HTML pages found: $COUNT"
-          if [ "$COUNT" -lt 12 ]; then
-              echo "FAIL: expected at least 12 HTML pages, found $COUNT" >&2
+          if [ "$COUNT" -lt "$MIN_HTML_PAGES" ]; then
+              echo "FAIL: expected at least $MIN_HTML_PAGES HTML pages, found $COUNT" >&2
               exit 1
           fi
           find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' -print0 \
@@ -54,8 +58,8 @@ jobs:
           set -euo pipefail
           COUNT="$(find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' | wc -l | tr -d ' ')"
           echo "HTML pages found: $COUNT"
-          if [ "$COUNT" -lt 12 ]; then
-              echo "FAIL: expected at least 12 HTML pages, found $COUNT" >&2
+          if [ "$COUNT" -lt "$MIN_HTML_PAGES" ]; then
+              echo "FAIL: expected at least $MIN_HTML_PAGES HTML pages, found $COUNT" >&2
               exit 1
           fi
           find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' -print0 \

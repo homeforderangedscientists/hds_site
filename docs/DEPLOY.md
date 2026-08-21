@@ -125,10 +125,18 @@ gh workflow run Deploy
 
 ## Continuous checks on pull requests
 
-Every push and every pull request against `main` runs a `checks` job first:
-it lints the workflow itself, validates `index.html` with `html-validate`
-(pinned to `9.7.1`), checks that referenced assets actually exist, and guards
-`.htaccess`. This job never touches secrets, so it runs safely on pull requests
+Every push and every pull request against `main` runs a `checks` job first.
+It lints the workflow itself, then over **every HTML page in the repo** (the
+homepage plus the eleven generated document pages) it runs `html-validate`
+(pinned to `9.7.1`) and verifies every referenced asset resolves. It guards
+`.htaccess`, runs the three test suites (`test-check-assets.sh`,
+`test-check-htaccess.sh`, `test-build-pages.py`), and runs
+`build-pages.py --check` so committed HTML cannot drift from `content/`.
+
+Both page-scanning gates first assert they matched at least `MIN_HTML_PAGES`
+files, so a broken glob fails loudly instead of validating nothing and passing.
+
+This job never touches secrets, so it runs safely on pull requests
 from any branch. The `deploy` job only runs after `checks` passes, and only on
 pushes to `main` — pull requests never trigger a deploy.
 
