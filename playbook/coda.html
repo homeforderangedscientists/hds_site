@@ -15,18 +15,16 @@
 <p class="rail-doc"><a href="index.html">The Engineer + Agent Playbook</a></p>
 <h2 class="rail-heading">Contents</h2>
 <ol class="rail-list">
-<li class="rail-l1"><a href="#coda-the-three-layers-read-back-through-the-field-notes">Coda — The three layers, read back through the field notes</a></li>
-<li class="rail-l2"><a href="#the-audit-is-craft-work-the-human-owns-with-a-fleet-at-its-disposal">The audit is craft work the human owns — with a fleet at its disposal</a></li>
+<li class="rail-l2"><a href="#the-audit-is-craft-work-the-human-owns--with-a-fleet-at-its-disposal">The audit is craft work the human owns — with a fleet at its disposal</a></li>
 </ol>
 </nav>
 <main class="doc-main" id="content">
 <header class="doc-masthead">
 <p class="doc-eyebrow">The Engineer + Agent Playbook</p>
-<h1 class="doc-title">Coda</h1>
+<h1 class="doc-title" id="coda--the-three-layers-read-back-through-the-field-notes">Coda</h1>
 <p class="doc-meta">Coda</p>
 </header>
 <div class="doc-body">
-<h1 id="coda-the-three-layers-read-back-through-the-field-notes">Coda — The three layers, read back through the field notes</h1>
 <p>Every field note in Part V is a moment when the three-layer division of labor from the thesis was violated. Read them that way and the whole gallery becomes one story told many ways.</p>
 <ul>
 <li><strong>The agent was asked to do the craftsperson&#39;s job.</strong> <em>The lookup form called &quot;clutter&quot; and removed</em> (referenced in §1): a design-pass agent made a taste call about what was load-bearing for a use case it had no context for. That&#39;s craft work, and craft work is the human&#39;s. The agent was doing elaboration the human should have done itself. The fix wasn&#39;t a better prompt — it was the human keeping taste in the human lane.</li>
@@ -35,7 +33,7 @@
 <li><strong>One layer tried to compensate for a missing layer.</strong> <em>The Onion</em>, <em>Three Deploys to Green</em>: weeks of cascading failure because the CI and deploy layers were doing work the pipeline should have been doing by itself. The human and agent were fighting the mechanics layer, not working inside it.</li>
 </ul>
 <p>The thesis isn&#39;t decoration. It&#39;s the diagnostic. When a cycle feels wrong, ask which layer is doing the wrong job, and put it back in its lane. Every rule in this playbook is, in the end, a way to perform that diagnosis quickly and return each layer to itself — so the human can get back to the work only a human can do.</p>
-<h2 id="the-audit-is-craft-work-the-human-owns-with-a-fleet-at-its-disposal">The audit is craft work the human owns — with a fleet at its disposal</h2>
+<h2 id="the-audit-is-craft-work-the-human-owns--with-a-fleet-at-its-disposal">The audit is craft work the human owns — with a fleet at its disposal</h2>
 <p>One craft discipline deserves naming explicitly because it has no analog in the agent or the pipeline layer: <strong>the systematic audit</strong> — now a full chapter (§15), but it belongs in the Coda too, because it&#39;s where the three-layer thesis pays out. Not a feature pass, not a bug-fix sprint, not a refactor. Looking at your own work with fresh eyes, on purpose, with no goal except to find what&#39;s wrong. Part V&#39;s <em>Audits as craft work</em> group has the exemplars: a security audit that surfaced fifteen issues a year of normal review had walked past, a visual audit that produced six UX fixes nothing else would have found, and an agent fleet that filed eighteen seam-debt issues in ten minutes over a codebase everyone believed was clean.</p>
 <p>The second edition&#39;s refinement: the audit <em>mechanizes further than the first edition guessed</em> — the seam-diffing, the claim-probing, the gate-rattling are read-and-compare work agents do superbly in parallel (§15) — but the two ends of the audit stay irreducibly human. The front end is the <em>decision to look</em>: no bug report, no pipeline gate, and no agent will ever propose spending a release finding out what&#39;s wrong with work everyone believes is fine. The back end is the <em>reading of the findings</em>: which of the eighteen tickets matters, which &quot;accessible but ugly&quot; is actually ugly, which seam is load-bearing. The agent doesn&#39;t audit; it executes an audit. The pipeline doesn&#39;t audit; it gates. The attention — slow, deliberate, ungoaled looking by the person who knows what the work is <em>for</em> — is the craft layer doing its highest-value job. The pipeline is boring so the agent can elaborate; the agent elaborates so the human can audit; the human audits so the work gets <em>good</em>.</p>
 <p>Schedule audits on purpose. Pick a surface — security, accessibility, performance, visual consistency, error messaging, the truthfulness of your own documentation — and walk it end to end with no goal except &quot;find what&#39;s wrong.&quot; Send the fleet down the seams; walk the taste surfaces yourself. The first one will feel like overkill. The findings will silence that. <em>Pin: every release that ships only what the bug reports asked for is a release that left work on the table. Audit on purpose.</em></p>

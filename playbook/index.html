@@ -26,13 +26,12 @@
 </ol>
 <h2 class="rail-heading">Contents</h2>
 <ol class="rail-list">
-<li class="rail-l1"><a href="#the-engineer-agent-playbook-second-edition">The Engineer + Agent Playbook — Second Edition</a></li>
 <li class="rail-l2"><a href="#what-changed-in-the-second-edition">What changed in the second edition</a></li>
 <li class="rail-l2"><a href="#the-thesis">The thesis</a></li>
 <li class="rail-l2"><a href="#the-six-case-studies-at-a-glance">The six case studies at a glance</a></li>
 <li class="rail-l2"><a href="#this-playbook-has-a-companion">This playbook has a companion</a></li>
 <li class="rail-l2"><a href="#how-to-read-this-playbook">How to read this playbook</a></li>
-<li class="rail-l3"><a href="#rule-ask-what-39-s-in-the-response-before-you-diagnose-why-it-39-s-wrong-format-example-not-a-numbered-rule">Rule: Ask what&amp;#39;s in the response before you diagnose why it&amp;#39;s wrong. (format example — not a numbered rule)</a></li>
+<li class="rail-l3"><a href="#rule-ask-whats-in-the-response-before-you-diagnose-why-its-wrong-format-example--not-a-numbered-rule">Rule: Ask what's in the response before you diagnose why it's wrong. (format example — not a numbered rule)</a></li>
 <li class="rail-l2"><a href="#all-the-rules-at-a-glance">All the rules at a glance</a></li>
 <li class="rail-l2"><a href="#reader-routing">Reader routing</a></li>
 <li class="rail-l2"><a href="#the-premise">The premise</a></li>
@@ -41,22 +40,21 @@
 <main class="doc-main" id="content">
 <header class="doc-masthead">
 <p class="doc-eyebrow">Home for Deranged Scientists</p>
-<h1 class="doc-title">The Engineer + Agent Playbook</h1>
+<h1 class="doc-title" id="the-engineer--agent-playbook--second-edition">The Engineer + Agent Playbook</h1>
 <p class="doc-meta">Second edition &middot; 71 rules &middot; 6 case studies</p>
 </header>
 <div class="doc-body">
-<h1 id="the-engineer-agent-playbook-second-edition">The Engineer + Agent Playbook — Second Edition</h1>
 <blockquote>
 <p>A field manual for partnering an engineer with a coding agent. Drawn from real scar tissue accumulated across six very differently-shaped efforts: a full-stack web application shipped over two years, a server built almost entirely by parallel agents against external specs, a high-velocity web app that shipped nine major versions in three days, a community-data web app driven by explicit security and visual audit passes, an epistolary journaling app whose deterministic classifier turned debugging into a laboratory discipline, and a fleet of small single-user apps that share scar tissue across repository boundaries.</p>
 <p>Between them: Python and Go and TypeScript backends, React and vanilla frontends, more than eighty narrative retrospectives, teams ranging from one human and one agent to a dozen parallel agents. All six are referenced throughout; you do not need access to any of them — every story this playbook relies on is told in full, right here. Written to be useful to humans <em>and</em> to agents loaded with this file as context — whichever model, whichever harness.</p>
 </blockquote>
 <blockquote>
-<p><strong>Agents loaded with this file as context:</strong> jump to <a href="#appendix-a--if-you-are-an-agent-reading-this">Appendix A</a> for the imperative-only fast path. <strong>Humans:</strong> read in order.</p>
+<p><strong>Agents loaded with this file as context:</strong> jump to <a href="appendix-a-agents.html#appendix-a--if-you-are-an-agent-reading-this">Appendix A</a> for the imperative-only fast path. <strong>Humans:</strong> read in order.</p>
 </blockquote>
 <h2 id="what-changed-in-the-second-edition">What changed in the second edition</h2>
 <p>The first edition was extracted from four projects&#39; retrospectives. Since then the practice kept running: a fifth project was built start-to-finish under these rules and wrote twenty retros of its own, the first case study shipped a new major version in parallel waves, and the fleet grew sideways — small single-purpose apps sharing lessons through cross-project memory. The second edition folds that evidence back in. Concretely:</p>
 <ul>
-<li><strong>Three new chapters.</strong> <a href="#2-the-model-and-the-harness">§2 The model and the harness</a> — what changes when the reader is a different model (Claude, GPT, GLM, Qwen) or a different harness (Claude Code, Codex, opencode, Cursor), and what never changes. <a href="#10-diagnosis--build-the-lab">§10 Diagnosis — build the lab</a> — the debugging discipline the fifth case study forced into the open. <a href="#15-audits">§15 Audits</a> — promoted from a coda aside to a chapter, because the evidence got too strong to leave it as an afterthought.</li>
+<li><strong>Three new chapters.</strong> <a href="foundations.html#2-the-model-and-the-harness">§2 The model and the harness</a> — what changes when the reader is a different model (Claude, GPT, GLM, Qwen) or a different harness (Claude Code, Codex, opencode, Cursor), and what never changes. <a href="when-it-goes-wrong.html#10-diagnosis--build-the-lab">§10 Diagnosis — build the lab</a> — the debugging discipline the fifth case study forced into the open. <a href="leveling-up.html#15-audits">§15 Audits</a> — promoted from a coda aside to a chapter, because the evidence got too strong to leave it as an afterthought.</li>
 <li><strong>New rules where the scars demanded them</strong> — exploration before planning, the revert question, wire-level verification, probing your own guardrails, secrets hygiene in agent sessions, pre-registered experiments before touching non-negotiables, two-stage review for delegated work.</li>
 <li><strong>Qualifiers where the practice outgrew the first edition&#39;s phrasing</strong> — retros consolidate at the arc, not the tag; investigation depth follows blast radius; the instructions file is a role, not a filename.</li>
 </ul>
@@ -76,7 +74,7 @@
 <p><strong>If you take two chapters of this playbook seriously, take §8 (Verification) and §16 (Retros).</strong> Verification is how you catch the failure. Retros are how you make sure you catch it only once. And if you take one thing seriously before either of those: <strong>make your pipeline boring.</strong> When the pipeline is boring, verification is cheap. When verification is cheap, retros write themselves. When retros write themselves, the loop learns. When the loop learns, the human gets to be the craftsperson — which is the whole point.</p>
 <p>The tagline is the point of the project. The rest of this playbook is the apparatus that serves it.</p>
 <h2 id="the-six-case-studies-at-a-glance">The six case studies at a glance</h2>
-<p>Every field note in this playbook comes from one of six real projects. The body refers to them by number — &quot;the second case study,&quot; &quot;the fifth case study.&quot; This table orients the reader once so the shorthand works everywhere else. Long-form in <a href="#appendix-c--about-the-case-studies">Appendix C</a>.</p>
+<p>Every field note in this playbook comes from one of six real projects. The body refers to them by number — &quot;the second case study,&quot; &quot;the fifth case study.&quot; This table orients the reader once so the shorthand works everywhere else. Long-form in <a href="appendix-c-case-studies.html#appendix-c--about-the-case-studies">Appendix C</a>.</p>
 <table>
 <thead>
 <tr>
@@ -138,7 +136,7 @@
 <p>Read the rule. If you believe it, skim. If you don&#39;t, read the story — the story is where the rule earned its keep.</p>
 <p>You&#39;ll also see lines marked <code>*Pin:*</code> scattered through the chapters. A <strong>pin</strong> is the sentence the whole chapter compresses to — the line worth taping to a monitor, worth extracting into memory, worth handing to an agent when the narrative is too long. Pins are the agent-facing one-liners that survive when everything else is forgotten. When a pin contradicts its surrounding narrative, the pin wins.</p>
 <p>Here&#39;s the format in action — a worked illustration drawn from a real scar. (This is the scaffolding demonstrated on a single rule; the actual §8 rule it derives from — &quot;Evidence before assertions&quot; — lives in that chapter, and the full story lives in Part V under <em>The Health Check That Wasn&#39;t</em>.)</p>
-<h3 id="rule-ask-what-39-s-in-the-response-before-you-diagnose-why-it-39-s-wrong-format-example-not-a-numbered-rule">Rule: Ask what&#39;s in the response before you diagnose why it&#39;s wrong. <em>(format example — not a numbered rule)</em></h3>
+<h3 id="rule-ask-whats-in-the-response-before-you-diagnose-why-its-wrong-format-example--not-a-numbered-rule">Rule: Ask what&#39;s in the response before you diagnose why it&#39;s wrong. <em>(format example — not a numbered rule)</em></h3>
 <p><strong>Why:</strong> You can spend three deploys &quot;fixing&quot; a value that was never in the payload.
 <strong>How to apply:</strong> Any time a field reads <code>unknown</code>, <code>null</code>, or empty — dump the raw response before touching the producer.</p>
 <p>We spent an evening forcing <code>GIT_REV</code> through three different docker compose mechanisms because <code>git_sha</code> kept coming back <code>unknown</code>. Shell export, env file, compose override, <code>--build-arg</code>. All of it worked. The verification curl was hitting <code>/health</code>, which returns <code>{&quot;status&quot;:&quot;ok&quot;}</code> and has no <code>git_sha</code> field at all. The real endpoint was <code>/api/v1/health</code>. We&#39;d been debugging a producer that was never broken.</p>
@@ -271,23 +269,23 @@
 </thead>
 <tbody><tr>
 <td>You&#39;re struggling and about to give up on agent-assisted work</td>
-<td><a href="#11-failure-modes--recovery">§11 Failure modes</a>, then <a href="#12-the-rescue-protocol">§12 The rescue protocol</a>, then loop back to <a href="#part-i--foundations">Part I</a></td>
+<td><a href="when-it-goes-wrong.html#11-failure-modes--recovery">§11 Failure modes</a>, then <a href="when-it-goes-wrong.html#12-the-rescue-protocol">§12 The rescue protocol</a>, then loop back to <a href="foundations.html#part-i--foundations">Part I</a></td>
 </tr>
 <tr>
 <td>You&#39;re new to this and want the foundations</td>
-<td><a href="#part-i--foundations">Part I — Foundations</a>, in order, no skipping</td>
+<td><a href="foundations.html#part-i--foundations">Part I — Foundations</a>, in order, no skipping</td>
 </tr>
 <tr>
 <td>You&#39;ve been doing this a while and want to level up</td>
-<td><a href="#part-iv--leveling-up">Part IV — Leveling Up</a>, then dip into <a href="#part-ii--working-together">Part II</a> for anything that rings a bell</td>
+<td><a href="leveling-up.html#part-iv--leveling-up">Part IV — Leveling Up</a>, then dip into <a href="working-together.html#part-ii--working-together">Part II</a> for anything that rings a bell</td>
 </tr>
 <tr>
 <td>You use a different model or harness than the one this playbook grew up with</td>
-<td><a href="#2-the-model-and-the-harness">§2 The model and the harness</a>, then read normally — the mapping table translates the rest</td>
+<td><a href="foundations.html#2-the-model-and-the-harness">§2 The model and the harness</a>, then read normally — the mapping table translates the rest</td>
 </tr>
 <tr>
 <td>You are an AI agent loaded with this file as context</td>
-<td><a href="#appendix-a--if-you-are-an-agent-reading-this">Appendix A</a> — the imperative-only fast path</td>
+<td><a href="appendix-a-agents.html#appendix-a--if-you-are-an-agent-reading-this">Appendix A</a> — the imperative-only fast path</td>
 </tr>
 </tbody></table>
 <h2 id="the-premise">The premise</h2>

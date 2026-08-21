@@ -15,13 +15,12 @@
 <p class="rail-doc"><a href="index.html">The Engineer + Agent Playbook</a></p>
 <h2 class="rail-heading">Contents</h2>
 <ol class="rail-list">
-<li class="rail-l1"><a href="#part-v-field-notes-from-the-case-studies">Part V — Field Notes from the Case Studies</a></li>
-<li class="rail-l2"><a href="#verification-amp-feedback-loops">Verification &amp;amp; feedback loops</a></li>
-<li class="rail-l3"><a href="#the-health-check-that-wasn-39-t-v5-11-0">The Health Check That Wasn&amp;#39;t (v5.11.0)</a></li>
-<li class="rail-l3"><a href="#verify-what-you-shipped-not-what-you-built-v5-9-0">Verify What You Shipped, Not What You Built (v5.9.0)</a></li>
-<li class="rail-l3"><a href="#trust-your-local-tests-v5-7-0">Trust Your Local Tests (v5.7.0)</a></li>
-<li class="rail-l3"><a href="#the-cache-that-worked-locally-and-lied-in-ci-v5-4-0">The Cache That Worked Locally And Lied In CI (v5.4.0)</a></li>
-<li class="rail-l3"><a href="#the-doorbell-that-never-rang-v4-2-0">The Doorbell That Never Rang (v4.2.0)</a></li>
+<li class="rail-l2"><a href="#verification--feedback-loops">Verification &amp; feedback loops</a></li>
+<li class="rail-l3"><a href="#the-health-check-that-wasnt-v5110">The Health Check That Wasn't (v5.11.0)</a></li>
+<li class="rail-l3"><a href="#verify-what-you-shipped-not-what-you-built-v590">Verify What You Shipped, Not What You Built (v5.9.0)</a></li>
+<li class="rail-l3"><a href="#trust-your-local-tests-v570">Trust Your Local Tests (v5.7.0)</a></li>
+<li class="rail-l3"><a href="#the-cache-that-worked-locally-and-lied-in-ci-v540">The Cache That Worked Locally And Lied In CI (v5.4.0)</a></li>
+<li class="rail-l3"><a href="#the-doorbell-that-never-rang-v420">The Doorbell That Never Rang (v4.2.0)</a></li>
 <li class="rail-l3"><a href="#the-comparison-that-quantum-superposed-into-nonexistence-case-study-1">The Comparison That Quantum-Superposed Into Nonexistence (case study 1)</a></li>
 <li class="rail-l3"><a href="#two-hotfixes-in-one-release-same-gap-case-study-3">Two Hotfixes in One Release, Same Gap (case study 3)</a></li>
 <li class="rail-l3"><a href="#the-bufconn-gap-case-study-2">The bufconn Gap (case study 2)</a></li>
@@ -30,41 +29,41 @@
 <li class="rail-l3"><a href="#the-perimeter-that-trusted-the-polite-client-case-study-1">The Perimeter That Trusted the Polite Client (case study 1)</a></li>
 <li class="rail-l3"><a href="#the-smoke-alarm-the-security-release-disarmed-case-study-1">The Smoke Alarm the Security Release Disarmed (case study 1)</a></li>
 <li class="rail-l2"><a href="#scope-plans-and-surprises">Scope, plans, and surprises</a></li>
-<li class="rail-l3"><a href="#four-scoping-gaps-in-one-release-v5-11-0">Four Scoping Gaps in One Release (v5.11.0)</a></li>
+<li class="rail-l3"><a href="#four-scoping-gaps-in-one-release-v5110">Four Scoping Gaps in One Release (v5.11.0)</a></li>
 <li class="rail-l3"><a href="#the-naiveplural-drift-case-study-4">The naivePlural Drift (case study 4)</a></li>
-<li class="rail-l3"><a href="#the-four-fix-wcag-contrast-cycle-v5-5-0-v5-6-0">The Four-Fix WCAG Contrast Cycle (v5.5.0–v5.6.0)</a></li>
-<li class="rail-l3"><a href="#hand-rolling-the-legacy-state-machine-right-call-wrong-call-second-case-study-v0-3-0">Hand-Rolling the Legacy State Machine — Right Call, Wrong Call (second case study, v0.3.0)</a></li>
+<li class="rail-l3"><a href="#the-four-fix-wcag-contrast-cycle-v550v560">The Four-Fix WCAG Contrast Cycle (v5.5.0–v5.6.0)</a></li>
+<li class="rail-l3"><a href="#hand-rolling-the-legacy-state-machine--right-call-wrong-call-second-case-study-v030">Hand-Rolling the Legacy State Machine — Right Call, Wrong Call (second case study, v0.3.0)</a></li>
 <li class="rail-l3"><a href="#fred-was-almost-an-uncle-case-study-5">Fred Was Almost an Uncle (case study 5)</a></li>
 <li class="rail-l3"><a href="#the-streak-in-a-trenchcoat-case-study-6">The Streak in a Trenchcoat (case study 6)</a></li>
-<li class="rail-l2"><a href="#diagnosis-amp-the-lab">Diagnosis &amp;amp; the lab</a></li>
-<li class="rail-l3"><a href="#the-hedge-that-wasn-39-t-case-study-5">The Hedge That Wasn&amp;#39;t (case study 5)</a></li>
+<li class="rail-l2"><a href="#diagnosis--the-lab">Diagnosis &amp; the lab</a></li>
+<li class="rail-l3"><a href="#the-hedge-that-wasnt-case-study-5">The Hedge That Wasn't (case study 5)</a></li>
 <li class="rail-l3"><a href="#the-word-the-domain-was-named-after-case-study-5">The Word the Domain Was Named After (case study 5)</a></li>
 <li class="rail-l3"><a href="#the-marcus-monopoly-case-study-5">The Marcus Monopoly (case study 5)</a></li>
 <li class="rail-l3"><a href="#the-silence-that-was-the-symptom-case-study-1">The Silence That Was the Symptom (case study 1)</a></li>
-<li class="rail-l2"><a href="#tooling-amp-environment-traps">Tooling &amp;amp; environment traps</a></li>
-<li class="rail-l3"><a href="#the-actions-token-that-won-39-t-wake-the-next-workflow-v5-10-0">The Actions Token That Won&amp;#39;t Wake the Next Workflow (v5.10.0)</a></li>
-<li class="rail-l3"><a href="#bash-buffers-scripts-in-memory-v4-2-0">Bash Buffers Scripts In Memory (v4.2.0)</a></li>
-<li class="rail-l3"><a href="#slack-mrkdwn-is-not-markdown-v5-10-0">Slack mrkdwn Is Not Markdown (v5.10.0)</a></li>
+<li class="rail-l2"><a href="#tooling--environment-traps">Tooling &amp; environment traps</a></li>
+<li class="rail-l3"><a href="#the-actions-token-that-wont-wake-the-next-workflow-v5100">The Actions Token That Won't Wake the Next Workflow (v5.10.0)</a></li>
+<li class="rail-l3"><a href="#bash-buffers-scripts-in-memory-v420">Bash Buffers Scripts In Memory (v4.2.0)</a></li>
+<li class="rail-l3"><a href="#slack-mrkdwn-is-not-markdown-v5100">Slack mrkdwn Is Not Markdown (v5.10.0)</a></li>
 <li class="rail-l3"><a href="#the-truncated-secret-case-study-6">The Truncated Secret (case study 6)</a></li>
 <li class="rail-l3"><a href="#the-day-the-landlords-came-calling-case-study-1">The Day the Landlords Came Calling (case study 1)</a></li>
 <li class="rail-l3"><a href="#the-redirects-file-that-outranked-the-config-case-study-6">The Redirects File That Outranked the Config (case study 6)</a></li>
-<li class="rail-l2"><a href="#trust-amp-blast-radius">Trust &amp;amp; blast radius</a></li>
-<li class="rail-l3"><a href="#the-admin-who-couldn-39-t-fire-herself-v4-3-0">The Admin Who Couldn&amp;#39;t Fire Herself (v4.3.0)</a></li>
+<li class="rail-l2"><a href="#trust--blast-radius">Trust &amp; blast radius</a></li>
+<li class="rail-l3"><a href="#the-admin-who-couldnt-fire-herself-v430">The Admin Who Couldn't Fire Herself (v4.3.0)</a></li>
 <li class="rail-l3"><a href="#the-default-that-was-admin-case-study-4">The Default That Was Admin (case study 4)</a></li>
 <li class="rail-l2"><a href="#the-record-that-lied">The record that lied</a></li>
-<li class="rail-l3"><a href="#the-lock-that-wasn-39-t-case-study-5">The Lock That Wasn&amp;#39;t (case study 5)</a></li>
+<li class="rail-l3"><a href="#the-lock-that-wasnt-case-study-5">The Lock That Wasn't (case study 5)</a></li>
 <li class="rail-l3"><a href="#the-header-nobody-read-case-study-1">The Header Nobody Read (case study 1)</a></li>
 <li class="rail-l3"><a href="#the-edit-that-reported-success-case-study-5">The Edit That Reported Success (case study 5)</a></li>
-<li class="rail-l2"><a href="#parallel-agents-amp-architecture">Parallel agents &amp;amp; architecture</a></li>
+<li class="rail-l2"><a href="#parallel-agents--architecture">Parallel agents &amp; architecture</a></li>
 <li class="rail-l3"><a href="#parallel-work-case-study-1">Parallel Work (case study 1)</a></li>
 <li class="rail-l3"><a href="#the-subagent-orchestra-case-study-1">The Subagent Orchestra (case study 1)</a></li>
 <li class="rail-l3"><a href="#the-wave-pattern-case-study-2">The Wave Pattern (case study 2)</a></li>
 <li class="rail-l3"><a href="#the-interface-that-never-needed-a-sixth-method-case-study-2">The Interface That Never Needed a Sixth Method (case study 2)</a></li>
 <li class="rail-l3"><a href="#the-v6-worktree-experiment-case-study-3">The v6 Worktree Experiment (case study 3)</a></li>
 <li class="rail-l3"><a href="#the-v7-team-pivot-case-study-3">The v7 Team Pivot (case study 3)</a></li>
-<li class="rail-l3"><a href="#the-vitest-cache-incident-v5-0-0">The Vitest Cache Incident (v5.0.0)</a></li>
+<li class="rail-l3"><a href="#the-vitest-cache-incident-v500">The Vitest Cache Incident (v5.0.0)</a></li>
 <li class="rail-l3"><a href="#the-phantom-downgrade-case-study-5">The Phantom Downgrade (case study 5)</a></li>
-<li class="rail-l3"><a href="#the-docker-port-mappings-that-weren-39-t-case-study-2">The Docker Port Mappings That Weren&amp;#39;t (case study 2)</a></li>
+<li class="rail-l3"><a href="#the-docker-port-mappings-that-werent-case-study-2">The Docker Port Mappings That Weren't (case study 2)</a></li>
 <li class="rail-l2"><a href="#audits-as-craft-work">Audits as craft work</a></li>
 <li class="rail-l3"><a href="#the-security-audit-pass-case-study-4">The Security Audit Pass (case study 4)</a></li>
 <li class="rail-l3"><a href="#the-visual-audit-pass-case-study-4">The Visual Audit Pass (case study 4)</a></li>
@@ -75,36 +74,35 @@
 <main class="doc-main" id="content">
 <header class="doc-masthead">
 <p class="doc-eyebrow">The Engineer + Agent Playbook</p>
-<h1 class="doc-title">Part V — Field Notes</h1>
+<h1 class="doc-title" id="part-v--field-notes-from-the-case-studies">Part V — Field Notes</h1>
 <p class="doc-meta">Part V — Field Notes</p>
 </header>
 <div class="doc-body">
-<h1 id="part-v-field-notes-from-the-case-studies">Part V — Field Notes from the Case Studies</h1>
 <p>Every rule in this playbook has a bruise under it. The entries below are where the bruises came from — compact re-tellings of the bugs that taught us the rules, each one naming the chapter it grounds. Read them in any order; each is self-contained. The headlines are whimsical on purpose, because a bug with a nickname is a bug you remember.</p>
 <p>The stories are grouped by the <em>kind</em> of problem they illustrate, so a reader scanning for &quot;I&#39;m having a verification problem&quot; or &quot;my parallel agents are stepping on each other&quot; can jump to the right neighborhood first. Within a group, they&#39;re in no particular order.</p>
-<h2 id="verification-amp-feedback-loops">Verification &amp; feedback loops</h2>
+<h2 id="verification--feedback-loops">Verification &amp; feedback loops</h2>
 <p><em>Stories where the test was green, the status was &quot;ok,&quot; and the thing was broken. The bruises here all trace back to verifying the wrong surface or trusting a signal that was answering a different question than the one you were asking.</em></p>
-<h3 id="the-health-check-that-wasn-39-t-v5-11-0">The Health Check That Wasn&#39;t (v5.11.0)</h3>
+<h3 id="the-health-check-that-wasnt-v5110">The Health Check That Wasn&#39;t (v5.11.0)</h3>
 <p><strong>What happened:</strong> Three deploys in a row, <code>git_sha</code> came back <code>unknown</code> in the health response after every release. We rebuilt the Docker image pipeline four different ways — shell export of <code>GIT_REV</code>, compose env file, compose override, <code>--build-arg</code> — and each fix deployed cleanly and &quot;didn&#39;t work.&quot;
 <strong>What we thought was happening:</strong> The build-arg plumbing was dropping <code>GIT_REV</code> somewhere between the YAML and the container, and we just had to find where.
 <strong>What was actually happening:</strong> The verification curl was hitting <code>/health</code>, which returns <code>{&quot;status&quot;:&quot;ok&quot;}</code> and has never had a <code>git_sha</code> field. The full health JSON lives at <code>/api/v1/health</code>. The producer was never broken. We spent three deploys fixing a hole that wasn&#39;t there because the verifier was looking through the wrong window.
 <strong>The lesson:</strong> §8 — health checks must check health, and verification curls must hit the endpoint that reports it. <em>(See DevOps Playbook Gotcha #8.)</em></p>
-<h3 id="verify-what-you-shipped-not-what-you-built-v5-9-0">Verify What You Shipped, Not What You Built (v5.9.0)</h3>
+<h3 id="verify-what-you-shipped-not-what-you-built-v590">Verify What You Shipped, Not What You Built (v5.9.0)</h3>
 <p><strong>What happened:</strong> The deploy script reported success. The new container had started. Every status check was green and every log line said &quot;ok.&quot; The live site was still serving the old version.
 <strong>What we thought was happening:</strong> A browser cache, a CDN delay, something between the user and the server — not the deploy itself.
 <strong>What was actually happening:</strong> An orphan container from the previous compose definition was still holding the port. The new container was running and healthy and completely unreachable from the internet, because nginx had never flipped to it. &quot;I started the container&quot; had become a stand-in for &quot;the container is serving traffic.&quot; The fix was one line of verification: one <code>curl</code> against the public health URL, comparing the response body to the SHA we just built.
 <strong>The lesson:</strong> §8 — evidence before assertions, against the URL the user will actually hit.</p>
-<h3 id="trust-your-local-tests-v5-7-0">Trust Your Local Tests (v5.7.0)</h3>
+<h3 id="trust-your-local-tests-v570">Trust Your Local Tests (v5.7.0)</h3>
 <p><strong>What happened:</strong> For three releases running, the backend test suite passed on every laptop and failed intermittently in CI. Nobody trusted &quot;local green&quot; anymore — every PR got a manual &quot;but did it pass in CI?&quot; even after it had passed in CI.
 <strong>What we thought was happening:</strong> Flaky tests. A Redis timing issue. Something environmental we&#39;d catch eventually.
 <strong>What was actually happening:</strong> Local used SQLite via a <code>is_testing</code> branch in <code>database.py</code>; CI used Postgres. Every release, the gap introduced a new dialect-specific failure, and every release we patched the symptom. The rescue was a single cycle of the full loop applied to the gap itself — rip the SQLite branch out, make <code>conftest.py</code> truncate a shared Postgres engine between tests, force every environment through the same path.
 <strong>The lesson:</strong> §8 — verify in the environment that matters, and §12 — you cannot out-discipline a missing rail.</p>
-<h3 id="the-cache-that-worked-locally-and-lied-in-ci-v5-4-0">The Cache That Worked Locally And Lied In CI (v5.4.0)</h3>
+<h3 id="the-cache-that-worked-locally-and-lied-in-ci-v540">The Cache That Worked Locally And Lied In CI (v5.4.0)</h3>
 <p><strong>What happened:</strong> We refactored the cache layer so Pydantic models flowed through Redis, shipped the PR with a green local suite, and watched an image-generation pipeline explode in CI the moment the deploy ran.
 <strong>What we thought was happening:</strong> A Redis connection issue, or maybe a dependency version mismatch in the CI image.
 <strong>What was actually happening:</strong> Someone had written <code>json.dumps(model, default=str)</code> as the serializer. <code>default=str</code> does not dictify a Pydantic model — it calls <code>str()</code> on it and produces the model&#39;s <em>repr</em>, a string that looks like Python source. Local was green because local used an in-memory cache with no serialization path at all; the model went in as an object and came out as an object. CI had actual Redis, which needed JSON, which exposed the bug.
 <strong>The lesson:</strong> §8 — if your local doesn&#39;t run what CI runs, your local green is a lie.</p>
-<h3 id="the-doorbell-that-never-rang-v4-2-0">The Doorbell That Never Rang (v4.2.0)</h3>
+<h3 id="the-doorbell-that-never-rang-v420">The Doorbell That Never Rang (v4.2.0)</h3>
 <p><strong>What happened:</strong> Audit logging shipped. Backend tests green, frontend tests green, a beautiful admin page that rendered an audit table. The table had zero rows in it. Every admin action completed successfully and left no trace.
 <strong>What we thought was happening:</strong> A query filter bug, or a timezone off-by-one making events land outside the default window.
 <strong>What was actually happening:</strong> Nothing in between the two halves emitted an audit event. Backend exposed the read endpoint. Frontend rendered the list. No service call anywhere in the admin routes actually fired the emit. Both halves were tested in isolation; nobody had wired the doorbell to the button. A thirty-second click in a real browser would have caught it.
@@ -146,7 +144,7 @@
 <strong>The lesson:</strong> §8 — observability is part of the system; verify it observes. Fire a deliberate test error through the pipe now and then.</p>
 <h2 id="scope-plans-and-surprises">Scope, plans, and surprises</h2>
 <p><em>Stories where the plan looked obvious, the scope felt small, and the thing that bit was the work nobody had named yet. These are the bruises that come from skipping the brainstorm, leaving a placeholder in a plan, or trusting a fan-out to hide coordination problems it never could.</em></p>
-<h3 id="four-scoping-gaps-in-one-release-v5-11-0">Four Scoping Gaps in One Release (v5.11.0)</h3>
+<h3 id="four-scoping-gaps-in-one-release-v5110">Four Scoping Gaps in One Release (v5.11.0)</h3>
 <p><strong>What happened:</strong> A one-line release-automation config fix was supposed to make Release PRs open against the develop branch and trigger the deploy workflow when a Release was published. The fix shipped. Nothing worked. Then the second fix shipped. Nothing worked.
 <strong>What we thought was happening:</strong> A typo in <code>release-please-config.json</code> — add <code>target-branch</code>, move on.
 <strong>What was actually happening:</strong> Four separate scoping errors, each plausible in isolation. <code>target-branch</code> is an action input, not a config key — the JSON accepted it silently. There was no anchor Release, so release-please scanned to the start of the repo. The merge commit used <code>release:</code> as its type, which is not a conventional-commit type and was silently skipped. And release-please plus the default <code>GITHUB_TOKEN</code> does not trigger downstream <code>release: types: [published]</code> workflows.
@@ -156,12 +154,12 @@
 <strong>What we thought was happening:</strong> A rendering inconsistency — maybe a stale cache on one of the pages.
 <strong>What was actually happening:</strong> Three copies of the same function that had <em>drifted silently</em>. Nobody owned the reconciliation because the copies were small enough individually that none of them flagged in review. The duplication was fine the day it shipped; what it became was a bug. The fix was to extract the helper into a shared module — the extract that, under §7&#39;s rule, had been deferred as &quot;the pattern hasn&#39;t stabilized yet.&quot; It had. The stabilization was invisible because nobody re-checked.
 <strong>The lesson:</strong> §7 — duplicates are fine when the pattern is still finding its shape; duplicates that have already drifted are a bug waiting to be reported. Re-check at each correction, not just at the third.</p>
-<h3 id="the-four-fix-wcag-contrast-cycle-v5-5-0-v5-6-0">The Four-Fix WCAG Contrast Cycle (v5.5.0–v5.6.0)</h3>
+<h3 id="the-four-fix-wcag-contrast-cycle-v550v560">The Four-Fix WCAG Contrast Cycle (v5.5.0–v5.6.0)</h3>
 <p><strong>What happened:</strong> Across two releases, four separate WCAG contrast violations slipped into the UI — each one a utility-class color swap picked by eye that looked fine in the design tool, failed the axe-core suite on the next run, and got fixed with a one-class swap.
 <strong>What we thought was happening:</strong> We thought we were calibrated to the contrast rules by now. After the second one, we thought we were calibrated <em>now</em>. After the third, we stopped guessing.
 <strong>What was actually happening:</strong> Nothing was broken — the automated rail was catching exactly what it was designed to catch. The humans were the slow learners. The right move was to stop pre-judging contrast by eye and let the axe-core evidence do the approving.
 <strong>The lesson:</strong> §9 — when the blast radius is small and the test is automated, confirm by evidence, not by ceremony.</p>
-<h3 id="hand-rolling-the-legacy-state-machine-right-call-wrong-call-second-case-study-v0-3-0">Hand-Rolling the Legacy State Machine — Right Call, Wrong Call (second case study, v0.3.0)</h3>
+<h3 id="hand-rolling-the-legacy-state-machine--right-call-wrong-call-second-case-study-v030">Hand-Rolling the Legacy State Machine — Right Call, Wrong Call (second case study, v0.3.0)</h3>
 <p><strong>What happened:</strong> The second case study was implementing a batch of early-era protocols. One of them is the pathological one — a decades-old protocol that uses <em>two connections</em> for what every other protocol accomplishes with one, with a secondary data channel that requires hand-negotiated host/port encoding in a format nobody else uses. The team considered importing a library and decided instead to hand-roll the entire state machine from the standard library. ~150 lines. Pure stdlib. Listener, data channel, directory listing, file transfer. All of it.
 <strong>What we thought was happening:</strong> This is a judgment call about dependency weight versus implementation cost. The project&#39;s ethos was zero-dependency-if-possible; the protocol was in scope; the hand-roll was tractable; we&#39;d save the dep.
 <strong>What was actually happening:</strong> The retro named the tension directly: <em>&quot;Right because it kept the dependency count low and forced us to truly understand the data-channel negotiation. Wrong because we now truly understand the data-channel negotiation, and that knowledge cannot be unlearned.&quot;</em> The hand-roll worked. It shipped. The test suite ran clean. And the team now carries around the protocol&#39;s internal mechanics as permanent mental residue — the bespoke host-port encoding, the ephemeral listener, the two-connection dance, the state transitions that make sense only if you were in the room when the spec was written. Every unit of knowledge about a legacy protocol you gain is a unit of attention you cannot reclaim for anything else. The dependency you didn&#39;t import was free; the attention you spent internalizing the protocol is not.
@@ -176,9 +174,9 @@
 <strong>What we thought was happening:</strong> A reasonable north star for a daily-use product.
 <strong>What was actually happening:</strong> The metric was <em>&quot;a streak in a trenchcoat&quot;</em> — the exact engagement mechanic the product forbids, smuggled into the meta-layer by pattern-matching on what success metrics usually look like. The human&#39;s verdict on streaks (&quot;Streaks stink of judgement&quot;) reversed the metric out of the specs entirely. The catch happened only because the elicitation session made the agent state its model of success out loud before any of it was load-bearing.
 <strong>The lesson:</strong> §4 — audit the agent&#39;s proposed north stars against the product&#39;s own ethos. The agent optimizes toward the pattern, and the pattern is somebody else&#39;s product.</p>
-<h2 id="diagnosis-amp-the-lab">Diagnosis &amp; the lab</h2>
+<h2 id="diagnosis--the-lab">Diagnosis &amp; the lab</h2>
 <p><em>Stories where the fix was drafted before the evidence was read — and what happened when a project started shipping instruments instead of guesses. The bruises here come from trusting a diagnosis (the ticket&#39;s, the agent&#39;s, your own) that no trace had ever witnessed.</em></p>
-<h3 id="the-hedge-that-wasn-39-t-case-study-5">The Hedge That Wasn&#39;t (case study 5)</h3>
+<h3 id="the-hedge-that-wasnt-case-study-5">The Hedge That Wasn&#39;t (case study 5)</h3>
 <p><strong>What happened:</strong> A ticket reported that hedge phrases (&quot;just a little bit&quot;) were suppressing heavy-affect detection in a journaling classifier. A hedge-ignore subsystem was designed and half-drafted.
 <strong>What we thought was happening:</strong> Hedges were diluting the signal; the fix was to strip them before classification.
 <strong>What was actually happening:</strong> The persisted trace — newly available, because the previous release had shipped the diagnostic surface instead of a fix — showed the misfired entry had never matched anything: the word <code>sad</code> simply wasn&#39;t in the heavy-signals list, which spoke only in extremes (<code>devastated</code>, <code>hollow</code>, <code>grief</code>). Four lines of mild-affect vocabulary fixed it. <em>&quot;It would have been a beautiful fix for a problem that didn&#39;t exist.&quot;</em>
@@ -198,19 +196,19 @@
 <strong>What we thought was happening:</strong> A configuration note for the backlog.
 <strong>What was actually happening:</strong> Four curls confirmed that every shared link&#39;s preview had been a 401 JSON blob on every social platform for three releases — the link-preview generator built two versions earlier had never once been reachable from the surfaces it existed to serve, dropped in a later nginx consolidation. No one had filed a bug, because broken share previews don&#39;t generate bug reports; friends just don&#39;t click. <em>&quot;The silence is the symptom.&quot;</em> The two-issue release became three, and the third was the one production needed most.
 <strong>The lesson:</strong> §5 and §10 — exploration finds the bugs nobody filed. Features whose failure mode is silence need scheduled probes, because no user will ever tell you.</p>
-<h2 id="tooling-amp-environment-traps">Tooling &amp; environment traps</h2>
+<h2 id="tooling--environment-traps">Tooling &amp; environment traps</h2>
 <p><em>Stories where the code was fine and the tool was lying. Bash buffering its own script, a token that couldn&#39;t wake the next workflow, a Slack dialect cosplaying as Markdown — the bruises here all come from trusting a tool to behave like its documentation said it did.</em></p>
-<h3 id="the-actions-token-that-won-39-t-wake-the-next-workflow-v5-10-0">The Actions Token That Won&#39;t Wake the Next Workflow (v5.10.0)</h3>
+<h3 id="the-actions-token-that-wont-wake-the-next-workflow-v5100">The Actions Token That Won&#39;t Wake the Next Workflow (v5.10.0)</h3>
 <p><strong>What happened:</strong> We moved release creation to release-please and the deploy pipeline went silent. Merging the Release PR created the GitHub Release exactly as intended; the <code>deploy.yml</code> workflow, wired to <code>release: types: [published]</code>, never fired.
 <strong>What we thought was happening:</strong> A YAML trigger typo, or maybe a branch-protection rule eating the event.
 <strong>What was actually happening:</strong> A documented GitHub Actions behavior: PRs and Releases created by a workflow using the default <code>GITHUB_TOKEN</code> do not trigger downstream workflows. The &quot;fix&quot; was technically working — a Release was created — but the next stage was built on a chain that the token could not carry across. A PAT or GitHub App token was required for the handoff.
 <strong>The lesson:</strong> §8 — verify in the environment that matters; a green release event doesn&#39;t prove the downstream workflow saw it.</p>
-<h3 id="bash-buffers-scripts-in-memory-v4-2-0">Bash Buffers Scripts In Memory (v4.2.0)</h3>
+<h3 id="bash-buffers-scripts-in-memory-v420">Bash Buffers Scripts In Memory (v4.2.0)</h3>
 <p><strong>What happened:</strong> The footer on the live site read <code>rev unknown</code> after deploy. The footer had displayed the git hash since v4.0.0. It worked in dev. It worked in CI. It did not work in production. We pushed fix after fix to <code>deploy.sh</code> and watched the old buggy version run to completion anyway.
 <strong>What we thought was happening:</strong> Git wasn&#39;t pulling, or the runner had a stale clone, or the <code>GIT_REV</code> export was being eaten somewhere in the compose plumbing.
 <strong>What was actually happening:</strong> Bash reads a script into a memory buffer when it starts executing. <code>git pull</code> updated the file on disk — the new bytes were right there — but the running shell kept executing its in-memory copy of the old file. Any edits after the <code>git pull</code> line never took effect on the run that pulled them. The fix is one line: after the pull, <code>exec &quot;$0&quot; &quot;$@&quot;</code> to re-read the script from disk.
 <strong>The lesson:</strong> §11 — when the obvious fix doesn&#39;t stick, stop editing and dump the raw state. <em>(See DevOps Playbook Gotcha #9 for the <code>exec &quot;$0&quot; &quot;$@&quot;</code> self-reexec pattern.)</em></p>
-<h3 id="slack-mrkdwn-is-not-markdown-v5-10-0">Slack mrkdwn Is Not Markdown (v5.10.0)</h3>
+<h3 id="slack-mrkdwn-is-not-markdown-v5100">Slack mrkdwn Is Not Markdown (v5.10.0)</h3>
 <p><strong>What happened:</strong> CI notifications started going out to the team channel with raw <code>**asterisks**</code> and <code>[link text](urls)</code> rendered as literal characters instead of formatting. The messages looked like a drunk bot.
 <strong>What we thought was happening:</strong> A webhook payload escaping bug — something double-encoding the Markdown before Slack got it.
 <strong>What was actually happening:</strong> Slack&#39;s mrkdwn is not Markdown. Bold is <code>*single asterisks*</code>, not <code>**double**</code>. Links are <code>&lt;url|text&gt;</code>, not <code>[text](url)</code>. The webhook was delivering exactly what we&#39;d written; we had written the wrong dialect. The fix was a full conversion to Block Kit, where the formatting contract is explicit instead of cosplaying as a familiar one.
@@ -230,9 +228,9 @@
 <strong>What we thought was happening:</strong> The pattern was identical; something environmental had to be wrong.
 <strong>What was actually happening:</strong> The third app had a <code>public/_redirects</code> file whose bare catch-all <strong>outranks</strong> the <code>netlify.toml</code> redirects the pattern relied on. <em>&quot;The pattern we&#39;d called &#39;identical&#39; was identical in the code and different in the routing, and the difference lived in a file we hadn&#39;t thought to look at.&quot;</em> The third repetition is when you stop reading the instructions — and when the platform&#39;s precedence rules stop forgiving you.
 <strong>The lesson:</strong> §5 — explore before you plan applies to config, too. &quot;Identical to the last one&quot; is a claim about every layer, including the ones you didn&#39;t diff.</p>
-<h2 id="trust-amp-blast-radius">Trust &amp; blast radius</h2>
+<h2 id="trust--blast-radius">Trust &amp; blast radius</h2>
 <p><em>Stories about authorization, denial paths, and the moments when &quot;yes&quot; in one direction quietly failed to mean &quot;yes&quot; in every other direction. The bruises here come from forgetting that the interesting rules live in what gets refused, not in what gets allowed.</em></p>
-<h3 id="the-admin-who-couldn-39-t-fire-herself-v4-3-0">The Admin Who Couldn&#39;t Fire Herself (v4.3.0)</h3>
+<h3 id="the-admin-who-couldnt-fire-herself-v430">The Admin Who Couldn&#39;t Fire Herself (v4.3.0)</h3>
 <p><strong>What happened:</strong> RBAC landed for the admin panel. The interesting bugs weren&#39;t in the &quot;yes&quot; paths — those were one-liners. They were in the &quot;no&quot; paths: self-role-change, self-deactivation, self-deletion, privilege escalation via update.
 <strong>What we thought was happening:</strong> RBAC is a matrix of allows; fill it in and you&#39;re done.
 <strong>What was actually happening:</strong> Trust in one direction (&quot;you are an admin&quot;) does not generalize in every direction (&quot;therefore you may fire yourself&quot;). Half a dozen explicit refusals had to be written on purpose, one by one, because each was a line the matrix didn&#39;t draw by default. The last-superadmin protection came later still, in v5.6, because we missed it the first time too.
@@ -244,7 +242,7 @@
 <strong>The lesson:</strong> §9 — the unsafe default is the one that gets used by everyone who didn&#39;t think about it. Make the safe choice the default; require explicit opt-in for elevation.</p>
 <h2 id="the-record-that-lied">The record that lied</h2>
 <p><em>Stories where the written context — memory, docs, comments, the harness itself — asserted something that was never true, and every reader repeated it with confidence. The bruises here come from treating written words as witnesses. Only a command output is a witness.</em></p>
-<h3 id="the-lock-that-wasn-39-t-case-study-5">The Lock That Wasn&#39;t (case study 5)</h3>
+<h3 id="the-lock-that-wasnt-case-study-5">The Lock That Wasn&#39;t (case study 5)</h3>
 <p><strong>What happened:</strong> The instructions file said main was branch-protected. The auto-memory said so. Weeks of PR descriptions said so. During an audit, someone finally ran the API call.
 <strong>What we thought was happening:</strong> Nothing — that&#39;s the point. The gate appeared to be doing its job.
 <strong>What was actually happening:</strong> <code>404: Branch not protected</code>. The protection had never been enabled. <em>&quot;Both were lying. Not maliciously. Just confidently. For weeks.&quot;</em> The gate had appeared to work because no one had tested whether the gate existed. The fix took two minutes; the reclassification took longer — the README now treats an un-PR&#39;d commit on main as a security incident, and the belief carries its probe. The strange small joy from the retro: after enabling protection, <em>&quot;the auto-memory was not corrected. It is now correct without modification.&quot;</em>
@@ -259,7 +257,7 @@
 <strong>What we thought was happening:</strong> The components had been wired; the harness said the edits succeeded.
 <strong>What was actually happening:</strong> The harness&#39;s edit tool had, at least once, reported success without persisting the change. The components compiled cleanly in isolation, CI stayed green, and the missing <code>&lt;Route&gt;</code> entries were invisible until a human clicked. The harness is software; software lies under load.
 <strong>The lesson:</strong> §2 — trust harness claims the way you trust &quot;tests pass&quot;: with evidence. For edits that matter, the witness is <code>git diff</code>, not the tool&#39;s return status.</p>
-<h2 id="parallel-agents-amp-architecture">Parallel agents &amp; architecture</h2>
+<h2 id="parallel-agents--architecture">Parallel agents &amp; architecture</h2>
 <p><em>Stories where the individual agents did clean work and the result broke anyway — because the shape of the collaboration had a hidden incompatibility with the tools underneath it, or because an effect emerged from the parallel structure that no single agent could see. Fix the topology, not the agents.</em></p>
 <h3 id="parallel-work-case-study-1">Parallel Work (case study 1)</h3>
 <p><strong>What happened:</strong> Two agents dispatched to write tests in parallel — one in Python/pytest, one in TypeScript/vitest. Different directories, different build tools, no shared state. The backend agent finished in two minutes; the frontend took three.
@@ -291,7 +289,7 @@
 <strong>What we thought was happening:</strong> A last-ditch simplification.
 <strong>What was actually happening:</strong> Three agents on three separate features merged cleanly with zero conflicts. Two more agents ran in a follow-up phase with explicit file-boundary instructions for shared files like <code>App.tsx</code> and <code>types.ts</code>. Same project, same agents, same discipline as v6. The architecture changed; the outcome changed. The retro: <em>&quot;parallel agents work well when boundaries are drawn at the feature level (different files) rather than the branch level (different git state).&quot;</em>
 <strong>The lesson:</strong> §11 — you don&#39;t out-discipline a bad topology; you change it. §13 — isolate context with worktrees; isolate work with file boundaries.</p>
-<h3 id="the-vitest-cache-incident-v5-0-0">The Vitest Cache Incident (v5.0.0)</h3>
+<h3 id="the-vitest-cache-incident-v500">The Vitest Cache Incident (v5.0.0)</h3>
 <p><strong>What happened:</strong> Four parallel agents wrote theme variants across several pages. The code was clean, the tests were clean, the dispatch was textbook. Then thirty-eight unrelated tests started hanging with vitest timeouts, every one of them in files nobody had touched.
 <strong>What we thought was happening:</strong> An agent had subtly broken a shared util or introduced a render loop somewhere in a component mount path.
 <strong>What was actually happening:</strong> Four agents had been writing to the same <code>node_modules</code> directory at once, and vitest&#39;s module-graph cache under <code>node_modules/.vitest</code> had corrupted itself during the concurrent writes. No individual agent&#39;s output was wrong. The failure was an emergent property of the parallel structure. <code>rm -rf node_modules/.vitest</code> fixed all thirty-eight tests.
@@ -301,7 +299,7 @@
 <strong>What we thought was happening:</strong> Someone fat-fingered a revert.
 <strong>What was actually happening:</strong> Most plausibly, one of the &quot;read-only&quot; auditors had run a package-manager command mid-analysis, and the tool had helpfully rewritten the manifest in the shared tree. The audit itself was a clear win — eighteen issues filed in ten minutes — but &quot;report-only&quot; described the agents&#39; <em>assignment</em>, not their <em>side effects</em>. Harmless this time; riding along in someone&#39;s next commit the time after.
 <strong>The lesson:</strong> §13 — isolate even the read-only agents. A fleet sharing your working tree is the topology failure in its mildest form, and the mild form is free to prevent.</p>
-<h3 id="the-docker-port-mappings-that-weren-39-t-case-study-2">The Docker Port Mappings That Weren&#39;t (case study 2)</h3>
+<h3 id="the-docker-port-mappings-that-werent-case-study-2">The Docker Port Mappings That Weren&#39;t (case study 2)</h3>
 <p><strong>What happened:</strong> 180+ passing tests. Zero data races. Four clean releases. And a Docker container that had been completely unreachable from outside for every single one of those releases.
 <strong>What we thought was happening:</strong> The container was fine — CI said so, and CI had been green on every dimension we&#39;d thought to measure.
 <strong>What was actually happening:</strong> The Makefile&#39;s port mapping routed a host port to a privileged container port, and the binary inside the container ran as a non-root user that could not bind privileged ports and was listening on a different port entirely. Every port mapping was a Potemkin village pointing at an empty socket. The first manual smoke test returned an immediate TCP RST. CI had validated that the image <em>built</em>; CI had never validated that the image <em>answered</em>. Fix: fifteen lines across three files. The retro: <em>&quot;unit tests prove your code works. Integration tests prove your components work together. But nothing proves your deployment works except deploying it and poking it with a stick.&quot;</em>

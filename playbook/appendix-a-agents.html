@@ -15,50 +15,48 @@
 <p class="rail-doc"><a href="index.html">The Engineer + Agent Playbook</a></p>
 <h2 class="rail-heading">Contents</h2>
 <ol class="rail-list">
-<li class="rail-l1"><a href="#appendix-a-if-you-are-an-agent-reading-this">Appendix A — If you are an agent reading this</a></li>
-<li class="rail-l2"><a href="#1-mental-models-full-section">§1 Mental models · full section</a></li>
-<li class="rail-l2"><a href="#2-the-model-and-the-harness-full-section">§2 The model and the harness · full section</a></li>
-<li class="rail-l2"><a href="#3-the-workspace-full-section">§3 The workspace · full section</a></li>
-<li class="rail-l2"><a href="#4-the-first-conversation-full-section">§4 The first conversation · full section</a></li>
-<li class="rail-l2"><a href="#5-the-loop-full-section">§5 The loop · full section</a></li>
-<li class="rail-l2"><a href="#6-memory-hygiene-full-section">§6 Memory hygiene · full section</a></li>
-<li class="rail-l2"><a href="#7-skills-as-institutional-knowledge-full-section">§7 Skills as institutional knowledge · full section</a></li>
-<li class="rail-l2"><a href="#8-verification-before-completion-full-section">§8 Verification before completion · full section</a></li>
-<li class="rail-l2"><a href="#9-trust-boundaries-full-section">§9 Trust boundaries · full section</a></li>
-<li class="rail-l2"><a href="#10-diagnosis-build-the-lab-full-section">§10 Diagnosis — build the lab · full section</a></li>
-<li class="rail-l2"><a href="#11-failure-modes-amp-recovery-full-section">§11 Failure modes &amp;amp; recovery · full section</a></li>
-<li class="rail-l2"><a href="#12-the-rescue-protocol-full-section">§12 The rescue protocol · full section</a></li>
-<li class="rail-l2"><a href="#13-parallel-agents-amp-worktrees-full-section">§13 Parallel agents &amp;amp; worktrees · full section</a></li>
-<li class="rail-l2"><a href="#14-plan-quality-full-section">§14 Plan quality · full section</a></li>
-<li class="rail-l2"><a href="#15-audits-full-section">§15 Audits · full section</a></li>
-<li class="rail-l2"><a href="#16-the-retro-habit-full-section">§16 The retro habit · full section</a></li>
+<li class="rail-l2"><a href="#1-mental-models--full-section">§1 Mental models · full section</a></li>
+<li class="rail-l2"><a href="#2-the-model-and-the-harness--full-section">§2 The model and the harness · full section</a></li>
+<li class="rail-l2"><a href="#3-the-workspace--full-section">§3 The workspace · full section</a></li>
+<li class="rail-l2"><a href="#4-the-first-conversation--full-section">§4 The first conversation · full section</a></li>
+<li class="rail-l2"><a href="#5-the-loop--full-section">§5 The loop · full section</a></li>
+<li class="rail-l2"><a href="#6-memory-hygiene--full-section">§6 Memory hygiene · full section</a></li>
+<li class="rail-l2"><a href="#7-skills-as-institutional-knowledge--full-section">§7 Skills as institutional knowledge · full section</a></li>
+<li class="rail-l2"><a href="#8-verification-before-completion--full-section">§8 Verification before completion · full section</a></li>
+<li class="rail-l2"><a href="#9-trust-boundaries--full-section">§9 Trust boundaries · full section</a></li>
+<li class="rail-l2"><a href="#10-diagnosis--build-the-lab--full-section">§10 Diagnosis — build the lab · full section</a></li>
+<li class="rail-l2"><a href="#11-failure-modes--recovery--full-section">§11 Failure modes &amp; recovery · full section</a></li>
+<li class="rail-l2"><a href="#12-the-rescue-protocol--full-section">§12 The rescue protocol · full section</a></li>
+<li class="rail-l2"><a href="#13-parallel-agents--worktrees--full-section">§13 Parallel agents &amp; worktrees · full section</a></li>
+<li class="rail-l2"><a href="#14-plan-quality--full-section">§14 Plan quality · full section</a></li>
+<li class="rail-l2"><a href="#15-audits--full-section">§15 Audits · full section</a></li>
+<li class="rail-l2"><a href="#16-the-retro-habit--full-section">§16 The retro habit · full section</a></li>
 </ol>
 </nav>
 <main class="doc-main" id="content">
 <header class="doc-masthead">
 <p class="doc-eyebrow">The Engineer + Agent Playbook</p>
-<h1 class="doc-title">Appendix A — For Agents</h1>
+<h1 class="doc-title" id="appendix-a--if-you-are-an-agent-reading-this">Appendix A — For Agents</h1>
 <p class="doc-meta">Appendix A — For Agents</p>
 </header>
 <div class="doc-body">
-<h1 id="appendix-a-if-you-are-an-agent-reading-this">Appendix A — If you are an agent reading this</h1>
 <p><em>Reference, not flow.</em> The Coda was the closing statement. This appendix exists so agents can find the rules without re-reading the prose — and so humans can skim the whole spine in one screen when they want to.</p>
 <p>You are an agent, and a human engineer has loaded this playbook as context because they want you to work the way it describes. It does not matter which model you are or which harness is running you — the rules below are model-invariant, and §2 maps the harness-specific names (read &quot;CLAUDE.md&quot; as your instructions file, &quot;settings.json&quot; as your harness config). This appendix is your index: every rule from chapters §1 through §16, stripped to imperatives, each with a one-sentence reason and a link back to the full section. Skim the rules here; jump to the section when a rule needs context you don&#39;t have. One overriding instruction: if anything in this appendix conflicts with the project&#39;s instructions file, with a skill the user tells you to run, or with a direct instruction from the user, the user wins — always. The rest of the file is for the human reading over your shoulder; you can skim it, but the rules live here.</p>
-<h2 id="1-mental-models-full-section">§1 Mental models · <a href="#1-mental-models">full section</a></h2>
+<h2 id="1-mental-models--full-section">§1 Mental models · <a href="foundations.html#1-mental-models">full section</a></h2>
 <ul>
 <li><strong>Brief the agent like a smart colleague who just walked into the room.</strong> — Every prompt is a cold start; a self-contained briefing prevents invented answers.</li>
 <li><strong>Delegate the task, not the understanding.</strong> — Synthesis is the engineer&#39;s job; handing the agent a riddle is where work falls apart.</li>
 <li><strong>The agent is good at breadth and consistency. It is bad at judgment under ambiguity.</strong> — Use it for search, refactor, fan-out; make trade-off calls yourself.</li>
 <li><strong>Agent-authored domain content is a plausible first draft of the world, not the world.</strong> — Wordlists, heuristics, and personas encode the author&#39;s vocabulary; only real data and the human&#39;s world knowledge close the gap.</li>
 </ul>
-<h2 id="2-the-model-and-the-harness-full-section">§2 The model and the harness · <a href="#2-the-model-and-the-harness">full section</a></h2>
+<h2 id="2-the-model-and-the-harness--full-section">§2 The model and the harness · <a href="foundations.html#2-the-model-and-the-harness">full section</a></h2>
 <ul>
 <li><strong>The disciplines are model-invariant. Only the calibration moves.</strong> — A model upgrade widens the qualifiers (step size, delegable judgment); it never retires verification, retros, or trust boundaries. A better model fails less often and more convincingly.</li>
 <li><strong>Pick the model tier by the shape of the work, not the size of the diff.</strong> — Gates can judge mechanics, so mechanics go cheap; nothing but the model judges voice, so voice goes expensive.</li>
 <li><strong>The harness is a dependency: map its layers, keep the knowledge portable.</strong> — File knowledge by layer (instructions file, memory, skills, hooks, permissions), not by filename; prefer repo-portable homes (AGENTS.md, docs/, retros) so a harness swap loses nothing.</li>
 <li><strong>Trust harness claims the way you trust &quot;tests pass&quot;: with evidence.</strong> — Edit tools mis-report, CLIs truncate secrets, CI providers have billing disputes; verify with an independent read, and keep a manual fallback for every automated rail.</li>
 </ul>
-<h2 id="3-the-workspace-full-section">§3 The workspace · <a href="#3-the-workspace">full section</a></h2>
+<h2 id="3-the-workspace--full-section">§3 The workspace · <a href="foundations.html#3-the-workspace">full section</a></h2>
 <ul>
 <li><strong>Your pipeline is a precondition, not a feature.</strong> — Every discipline in this playbook assumes CI catches mechanical failures quickly and deploys are automated; a flaky pipeline inverts the loop and drags the human into the mechanics layer. You are done when the pipeline is boring. And every automated rail needs a rehearsed manual fallback — automation you can&#39;t bypass is a dependency you can&#39;t survive.</li>
 <li><strong>The instructions file is for facts that don&#39;t change. Memory is for facts that do.</strong> — Stable facts in a stable layer stay correct; moving facts in memory can be corrected next turn.</li>
@@ -66,14 +64,14 @@
 <li><strong>Hooks make automation non-negotiable.</strong> — Anything the agent is asked to &quot;remember to do&quot; will fail silently at least once; hooks take the choice out of the loop.</li>
 <li><strong>The harness config configures the harness. The instructions file configures the agent. They are different layers.</strong> — &quot;Can&#39;t&quot; is enforced by the tool; &quot;should&quot; is enforced by politeness.</li>
 </ul>
-<h2 id="4-the-first-conversation-full-section">§4 The first conversation · <a href="#4-the-first-conversation">full section</a></h2>
+<h2 id="4-the-first-conversation--full-section">§4 The first conversation · <a href="foundations.html#4-the-first-conversation">full section</a></h2>
 <ul>
 <li><strong>Bootstrap with the smallest context that contains the answer.</strong> — Token budget is attention budget; three load-bearing files beat eighty skimmed ones.</li>
 <li><strong>Correct drift in message 2, not message 50.</strong> — Early corrections are nearly free; late ones mean rewriting ten turns built on top of the drift. The highest-leverage corrections are conceptual reframings — correct the frame in one sentence now, or the code in one release later.</li>
 <li><strong>If the agent doesn&#39;t know something, tell it. Don&#39;t let it guess.</strong> — Hallucination is most likely when the agent is confidently filling a gap.</li>
 <li><strong>Make the agent tell you what it thinks you&#39;re building — then grill it.</strong> — The agent&#39;s model of the product is a guess until you&#39;ve heard it recited and corrected it out loud; the value proposition is not derivable from a type definition.</li>
 </ul>
-<h2 id="5-the-loop-full-section">§5 The loop · <a href="#5-the-loop">full section</a></h2>
+<h2 id="5-the-loop--full-section">§5 The loop · <a href="foundations.html#5-the-loop">full section</a></h2>
 <ul>
 <li><strong>Explore before you plan. The plan is not the codebase.</strong> — Run the greps, check the migration state, dispatch the survey agent; ten minutes of reading reality deletes an hour of planning against a memory of it, and exploration finds the bugs nobody filed.</li>
 <li><strong>Run the whole loop. Skip a step out loud or pay for it silently.</strong> — Each step (explore, brainstorm, plan, TDD, verify, commit, retro) catches a different class of failure.</li>
@@ -82,7 +80,7 @@
 <li><strong>Retros feed the next loop.</strong> — Without them, the loop has no memory and each release starts from zero.</li>
 <li><strong>Cycles nest. Each level needs a theme, a boundary, and all three phases.</strong> — Task-level, release-level, and project-level loops all take the same shape; cycles without themes get named by date and forgotten.</li>
 </ul>
-<h2 id="6-memory-hygiene-full-section">§6 Memory hygiene · <a href="#6-memory-hygiene">full section</a></h2>
+<h2 id="6-memory-hygiene--full-section">§6 Memory hygiene · <a href="working-together.html#6-memory-hygiene">full section</a></h2>
 <ul>
 <li><strong>Memory has four types. Use the right one or it rots.</strong> — User facts, feedback, state, and pointers have different staleness profiles; mixing them produces a junk drawer.</li>
 <li><strong>Stale memory is worse than no memory.</strong> — No memory makes the agent ask; stale memory makes it act confidently on last quarter&#39;s facts.</li>
@@ -91,14 +89,14 @@
 <li><strong>Don&#39;t memorize what the code already says.</strong> — Anything one <code>grep</code> away will drift out from under a memory note the moment a file is renamed.</li>
 <li><strong>File your neighbor&#39;s scars, keyed to the trigger that will make them yours.</strong> — A sibling project&#39;s bug plus a named trigger (the dependency bump, the platform migration) is your cheapest future fix; fleets learn through cross-repo memory.</li>
 </ul>
-<h2 id="7-skills-as-institutional-knowledge-full-section">§7 Skills as institutional knowledge · <a href="#7-skills-as-institutional-knowledge">full section</a></h2>
+<h2 id="7-skills-as-institutional-knowledge--full-section">§7 Skills as institutional knowledge · <a href="working-together.html#7-skills-as-institutional-knowledge">full section</a></h2>
 <ul>
 <li><strong>Skills are procedures with discipline. Instructions-file notes are facts you hope get followed.</strong> — If a thing must happen reliably, it needs a host other than the agent&#39;s attention.</li>
 <li><strong>Rigid skills exist for a reason. Don&#39;t adapt the discipline away.</strong> — Rigid skills feel like overkill in exactly the moments they&#39;re needed most.</li>
 <li><strong>Write a skill after the third correction.</strong> — The third correction is the moment &quot;I keep saying this&quot; becomes &quot;the system should enforce this.&quot;</li>
 <li><strong>Ship the cheap defense now; schedule the clean refactor for a quiet phase.</strong> — The warning comment buys the time; the maintenance cycle spends it; skipping either half is how seams become incidents. Rigor budgets are per-audience — debug tooling may take documented shortcuts user-facing code can&#39;t.</li>
 </ul>
-<h2 id="8-verification-before-completion-full-section">§8 Verification before completion · <a href="#8-verification-before-completion">full section</a></h2>
+<h2 id="8-verification-before-completion--full-section">§8 Verification before completion · <a href="working-together.html#8-verification-before-completion">full section</a></h2>
 <ul>
 <li><strong>&quot;Tests pass&quot; is not &quot;feature works.&quot; Verify the feature.</strong> — Suites can be green while the feature is broken because no test exercised the wire. Check what each assertion would tolerate — a test guarding a weaker property than the invariant is theater in miniature.</li>
 <li><strong>Evidence before assertions. Always.</strong> — Prose without paste is hallucination; evidence of the wrong claim is theater.</li>
@@ -107,7 +105,7 @@
 <li><strong>When a value crosses a layer boundary, verify the wire, not the fixture.</strong> — Some delivery properties are structurally invisible to unit tests; the manual wire-level integration task is mandatory plan content, not extra credit.</li>
 <li><strong>Health checks must check health — and observability must be observed.</strong> — A check that can&#39;t detect a downed dependency is a status check cosplaying as one; an unobserved error tracker is a prop. Fire a test flare through it.</li>
 </ul>
-<h2 id="9-trust-boundaries-full-section">§9 Trust boundaries · <a href="#9-trust-boundaries">full section</a></h2>
+<h2 id="9-trust-boundaries--full-section">§9 Trust boundaries · <a href="working-together.html#9-trust-boundaries">full section</a></h2>
 <ul>
 <li><strong>Match the action to its blast radius. Confirm before crossing the line.</strong> — Blast radius is set by recovery time, not by command length. Reversibility has a time axis: deploy the conservative setting first and calendar the escalation on hard-to-put-back levers.</li>
 <li><strong>Authorization is scoped, not blanket.</strong> — Every yes is for one action; it is not a standing permission slip for the next risky thing.</li>
@@ -115,7 +113,7 @@
 <li><strong>Secrets never transit the transcript.</strong> — The session log is a copy of everything that touches it; pipe secrets, verify their properties not their values, and rotate anything that leaked.</li>
 <li><strong>Before touching a non-negotiable, write down what would change your mind.</strong> — File the challenge as a pre-registered experiment: measurable bar, full cost accounting, no conclusion before evidence.</li>
 </ul>
-<h2 id="10-diagnosis-build-the-lab-full-section">§10 Diagnosis — build the lab · <a href="#10-diagnosis--build-the-lab">full section</a></h2>
+<h2 id="10-diagnosis--build-the-lab--full-section">§10 Diagnosis — build the lab · <a href="when-it-goes-wrong.html#10-diagnosis--build-the-lab">full section</a></h2>
 <ul>
 <li><strong>Build the diagnostic surface before the fix.</strong> — When a bug class recurs, ship the instrument (persisted traces, replay playground, exportable diagnostics) first; then the fixes land in batches and you watch them land instead of inferring it.</li>
 <li><strong>The ticket&#39;s diagnosis is a hypothesis. Read the trace before believing the issue.</strong> — Fixes designed from the ticket&#39;s framing are beautiful solutions to problems that may not exist; the trace is the only witness that was there.</li>
@@ -123,7 +121,7 @@
 <li><strong>Exploration mode is not production mode.</strong> — Stateful rules that are correct in the real flow misbehave against a playground&#39;s frozen state; bypass them in the lab with an explicit flag, never in production.</li>
 <li><strong>When the runner wedges, suspect the runner.</strong> — Failures in files you didn&#39;t touch, at speeds that make no sense, are the tooling talking; try the cache clear and the config change before debugging your code, and don&#39;t over-investigate a mystery with zero blast radius.</li>
 </ul>
-<h2 id="11-failure-modes-amp-recovery-full-section">§11 Failure modes &amp; recovery · <a href="#11-failure-modes--recovery">full section</a></h2>
+<h2 id="11-failure-modes--recovery--full-section">§11 Failure modes &amp; recovery · <a href="when-it-goes-wrong.html#11-failure-modes--recovery">full section</a></h2>
 <ul>
 <li><strong>Agent went off the rails:</strong> stop, open a fresh conversation, and write a self-contained briefing (§4) — steering a context-starved conversation only gives new ways to be wrong.</li>
 <li><strong>Agent produced slop:</strong> add explicit YAGNI constraints and promote them into memory or a skill (§6, §7) — without a rail, every prompt drifts toward gold-plating.</li>
@@ -134,13 +132,13 @@
 <li><strong>The workspace lies about state:</strong> everyone agrees on a fact that was never true — probe the load-bearing beliefs with commands (§6, §15); written context is an amplifier, not a witness.</li>
 </ul>
 <p><em>Closing note:</em> every agent failure has a human-side twin — skipped brainstorm, skipped retro, accepted-prose-as-evidence, note-instead-of-skill, claim-written-without-probe. Look for the shortcut you took upstream before you tune the prompt. The antecedent is almost always cheaper to fix than the symptom.</p>
-<h2 id="12-the-rescue-protocol-full-section">§12 The rescue protocol · <a href="#12-the-rescue-protocol">full section</a></h2>
+<h2 id="12-the-rescue-protocol--full-section">§12 The rescue protocol · <a href="when-it-goes-wrong.html#12-the-rescue-protocol">full section</a></h2>
 <ul>
 <li><strong>In the next hour:</strong> pick one small scoped task, run the full loop on it, stop using the agent for anything you can&#39;t verify in 5 minutes, and audit memory files with a bias toward deletion — re-calibrate the muscle before optimizing it.</li>
 <li><strong>In the next day:</strong> run the brainstorming skill before every task for a full day, write one feedback memory from last week&#39;s corrections, run an honest retro, and read §8 out loud — stabilize by reinstalling the disciplines that got skipped.</li>
 <li><strong>In the next week:</strong> promote two repeated corrections into real skills, add one hook that enforces a non-negotiable, reconcile the instructions file against memory, and ship one thing end-to-end with pasted evidence — move pain from prompts into the harness.</li>
 </ul>
-<h2 id="13-parallel-agents-amp-worktrees-full-section">§13 Parallel agents &amp; worktrees · <a href="#13-parallel-agents--worktrees">full section</a></h2>
+<h2 id="13-parallel-agents--worktrees--full-section">§13 Parallel agents &amp; worktrees · <a href="leveling-up.html#13-parallel-agents--worktrees">full section</a></h2>
 <ul>
 <li><strong>Fan out only when tasks are independent.</strong> — Group by file overlap, not issue priority. Interface-first design makes conflicts impossible by construction.</li>
 <li><strong>Designate merge points explicitly; update them last.</strong> — Shared touchpoints (config, main, integration tests) belong to a single post-parallel pass. Phase one is fan-out; phase two is the merge-point pass — which ends with reading the diff against the commit message, because the controller owns the history&#39;s truthfulness.</li>
@@ -149,7 +147,7 @@
 <li><strong>Review delegated work in two stages, with reviewers who don&#39;t trust the implementer.</strong> — A spec-compliance pass (asks the revert question) and a code-quality pass (hunts the wrong-someday class), neither fed the implementer&#39;s self-report. Nobody grades their own homework.</li>
 <li><strong>Isolate even the &quot;read-only&quot; agents.</strong> — &quot;Report-only&quot; is a job description, not a sandbox; audit fleets run package managers and dirty shared trees. Give the fleet its own copy of the world.</li>
 </ul>
-<h2 id="14-plan-quality-full-section">§14 Plan quality · <a href="#14-plan-quality">full section</a></h2>
+<h2 id="14-plan-quality--full-section">§14 Plan quality · <a href="leveling-up.html#14-plan-quality">full section</a></h2>
 <ul>
 <li><strong>A plan with placeholders is a wish list.</strong> — If you can&#39;t fill in the step right now, you can&#39;t implement it right now. A known-failing test deferred to &quot;future work&quot; is a TODO, not TDD.</li>
 <li><strong>Each step is one action, two to five minutes long.</strong> — Small steps surface complexity before the agent buries it. The time budget is a proxy for small blame radius; when architecture provides that for free, steps can be larger.</li>
@@ -157,14 +155,14 @@
 <li><strong>Predict the failing output before you run it.</strong> — Write the expected red (exception, message, counts) into each TDD step; a match is a drift detector reporting all-clear, a mismatch is the cheapest warning you&#39;ll ever get.</li>
 <li><strong>Descope explicitly. Name what&#39;s out, and name why.</strong> — Every plan gets a &quot;descoped&quot; section with named reasons; every change gets a &quot;things we deliberately didn&#39;t do&quot; list, because restraint that isn&#39;t written down will be undone by the next helpful editor.</li>
 </ul>
-<h2 id="15-audits-full-section">§15 Audits · <a href="#15-audits">full section</a></h2>
+<h2 id="15-audits--full-section">§15 Audits · <a href="leveling-up.html#15-audits">full section</a></h2>
 <ul>
 <li><strong>Schedule audits on purpose.</strong> — Whole defect categories generate no bug reports; the only way they&#39;re found is someone deciding to look. The audit is its own themed cycle with its own retro.</li>
 <li><strong>Claims must be downstream of code, not upstream.</strong> — Aspirational policy text is a liability for exactly as long as it&#39;s unimplemented; when the PRD and the code disagree, fix the one a user can verify.</li>
 <li><strong>The debt is in the seams. Diff what you wrote down against what&#39;s true.</strong> — A parallel report-only fleet (docs, security, debt, devops) enumerates the record-vs-reality gap in minutes; the rot itemizes faster than it accumulates if you measure it at all.</li>
 <li><strong>Probe the gate. A protection you&#39;ve never tested is a protection you don&#39;t have.</strong> — Branch rules, backups, alarms, and rate limits look identical present or absent until the day they matter; rattle every gate on a schedule and attach the probe to the belief.</li>
 </ul>
-<h2 id="16-the-retro-habit-full-section">§16 The retro habit · <a href="#16-the-retro-habit">full section</a></h2>
+<h2 id="16-the-retro-habit--full-section">§16 The retro habit · <a href="leveling-up.html#16-the-retro-habit">full section</a></h2>
 <ul>
 <li><strong>Write retros in voice, not in bullet points.</strong> — A dry changelog is forgotten in a week; a story with a nickname is rediscoverable in two years by instinct.</li>
 <li><strong>Retros are how the loop learns.</strong> — A retro is mandatory at the end of every release, even small ones; an honest paragraph beats a dishonest page. Paired with §8: verification catches the failure; retros convert it into a rule.</li>
