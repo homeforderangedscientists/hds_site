@@ -1147,13 +1147,13 @@ In `.github/workflows/deploy.yml`, replace the `Validate HTML` and `Check asset 
       - name: Validate HTML
         run: |
           set -euo pipefail
-          find . -name '*.html' -not -path './.git/*' -print0 \
+          find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' -print0 \
             | xargs -0 npx --yes html-validate@9.7.1
 
       - name: Check asset references
         run: |
           set -euo pipefail
-          find . -name '*.html' -not -path './.git/*' -print0 \
+          find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' -print0 \
             | xargs -0 -n1 python3 scripts/check-assets.py
 ```
 
@@ -1190,8 +1190,8 @@ Expected: line count greater than 0 and `secrets=0`. The `checks` job runs on pu
 
 ```bash
 set -euo pipefail
-find . -name '*.html' -not -path './.git/*' -print0 | xargs -0 npx --yes html-validate@9.7.1 && echo "[1] html OK"
-find . -name '*.html' -not -path './.git/*' -print0 | xargs -0 -n1 python3 scripts/check-assets.py >/dev/null && echo "[2] assets OK"
+find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' -print0 | xargs -0 npx --yes html-validate@9.7.1 && echo "[1] html OK"
+find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' -print0 | xargs -0 -n1 python3 scripts/check-assets.py >/dev/null && echo "[2] assets OK"
 ./scripts/check-htaccess.sh .htaccess >/dev/null && echo "[3] htaccess OK"
 ./scripts/test-check-assets.sh >/dev/null && ./scripts/test-check-htaccess.sh >/dev/null && echo "[4] script tests OK"
 python3 scripts/test-build-pages.py 2>&1 | tail -1
