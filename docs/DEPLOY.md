@@ -230,6 +230,56 @@ The same guard also fails closed if the deletion count it parsed isn't a plain
 number — rather than risk proceeding on a miscounted or garbled value, it
 treats an unparseable count as a reason to stop.
 
+## Updating the ethos or the playbook
+
+Both documents are authored in the separate `groundskeeper` repo. This repo holds
+hand-synced **snapshots** in `content/`, and the published HTML is generated from
+those snapshots — not from `groundskeeper` directly. Nothing detects drift across
+that boundary, so re-syncing is a deliberate act:
+
+```bash
+cp ../groundskeeper/docs/hfds-ethos.md content/
+cp ../groundskeeper/docs/engineer-agent-playbook-v2.md content/
+python3 scripts/build-pages.py
+git add content ethos playbook
+git commit -m "content: re-sync ethos and playbook from groundskeeper"
+```
+
+If you edit `content/` and forget to rebuild, CI fails with
+`FAIL: generated pages do not match committed pages:` followed by a line naming
+each stale file, e.g. `ethos/index.html: content differs from committed`. Run
+`python3 scripts/build-pages.py` and commit the result. That gate covers
+`content/` → HTML. It does **not** cover `groundskeeper` → `content/`.
+
+### If the playbook grows a new Part
+
+`PLAYBOOK_PAGES` in `scripts/build-pages.py` maps section titles to filenames. A
+**leading run** of unmatched top-level sections — the document's own title, plus
+any preface-like sections that come before the first matched Part — legitimately
+joins the front matter that becomes `playbook/index.html`. That's expected and
+not an error.
+
+But any unmatched top-level section that appears **after** the first matched Part
+now fails the build loudly: the error names the offending section and points at
+`PLAYBOOK_PAGES` in `scripts/build-pages.py`, so a new Part can't silently vanish
+into the index page instead of getting its own file. Add an entry to
+`PLAYBOOK_PAGES` for each new Part. A listed page with no matching source section
+also fails the build loudly rather than emitting an empty page.
+
+### Why `valid-id` is relaxed in `.htmlvalidate.json`
+
+`.htmlvalidate.json` sets `valid-id` to `{ "relaxed": true }` on purpose. The
+generator emits GitHub-compatible heading slugs, many of which begin with a
+digit (e.g. `id="1-mental-models"`), and the playbook pages contain 82 `href` links across 32 distinct digit-initial anchors (mostly
+in the table of contents and the appendices — count with
+`grep -oh 'href="[^"]*#[0-9][^"]*"' playbook/*.html | wc -l`). HTML5 permits
+ids that start with a digit — only HTML4 forbade it — so this is not a
+workaround for broken markup; it's the validator's default being stricter
+than the spec it's checking against. The relaxed setting still rejects ids
+containing whitespace. If someone tightens this rule later without
+understanding why it's here, it will break dozens of working
+cross-references inside the playbook.
+
 ## Rollback
 
 Rollback is manual and snapshot-backed. The deploy job archives the docroot
