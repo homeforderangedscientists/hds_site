@@ -3,6 +3,7 @@
   "rules": {
     "void-style": "off",
     "no-inline-style": "off",
-    "require-sri": "off"
+    "require-sri": "off",
+    "valid-id": ["error", { "relaxed": true }]
   }
 }

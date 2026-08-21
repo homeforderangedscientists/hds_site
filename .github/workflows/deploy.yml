@@ -36,12 +36,14 @@ jobs:
       - name: Validate HTML
         run: |
           set -euo pipefail
-          npx --yes html-validate@9.7.1 index.html
+          find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' -print0 \
+            | xargs -0 npx --yes html-validate@9.7.1
 
       - name: Check asset references
         run: |
           set -euo pipefail
-          python3 scripts/check-assets.py index.html
+          find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' -print0 \
+            | xargs -0 -n1 python3 scripts/check-assets.py
 
       - name: Guard .htaccess
         run: |
@@ -53,6 +55,16 @@ jobs:
           set -euo pipefail
           ./scripts/test-check-assets.sh
           ./scripts/test-check-htaccess.sh
+
+      - name: Run page builder tests
+        run: |
+          set -euo pipefail
+          python3 scripts/test-build-pages.py
+
+      - name: Check generated pages match their source
+        run: |
+          set -euo pipefail
+          python3 scripts/build-pages.py --check
 
   deploy:
     name: Deploy to Apache
