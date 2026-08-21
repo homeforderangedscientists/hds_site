@@ -357,9 +357,13 @@ class TestUnresolvedAnchors(unittest.TestCase):
 
 class TestPlaybookUnmatchedSectionGuard(unittest.TestCase):
     """collect_playbook_pages must fail loudly if a top-level section in the
-    source markdown doesn't match any entry in PLAYBOOK_PAGES -- EXCEPT the
-    document's own title section, which is always sections[0] and is allowed
-    to fall through into the front matter of playbook/index.html.
+    source markdown doesn't match any entry in PLAYBOOK_PAGES -- EXCEPT a
+    LEADING RUN of unmatched sections (the document's own title, plus any
+    preface/acknowledgements/etc. that precede the first matched section),
+    which is allowed to fall through into the front matter of
+    playbook/index.html. An unmatched section that appears AFTER the first
+    matched section is always flagged, no matter how many leading unmatched
+    sections came before it.
 
     These tests point the script's ROOT at a scratch directory holding a
     synthetic content/engineer-agent-playbook-v2.md, so they run against the
@@ -438,6 +442,36 @@ class TestPlaybookUnmatchedSectionGuard(unittest.TestCase):
             self.fail(f"unexpected SystemExit from a fully-matched document: {exc}")
         self.assertIn("playbook/index.html", pages)
         self.assertIn("playbook/foundations.html", pages)
+
+    def test_a_second_leading_unmatched_section_is_allowed(self):
+        # A preface/acknowledgements-style section between the doc title and
+        # "Part I" is still front matter, not a lost section -- the guard
+        # must not hard-code that exactly one leading section may fall
+        # through. render_markdown is stubbed so this runs to completion.
+        titles = (["The Engineer + Agent Playbook", "A Note Before You Begin"]
+                  + self._all_configured_titles())
+        try:
+            pages = self._run(titles, stub_render=True)
+        except SystemExit as exc:
+            self.fail(f"unexpected SystemExit from a leading-run document: {exc}")
+        self.assertIn("playbook/index.html", pages)
+        self.assertIn("playbook/foundations.html", pages)
+
+    def test_unmatched_section_after_the_first_match_still_fails(self):
+        # Even with a leading run of two unmatched sections before "Part I",
+        # a stray section AFTER the first match is still a real defect (a
+        # new Part with no PLAYBOOK_PAGES entry) and must fail loudly, naming
+        # the offending section.
+        titles = (["The Engineer + Agent Playbook", "A Note Before You Begin"]
+                  + self._all_configured_titles() + ["Part VI — New Frontier"])
+        with self.assertRaises(SystemExit) as ctx:
+            self._run(titles)
+        message = str(ctx.exception)
+        self.assertIn("Part VI — New Frontier", message)
+        self.assertIn("PLAYBOOK_PAGES", message)
+        self.assertIn("scripts/build-pages.py", message)
+        # The two leading sections must NOT be reported as unmatched.
+        self.assertNotIn("A Note Before You Begin", message)
 
 
 if __name__ == "__main__":

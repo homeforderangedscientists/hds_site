@@ -195,22 +195,38 @@ def collect_playbook_pages(out_root):
     except ValueError as exc:
         raise ValueError(f"engineer-agent-playbook-v2.md: {exc}") from exc
 
-    # Map each configured page to its section; anything unmatched (the title
-    # block and its front matter) becomes the playbook index. Matching is by
-    # exact equality on the title text before the em-dash (not startswith),
-    # so "Part I" and "Part II" cannot collide -- "Part I" is a literal
-    # string prefix of "Part II"/"Part III"/"Part IV".
+    # Map each configured page to its section; anything unmatched becomes
+    # part of the playbook index's front matter. Matching is by exact
+    # equality on the title text before the em-dash (not startswith), so
+    # "Part I" and "Part II" cannot collide -- "Part I" is a literal string
+    # prefix of "Part II"/"Part III"/"Part IV".
+    #
+    # A LEADING RUN of unmatched sections (the document's own title, plus any
+    # preface/acknowledgements/etc. that precede the first matched section)
+    # may fall through to the front matter -- that's normal front matter, not
+    # a lost section. Only an unmatched section that appears AFTER the first
+    # matched section is flagged: at that point the document is inside its
+    # numbered/lettered parts, so a section with no PLAYBOOK_PAGES entry is a
+    # new Part silently missing a destination page, not front matter.
+    classified = []
+    for title, section_md in sections:
+        key = title.split("—", 1)[0].strip()
+        match = next((p for p in PLAYBOOK_PAGES if p[0] == key), None)
+        classified.append((title, section_md, match))
+
+    first_match_idx = next(
+        (i for i, (_, _, match) in enumerate(classified) if match), None
+    )
+
     by_prefix = {}
     front = []
     unmatched = []
-    for i, (title, section_md) in enumerate(sections):
-        key = title.split("—", 1)[0].strip()
-        match = next((p for p in PLAYBOOK_PAGES if p[0] == key), None)
+    for i, (title, section_md, match) in enumerate(classified):
         if match:
             by_prefix[match[1]] = (match[2], section_md)
         else:
             front.append(section_md)
-            if i > 0:
+            if first_match_idx is not None and i > first_match_idx:
                 unmatched.append(title)
 
     missing = [p[1] for p in PLAYBOOK_PAGES if p[1] not in by_prefix]
@@ -221,11 +237,12 @@ def collect_playbook_pages(out_root):
     if unmatched:
         sys.exit(f"FAIL: unmatched top-level section(s) in "
                  f"engineer-agent-playbook-v2.md: {unmatched}\n"
-                 f"      Only the document's own title section (the first "
-                 f"section) may fall through to the front matter; every "
-                 f"other top-level section must have a corresponding entry "
-                 f"in PLAYBOOK_PAGES (scripts/build-pages.py). Add one for "
-                 f"each section listed above.")
+                 f"      A leading run of unmatched sections (the document's "
+                 f"title, a preface, etc.) may fall through to the front "
+                 f"matter, but every top-level section after the first "
+                 f"matched one must have a corresponding entry in "
+                 f"PLAYBOOK_PAGES (scripts/build-pages.py). Add one for each "
+                 f"section listed above.")
 
     pages = {}
     order = [p[1] for p in PLAYBOOK_PAGES]
