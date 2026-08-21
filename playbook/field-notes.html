@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Part V — Field Notes — Home for Deranged Scientists</title>
+<meta name="description" content="Part V — Field Notes of the Engineer + Agent Playbook.">
+<link rel="stylesheet" href="../assets/docs.css">
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+<div class="doc-layout">
+<nav class="doc-rail" aria-label="Contents">
+<a class="doc-home" href="../">&larr; Home for Deranged Scientists</a>
+<p class="rail-doc"><a href="index.html">The Engineer + Agent Playbook</a></p>
+<h2 class="rail-heading">Contents</h2>
+<ol class="rail-list">
+<li class="rail-l2"><a href="#verification--feedback-loops">Verification &amp; feedback loops</a></li>
+<li class="rail-l3"><a href="#the-health-check-that-wasnt-v5110">The Health Check That Wasn't (v5.11.0)</a></li>
+<li class="rail-l3"><a href="#verify-what-you-shipped-not-what-you-built-v590">Verify What You Shipped, Not What You Built (v5.9.0)</a></li>
+<li class="rail-l3"><a href="#trust-your-local-tests-v570">Trust Your Local Tests (v5.7.0)</a></li>
+<li class="rail-l3"><a href="#the-cache-that-worked-locally-and-lied-in-ci-v540">The Cache That Worked Locally And Lied In CI (v5.4.0)</a></li>
+<li class="rail-l3"><a href="#the-doorbell-that-never-rang-v420">The Doorbell That Never Rang (v4.2.0)</a></li>
+<li class="rail-l3"><a href="#the-comparison-that-quantum-superposed-into-nonexistence-case-study-1">The Comparison That Quantum-Superposed Into Nonexistence (case study 1)</a></li>
+<li class="rail-l3"><a href="#two-hotfixes-in-one-release-same-gap-case-study-3">Two Hotfixes in One Release, Same Gap (case study 3)</a></li>
+<li class="rail-l3"><a href="#the-bufconn-gap-case-study-2">The bufconn Gap (case study 2)</a></li>
+<li class="rail-l3"><a href="#the-tests-that-would-have-passed-anyway-case-study-1">The Tests That Would Have Passed Anyway (case study 1)</a></li>
+<li class="rail-l3"><a href="#the-formatter-that-ate-the-evidence-case-study-1">The Formatter That Ate the Evidence (case study 1)</a></li>
+<li class="rail-l3"><a href="#the-perimeter-that-trusted-the-polite-client-case-study-1">The Perimeter That Trusted the Polite Client (case study 1)</a></li>
+<li class="rail-l3"><a href="#the-smoke-alarm-the-security-release-disarmed-case-study-1">The Smoke Alarm the Security Release Disarmed (case study 1)</a></li>
+<li class="rail-l2"><a href="#scope-plans-and-surprises">Scope, plans, and surprises</a></li>
+<li class="rail-l3"><a href="#four-scoping-gaps-in-one-release-v5110">Four Scoping Gaps in One Release (v5.11.0)</a></li>
+<li class="rail-l3"><a href="#the-naiveplural-drift-case-study-4">The naivePlural Drift (case study 4)</a></li>
+<li class="rail-l3"><a href="#the-four-fix-wcag-contrast-cycle-v550v560">The Four-Fix WCAG Contrast Cycle (v5.5.0–v5.6.0)</a></li>
+<li class="rail-l3"><a href="#hand-rolling-the-legacy-state-machine--right-call-wrong-call-second-case-study-v030">Hand-Rolling the Legacy State Machine — Right Call, Wrong Call (second case study, v0.3.0)</a></li>
+<li class="rail-l3"><a href="#fred-was-almost-an-uncle-case-study-5">Fred Was Almost an Uncle (case study 5)</a></li>
+<li class="rail-l3"><a href="#the-streak-in-a-trenchcoat-case-study-6">The Streak in a Trenchcoat (case study 6)</a></li>
+<li class="rail-l2"><a href="#diagnosis--the-lab">Diagnosis &amp; the lab</a></li>
+<li class="rail-l3"><a href="#the-hedge-that-wasnt-case-study-5">The Hedge That Wasn't (case study 5)</a></li>
+<li class="rail-l3"><a href="#the-word-the-domain-was-named-after-case-study-5">The Word the Domain Was Named After (case study 5)</a></li>
+<li class="rail-l3"><a href="#the-marcus-monopoly-case-study-5">The Marcus Monopoly (case study 5)</a></li>
+<li class="rail-l3"><a href="#the-silence-that-was-the-symptom-case-study-1">The Silence That Was the Symptom (case study 1)</a></li>
+<li class="rail-l2"><a href="#tooling--environment-traps">Tooling &amp; environment traps</a></li>
+<li class="rail-l3"><a href="#the-actions-token-that-wont-wake-the-next-workflow-v5100">The Actions Token That Won't Wake the Next Workflow (v5.10.0)</a></li>
+<li class="rail-l3"><a href="#bash-buffers-scripts-in-memory-v420">Bash Buffers Scripts In Memory (v4.2.0)</a></li>
+<li class="rail-l3"><a href="#slack-mrkdwn-is-not-markdown-v5100">Slack mrkdwn Is Not Markdown (v5.10.0)</a></li>
+<li class="rail-l3"><a href="#the-truncated-secret-case-study-6">The Truncated Secret (case study 6)</a></li>
+<li class="rail-l3"><a href="#the-day-the-landlords-came-calling-case-study-1">The Day the Landlords Came Calling (case study 1)</a></li>
+<li class="rail-l3"><a href="#the-redirects-file-that-outranked-the-config-case-study-6">The Redirects File That Outranked the Config (case study 6)</a></li>
+<li class="rail-l2"><a href="#trust--blast-radius">Trust &amp; blast radius</a></li>
+<li class="rail-l3"><a href="#the-admin-who-couldnt-fire-herself-v430">The Admin Who Couldn't Fire Herself (v4.3.0)</a></li>
+<li class="rail-l3"><a href="#the-default-that-was-admin-case-study-4">The Default That Was Admin (case study 4)</a></li>
+<li class="rail-l2"><a href="#the-record-that-lied">The record that lied</a></li>
+<li class="rail-l3"><a href="#the-lock-that-wasnt-case-study-5">The Lock That Wasn't (case study 5)</a></li>
+<li class="rail-l3"><a href="#the-header-nobody-read-case-study-1">The Header Nobody Read (case study 1)</a></li>
+<li class="rail-l3"><a href="#the-edit-that-reported-success-case-study-5">The Edit That Reported Success (case study 5)</a></li>
+<li class="rail-l2"><a href="#parallel-agents--architecture">Parallel agents &amp; architecture</a></li>
+<li class="rail-l3"><a href="#parallel-work-case-study-1">Parallel Work (case study 1)</a></li>
+<li class="rail-l3"><a href="#the-subagent-orchestra-case-study-1">The Subagent Orchestra (case study 1)</a></li>
+<li class="rail-l3"><a href="#the-wave-pattern-case-study-2">The Wave Pattern (case study 2)</a></li>
+<li class="rail-l3"><a href="#the-interface-that-never-needed-a-sixth-method-case-study-2">The Interface That Never Needed a Sixth Method (case study 2)</a></li>
+<li class="rail-l3"><a href="#the-v6-worktree-experiment-case-study-3">The v6 Worktree Experiment (case study 3)</a></li>
+<li class="rail-l3"><a href="#the-v7-team-pivot-case-study-3">The v7 Team Pivot (case study 3)</a></li>
+<li class="rail-l3"><a href="#the-vitest-cache-incident-v500">The Vitest Cache Incident (v5.0.0)</a></li>
+<li class="rail-l3"><a href="#the-phantom-downgrade-case-study-5">The Phantom Downgrade (case study 5)</a></li>
+<li class="rail-l3"><a href="#the-docker-port-mappings-that-werent-case-study-2">The Docker Port Mappings That Weren't (case study 2)</a></li>
+<li class="rail-l2"><a href="#audits-as-craft-work">Audits as craft work</a></li>
+<li class="rail-l3"><a href="#the-security-audit-pass-case-study-4">The Security Audit Pass (case study 4)</a></li>
+<li class="rail-l3"><a href="#the-visual-audit-pass-case-study-4">The Visual Audit Pass (case study 4)</a></li>
+<li class="rail-l3"><a href="#the-claims-that-ran-ahead-of-the-code-case-study-5">The Claims That Ran Ahead of the Code (case study 5)</a></li>
+<li class="rail-l3"><a href="#the-fleet-in-the-seams-case-study-5">The Fleet in the Seams (case study 5)</a></li>
+</ol>
+</nav>
+<main class="doc-main" id="content">
+<header class="doc-masthead">
+<p class="doc-eyebrow">The Engineer + Agent Playbook</p>
+<h1 class="doc-title" id="part-v--field-notes-from-the-case-studies">Part V — Field Notes</h1>
+<p class="doc-meta">Part V — Field Notes</p>
+</header>
+<div class="doc-body">
+<p>Every rule in this playbook has a bruise under it. The entries below are where the bruises came from — compact re-tellings of the bugs that taught us the rules, each one naming the chapter it grounds. Read them in any order; each is self-contained. The headlines are whimsical on purpose, because a bug with a nickname is a bug you remember.</p>
+<p>The stories are grouped by the <em>kind</em> of problem they illustrate, so a reader scanning for &quot;I&#39;m having a verification problem&quot; or &quot;my parallel agents are stepping on each other&quot; can jump to the right neighborhood first. Within a group, they&#39;re in no particular order.</p>
+<h2 id="verification--feedback-loops">Verification &amp; feedback loops</h2>
+<p><em>Stories where the test was green, the status was &quot;ok,&quot; and the thing was broken. The bruises here all trace back to verifying the wrong surface or trusting a signal that was answering a different question than the one you were asking.</em></p>
+<h3 id="the-health-check-that-wasnt-v5110">The Health Check That Wasn&#39;t (v5.11.0)</h3>
+<p><strong>What happened:</strong> Three deploys in a row, <code>git_sha</code> came back <code>unknown</code> in the health response after every release. We rebuilt the Docker image pipeline four different ways — shell export of <code>GIT_REV</code>, compose env file, compose override, <code>--build-arg</code> — and each fix deployed cleanly and &quot;didn&#39;t work.&quot;
+<strong>What we thought was happening:</strong> The build-arg plumbing was dropping <code>GIT_REV</code> somewhere between the YAML and the container, and we just had to find where.
+<strong>What was actually happening:</strong> The verification curl was hitting <code>/health</code>, which returns <code>{&quot;status&quot;:&quot;ok&quot;}</code> and has never had a <code>git_sha</code> field. The full health JSON lives at <code>/api/v1/health</code>. The producer was never broken. We spent three deploys fixing a hole that wasn&#39;t there because the verifier was looking through the wrong window.
+<strong>The lesson:</strong> §8 — health checks must check health, and verification curls must hit the endpoint that reports it. <em>(See DevOps Playbook Gotcha #8.)</em></p>
+<h3 id="verify-what-you-shipped-not-what-you-built-v590">Verify What You Shipped, Not What You Built (v5.9.0)</h3>
+<p><strong>What happened:</strong> The deploy script reported success. The new container had started. Every status check was green and every log line said &quot;ok.&quot; The live site was still serving the old version.
+<strong>What we thought was happening:</strong> A browser cache, a CDN delay, something between the user and the server — not the deploy itself.
+<strong>What was actually happening:</strong> An orphan container from the previous compose definition was still holding the port. The new container was running and healthy and completely unreachable from the internet, because nginx had never flipped to it. &quot;I started the container&quot; had become a stand-in for &quot;the container is serving traffic.&quot; The fix was one line of verification: one <code>curl</code> against the public health URL, comparing the response body to the SHA we just built.
+<strong>The lesson:</strong> §8 — evidence before assertions, against the URL the user will actually hit.</p>
+<h3 id="trust-your-local-tests-v570">Trust Your Local Tests (v5.7.0)</h3>
+<p><strong>What happened:</strong> For three releases running, the backend test suite passed on every laptop and failed intermittently in CI. Nobody trusted &quot;local green&quot; anymore — every PR got a manual &quot;but did it pass in CI?&quot; even after it had passed in CI.
+<strong>What we thought was happening:</strong> Flaky tests. A Redis timing issue. Something environmental we&#39;d catch eventually.
+<strong>What was actually happening:</strong> Local used SQLite via a <code>is_testing</code> branch in <code>database.py</code>; CI used Postgres. Every release, the gap introduced a new dialect-specific failure, and every release we patched the symptom. The rescue was a single cycle of the full loop applied to the gap itself — rip the SQLite branch out, make <code>conftest.py</code> truncate a shared Postgres engine between tests, force every environment through the same path.
+<strong>The lesson:</strong> §8 — verify in the environment that matters, and §12 — you cannot out-discipline a missing rail.</p>
+<h3 id="the-cache-that-worked-locally-and-lied-in-ci-v540">The Cache That Worked Locally And Lied In CI (v5.4.0)</h3>
+<p><strong>What happened:</strong> We refactored the cache layer so Pydantic models flowed through Redis, shipped the PR with a green local suite, and watched an image-generation pipeline explode in CI the moment the deploy ran.
+<strong>What we thought was happening:</strong> A Redis connection issue, or maybe a dependency version mismatch in the CI image.
+<strong>What was actually happening:</strong> Someone had written <code>json.dumps(model, default=str)</code> as the serializer. <code>default=str</code> does not dictify a Pydantic model — it calls <code>str()</code> on it and produces the model&#39;s <em>repr</em>, a string that looks like Python source. Local was green because local used an in-memory cache with no serialization path at all; the model went in as an object and came out as an object. CI had actual Redis, which needed JSON, which exposed the bug.
+<strong>The lesson:</strong> §8 — if your local doesn&#39;t run what CI runs, your local green is a lie.</p>
+<h3 id="the-doorbell-that-never-rang-v420">The Doorbell That Never Rang (v4.2.0)</h3>
+<p><strong>What happened:</strong> Audit logging shipped. Backend tests green, frontend tests green, a beautiful admin page that rendered an audit table. The table had zero rows in it. Every admin action completed successfully and left no trace.
+<strong>What we thought was happening:</strong> A query filter bug, or a timezone off-by-one making events land outside the default window.
+<strong>What was actually happening:</strong> Nothing in between the two halves emitted an audit event. Backend exposed the read endpoint. Frontend rendered the list. No service call anywhere in the admin routes actually fired the emit. Both halves were tested in isolation; nobody had wired the doorbell to the button. A thirty-second click in a real browser would have caught it.
+<strong>The lesson:</strong> §8 — &quot;tests pass&quot; is not &quot;feature works.&quot; Open the thing and use it.</p>
+<h3 id="the-comparison-that-quantum-superposed-into-nonexistence-case-study-1">The Comparison That Quantum-Superposed Into Nonexistence (case study 1)</h3>
+<p><strong>What happened:</strong> A &quot;Comparison of the Day&quot; feature shipped to the homepage. The component was implemented correctly, the data fetched correctly, the unit tests passed, the integration tests passed, the deploy was clean. It never appeared on the page.
+<strong>What we thought was happening:</strong> A caching or CDN bug swallowing the response on first paint.
+<strong>What was actually happening:</strong> The component was wrapped in <code>{!isLoading &amp;&amp; &lt;Feature /&gt;}</code>, and on the homepage&#39;s particular data path <code>isLoading</code> never resolved to false because of a stale-cache race condition in a sibling component. The feature rendered into a virtual DOM that nobody ever painted. If <em>The Doorbell</em> is about missing wiring (the event never fired), this is the inverse: <em>the bell rang, perfectly, into a room nobody could see into.</em>
+<strong>The lesson:</strong> §8 — a green test suite tells you the parts work; only a real session in the real browser, on the real page, with the real data, tells you the user can use the thing.</p>
+<h3 id="two-hotfixes-in-one-release-same-gap-case-study-3">Two Hotfixes in One Release, Same Gap (case study 3)</h3>
+<p><strong>What happened:</strong> A data-layer migration from manual <code>useEffect</code>/<code>useState</code> to TanStack Query shipped with 161 unit tests green and broke cache-hit paint within 24 hours of release. Its stablemate, shipped the same day for the same reason, was a touch-vs-mouse guard that had been written and tested on desktop only and silently blocked single taps on iPad Safari.
+<strong>What we thought was happening:</strong> Both changes were mechanical — data layer swap and an input-event refactor. Unit tests covered the data behavior and the handler logic. Nothing to see here.
+<strong>What was actually happening:</strong> The TQ bug: a side effect moved inside <code>queryFn</code> never ran when TQ served cached data. The iPad bug: the guard had never been exercised on an actual touch device. Both failures slipped a full green suite because no test exercised the <em>interaction pipeline</em> on the real substrate — cache-warmed data + real click, or real gesture on a real device. A single Playwright click against a pre-warmed cache would have caught the TQ bug in five seconds; a real tap on a real iPad would have caught the other.
+<strong>The lesson:</strong> §8 — when you&#39;re swapping a foundation layer (data layer, auth, router, state), the test gap is always on the <em>interaction</em> side, because the unit tests were written for the <em>old</em> substrate&#39;s assumptions.</p>
+<h3 id="the-bufconn-gap-case-study-2">The bufconn Gap (case study 2)</h3>
+<p><strong>What happened:</strong> One protocol adapter had full unit-test coverage using an in-memory connection that bypassed network transport. Every test passed beautifully.
+<strong>What we thought was happening:</strong> The adapter was ready to ship.
+<strong>What was actually happening:</strong> The first smoke test from a real client against the running server discovered that a required discovery feature had never been enabled, and the client had no way to find the service. Fix: two lines. The in-memory loopback tested <em>logic</em>; it did not test <em>deployment</em>. The retro&#39;s one-liner: <em>&quot;this is not an argument against unit tests; it is an argument for also just… running the thing.&quot;</em>
+<strong>The lesson:</strong> §8 — your tests can only catch the things they actually test. A complete suite against the in-memory path is not a complete suite against the wire.</p>
+<h3 id="the-tests-that-would-have-passed-anyway-case-study-1">The Tests That Would Have Passed Anyway (case study 1)</h3>
+<p><strong>What happened:</strong> A fix restored nginx routing so social-media crawlers could reach the link-preview endpoint. The change shipped with a suite of E2E tests. All green.
+<strong>What we thought was happening:</strong> The routing fix was verified end to end.
+<strong>What was actually happening:</strong> The tests hit the backend endpoint directly and the dev server directly — bypassing nginx, the exact layer being fixed. Reverted, every test would still have passed. A reviewer asked one question — <em>would these tests pass if you reverted the change?</em> — and the theater collapsed. The remedy was honesty in two moves: rename the test file to what it actually pins (the endpoint contract), and move the real verification into the post-deploy smoke test, the only place that exercises nginx.
+<strong>The lesson:</strong> §8 — the revert question is <em>&quot;the sharpest tool we have for distinguishing verification from verification theater.&quot;</em></p>
+<h3 id="the-formatter-that-ate-the-evidence-case-study-1">The Formatter That Ate the Evidence (case study 1)</h3>
+<p><strong>What happened:</strong> A consumer API-key tier shipped with forty green tests and a plan that ended with a mandatory manual integration task. The manual task found two production-killers in one afternoon.
+<strong>What we thought was happening:</strong> Forty for forty; the manual step was belt-and-suspenders.
+<strong>What was actually happening:</strong> First, the production compose file explicitly allowlists which env vars reach each container, and the new <code>CONSUMER_API_KEYS</code> wasn&#39;t on the list — the feature was <em>&quot;entirely correct in code review and entirely broken in production.&quot;</em> Second, the logging pipeline&#39;s formatter had been silently discarding every structured <code>extra={...}</code> payload since the day it was configured; the test suite&#39;s log-capture fixture passed because it reads records <em>before</em> any handler runs. Neither failure was <em>reachable</em> by a unit test — one lived in an ops file no test loads, the other past the exact boundary the fixture stops at.
+<strong>The lesson:</strong> §8 — <em>&quot;when testing whether a feature delivers, not whether it runs, look at the wire output, not the test fixture.&quot;</em></p>
+<h3 id="the-perimeter-that-trusted-the-polite-client-case-study-1">The Perimeter That Trusted the Polite Client (case study 1)</h3>
+<p><strong>What happened:</strong> Native mobile clients started getting 403s from endpoints that worked flawlessly in every browser and every test — and had for three major versions and 311 CI runs.
+<strong>What we thought was happening:</strong> A mobile-side auth bug; the captured response headers said <code>X-Authenticated: true</code> right next to the 403.
+<strong>What was actually happening:</strong> A &quot;defense-in-depth&quot; perimeter middleware had four authorization checks that were secretly <em>sequential</em> — three of them dead code — and the surviving check keyed on the Referer header, which browsers send on every XHR and the native HTTP stack never sends. Every test client was the polite kind. The fix was 21 lines: trust the request the upstream auth had already authenticated.
+<strong>The lesson:</strong> §8 — test with the rudest client you support. A guard that only ever meets polite clients is a guard nobody has met.</p>
+<h3 id="the-smoke-alarm-the-security-release-disarmed-case-study-1">The Smoke Alarm the Security Release Disarmed (case study 1)</h3>
+<p><strong>What happened:</strong> During an audit, someone noticed the frontend error tracker had reported nothing — nothing at all — for five releases.
+<strong>What we thought was happening:</strong> Five quiet releases.
+<strong>What was actually happening:</strong> A security release had tightened the Content-Security-Policy to <code>connect-src &#39;self&#39;</code>, which blocked the error tracker&#39;s own reporting endpoint. The release that hardened the app disarmed its smoke alarm, and nothing downstream of a dead instrument ever complains. The retro: <em>&quot;We have not yet decided whether this is hilarious or appalling.&quot;</em>
+<strong>The lesson:</strong> §8 — observability is part of the system; verify it observes. Fire a deliberate test error through the pipe now and then.</p>
+<h2 id="scope-plans-and-surprises">Scope, plans, and surprises</h2>
+<p><em>Stories where the plan looked obvious, the scope felt small, and the thing that bit was the work nobody had named yet. These are the bruises that come from skipping the brainstorm, leaving a placeholder in a plan, or trusting a fan-out to hide coordination problems it never could.</em></p>
+<h3 id="four-scoping-gaps-in-one-release-v5110">Four Scoping Gaps in One Release (v5.11.0)</h3>
+<p><strong>What happened:</strong> A one-line release-automation config fix was supposed to make Release PRs open against the develop branch and trigger the deploy workflow when a Release was published. The fix shipped. Nothing worked. Then the second fix shipped. Nothing worked.
+<strong>What we thought was happening:</strong> A typo in <code>release-please-config.json</code> — add <code>target-branch</code>, move on.
+<strong>What was actually happening:</strong> Four separate scoping errors, each plausible in isolation. <code>target-branch</code> is an action input, not a config key — the JSON accepted it silently. There was no anchor Release, so release-please scanned to the start of the repo. The merge commit used <code>release:</code> as its type, which is not a conventional-commit type and was silently skipped. And release-please plus the default <code>GITHUB_TOKEN</code> does not trigger downstream <code>release: types: [published]</code> workflows.
+<strong>The lesson:</strong> §14 — walk every spec section and name the task that implements it.</p>
+<h3 id="the-naiveplural-drift-case-study-4">The naivePlural Drift (case study 4)</h3>
+<p><strong>What happened:</strong> A small <code>naivePlural()</code> helper existed as three copy-pasted duplicates across three edge functions. Over one release cycle, one of the three copies had an irregular-noun branch extended with <code>tooth → teeth</code> and <code>goose → geese</code>; the other two didn&#39;t. The user-visible bug: the same entity rendered as &quot;1 mouse&quot; on one page and &quot;1 mice&quot; on another, with a third path still saying &quot;1 mouses.&quot;
+<strong>What we thought was happening:</strong> A rendering inconsistency — maybe a stale cache on one of the pages.
+<strong>What was actually happening:</strong> Three copies of the same function that had <em>drifted silently</em>. Nobody owned the reconciliation because the copies were small enough individually that none of them flagged in review. The duplication was fine the day it shipped; what it became was a bug. The fix was to extract the helper into a shared module — the extract that, under §7&#39;s rule, had been deferred as &quot;the pattern hasn&#39;t stabilized yet.&quot; It had. The stabilization was invisible because nobody re-checked.
+<strong>The lesson:</strong> §7 — duplicates are fine when the pattern is still finding its shape; duplicates that have already drifted are a bug waiting to be reported. Re-check at each correction, not just at the third.</p>
+<h3 id="the-four-fix-wcag-contrast-cycle-v550v560">The Four-Fix WCAG Contrast Cycle (v5.5.0–v5.6.0)</h3>
+<p><strong>What happened:</strong> Across two releases, four separate WCAG contrast violations slipped into the UI — each one a utility-class color swap picked by eye that looked fine in the design tool, failed the axe-core suite on the next run, and got fixed with a one-class swap.
+<strong>What we thought was happening:</strong> We thought we were calibrated to the contrast rules by now. After the second one, we thought we were calibrated <em>now</em>. After the third, we stopped guessing.
+<strong>What was actually happening:</strong> Nothing was broken — the automated rail was catching exactly what it was designed to catch. The humans were the slow learners. The right move was to stop pre-judging contrast by eye and let the axe-core evidence do the approving.
+<strong>The lesson:</strong> §9 — when the blast radius is small and the test is automated, confirm by evidence, not by ceremony.</p>
+<h3 id="hand-rolling-the-legacy-state-machine--right-call-wrong-call-second-case-study-v030">Hand-Rolling the Legacy State Machine — Right Call, Wrong Call (second case study, v0.3.0)</h3>
+<p><strong>What happened:</strong> The second case study was implementing a batch of early-era protocols. One of them is the pathological one — a decades-old protocol that uses <em>two connections</em> for what every other protocol accomplishes with one, with a secondary data channel that requires hand-negotiated host/port encoding in a format nobody else uses. The team considered importing a library and decided instead to hand-roll the entire state machine from the standard library. ~150 lines. Pure stdlib. Listener, data channel, directory listing, file transfer. All of it.
+<strong>What we thought was happening:</strong> This is a judgment call about dependency weight versus implementation cost. The project&#39;s ethos was zero-dependency-if-possible; the protocol was in scope; the hand-roll was tractable; we&#39;d save the dep.
+<strong>What was actually happening:</strong> The retro named the tension directly: <em>&quot;Right because it kept the dependency count low and forced us to truly understand the data-channel negotiation. Wrong because we now truly understand the data-channel negotiation, and that knowledge cannot be unlearned.&quot;</em> The hand-roll worked. It shipped. The test suite ran clean. And the team now carries around the protocol&#39;s internal mechanics as permanent mental residue — the bespoke host-port encoding, the ephemeral listener, the two-connection dance, the state transitions that make sense only if you were in the room when the spec was written. Every unit of knowledge about a legacy protocol you gain is a unit of attention you cannot reclaim for anything else. The dependency you didn&#39;t import was free; the attention you spent internalizing the protocol is not.
+<strong>The lesson:</strong> A counter-weight to &quot;always reach for a library&quot; <em>and</em> to &quot;always hand-roll for purity.&quot; The real question isn&#39;t library-vs-hand-roll — it&#39;s whether the knowledge you&#39;ll acquire during the hand-roll is worth the craft attention it will permanently occupy. Sometimes yes (the team&#39;s zero-dependency posture became a source of genuine craft pride across nine releases). Sometimes no (the legacy protocol&#39;s mechanics are nobody&#39;s art). The judgment call connects back to §1&#39;s three-layer thesis: a hand-roll is a decision to spend <em>craft</em> attention on <em>mechanics</em>, and that trade is only worth it when the mechanics are themselves part of the craft. Here they aren&#39;t. The zero-dependency posture as a whole is. The retro was honest about the tension instead of pretending the hand-roll was unambiguously correct, which is the only reason the lesson survives.</p>
+<h3 id="fred-was-almost-an-uncle-case-study-5">Fred Was Almost an Uncle (case study 5)</h3>
+<p><strong>What happened:</strong> A subagent was dispatched to write reply templates in the voice of a beloved children&#39;s-television host. The draft came back warm, kind, encouraging — and generic. (&quot;Yeah. That&#39;s a real one.&quot;)
+<strong>What we thought was happening:</strong> The dispatch was fine; the model just needed another pass.
+<strong>What was actually happening:</strong> The dispatch prompt said &quot;the right energy&quot; <em>in passing</em> and pointed at a JSON file — not at the twenty lines of seed library that actually specified the voice (the permission-granting constructions, the load-bearing second person). The human&#39;s review was one sentence: <em>&quot;these don&#39;t sound like fred rogers. Are you sure?&quot;</em> The re-dispatch put the voice spec in the prompt verbatim and required the agent to produce three too-saccharine and three just-right calibration samples <em>before</em> drafting. The second draft was the man himself: <em>&quot;You&#39;re a person who carried a worry without making a fuss about it… You did that.&quot;</em>
+<strong>The lesson:</strong> §1 and §4 — for taste-heavy delegation, pointing at the spec is not the same as putting the spec in the context. Demand calibration samples before the real output, and route the result past the human ear.</p>
+<h3 id="the-streak-in-a-trenchcoat-case-study-6">The Streak in a Trenchcoat (case study 6)</h3>
+<p><strong>What happened:</strong> During a pre-code elicitation session for an anti-optimization health app — a product whose ethos explicitly forbids gamification — the agent proposed a success metric: &quot;you use it daily, unbroken.&quot;
+<strong>What we thought was happening:</strong> A reasonable north star for a daily-use product.
+<strong>What was actually happening:</strong> The metric was <em>&quot;a streak in a trenchcoat&quot;</em> — the exact engagement mechanic the product forbids, smuggled into the meta-layer by pattern-matching on what success metrics usually look like. The human&#39;s verdict on streaks (&quot;Streaks stink of judgement&quot;) reversed the metric out of the specs entirely. The catch happened only because the elicitation session made the agent state its model of success out loud before any of it was load-bearing.
+<strong>The lesson:</strong> §4 — audit the agent&#39;s proposed north stars against the product&#39;s own ethos. The agent optimizes toward the pattern, and the pattern is somebody else&#39;s product.</p>
+<h2 id="diagnosis--the-lab">Diagnosis &amp; the lab</h2>
+<p><em>Stories where the fix was drafted before the evidence was read — and what happened when a project started shipping instruments instead of guesses. The bruises here come from trusting a diagnosis (the ticket&#39;s, the agent&#39;s, your own) that no trace had ever witnessed.</em></p>
+<h3 id="the-hedge-that-wasnt-case-study-5">The Hedge That Wasn&#39;t (case study 5)</h3>
+<p><strong>What happened:</strong> A ticket reported that hedge phrases (&quot;just a little bit&quot;) were suppressing heavy-affect detection in a journaling classifier. A hedge-ignore subsystem was designed and half-drafted.
+<strong>What we thought was happening:</strong> Hedges were diluting the signal; the fix was to strip them before classification.
+<strong>What was actually happening:</strong> The persisted trace — newly available, because the previous release had shipped the diagnostic surface instead of a fix — showed the misfired entry had never matched anything: the word <code>sad</code> simply wasn&#39;t in the heavy-signals list, which spoke only in extremes (<code>devastated</code>, <code>hollow</code>, <code>grief</code>). Four lines of mild-affect vocabulary fixed it. <em>&quot;It would have been a beautiful fix for a problem that didn&#39;t exist.&quot;</em>
+<strong>The lesson:</strong> §10 — the ticket&#39;s diagnosis is a hypothesis. Read the trace before believing the issue.</p>
+<h3 id="the-word-the-domain-was-named-after-case-study-5">The Word the Domain Was Named After (case study 5)</h3>
+<p><strong>What happened:</strong> A rest-and-recovery keyword domain kept missing obvious entries.
+<strong>What we thought was happening:</strong> Edge cases; the list needed a few more synonyms.
+<strong>What was actually happening:</strong> The agent-authored wordlist contained every verb of resting (<code>napped</code>, <code>slept</code>) and every resting-place noun (<code>porch</code>, <code>hammock</code>) — and not the word <code>rest</code>. <em>&quot;The bare noun. The thing the entire domain is named after. Missing… We added it. The fixture passed. We laughed.&quot;</em> The sibling contentment cluster had the same disease: <code>simple pleasures</code> and <code>at peace</code>, no <code>happy</code> — vocabulary <em>&quot;designed by someone trying to write literature about contentment.&quot;</em>
+<strong>The lesson:</strong> §1 — agent-authored heuristics encode the author&#39;s vocabulary, not the user&#39;s. Only real inputs close the gap.</p>
+<h3 id="the-marcus-monopoly-case-study-5">The Marcus Monopoly (case study 5)</h3>
+<p><strong>What happened:</strong> After a new reply register shipped, the user reported that one historical figure was answering <em>every</em> playground test.
+<strong>What we thought was happening:</strong> The rotation logic was broken; a fix to production fairness rules was taking shape.
+<strong>What was actually happening:</strong> The fairness rule — a figure not seen recently beats all others — is correct in production, where every reply becomes history. The debug playground loads history once and never writes back, so the one figure absent from the last sixty days won every single draw: a fairness rule producing perfect unfairness against frozen state. The user made the call: <em>&quot;I think the logic is right. I think we need to fix /debug so that it ignores the anti-repeat logic, since it will never save.&quot;</em> Production shipped byte-identical; the playground got a bypass flag.
+<strong>The lesson:</strong> §10 — exploration mode is not production mode. When the bug only reproduces in the lab, suspect the lab&#39;s frozen state first.</p>
+<h3 id="the-silence-that-was-the-symptom-case-study-1">The Silence That Was the Symptom (case study 1)</h3>
+<p><strong>What happened:</strong> A pre-planning survey agent, sent to read the nginx layer before a routing release, mentioned almost as an aside: &quot;nginx blocks social crawlers by default.&quot;
+<strong>What we thought was happening:</strong> A configuration note for the backlog.
+<strong>What was actually happening:</strong> Four curls confirmed that every shared link&#39;s preview had been a 401 JSON blob on every social platform for three releases — the link-preview generator built two versions earlier had never once been reachable from the surfaces it existed to serve, dropped in a later nginx consolidation. No one had filed a bug, because broken share previews don&#39;t generate bug reports; friends just don&#39;t click. <em>&quot;The silence is the symptom.&quot;</em> The two-issue release became three, and the third was the one production needed most.
+<strong>The lesson:</strong> §5 and §10 — exploration finds the bugs nobody filed. Features whose failure mode is silence need scheduled probes, because no user will ever tell you.</p>
+<h2 id="tooling--environment-traps">Tooling &amp; environment traps</h2>
+<p><em>Stories where the code was fine and the tool was lying. Bash buffering its own script, a token that couldn&#39;t wake the next workflow, a Slack dialect cosplaying as Markdown — the bruises here all come from trusting a tool to behave like its documentation said it did.</em></p>
+<h3 id="the-actions-token-that-wont-wake-the-next-workflow-v5100">The Actions Token That Won&#39;t Wake the Next Workflow (v5.10.0)</h3>
+<p><strong>What happened:</strong> We moved release creation to release-please and the deploy pipeline went silent. Merging the Release PR created the GitHub Release exactly as intended; the <code>deploy.yml</code> workflow, wired to <code>release: types: [published]</code>, never fired.
+<strong>What we thought was happening:</strong> A YAML trigger typo, or maybe a branch-protection rule eating the event.
+<strong>What was actually happening:</strong> A documented GitHub Actions behavior: PRs and Releases created by a workflow using the default <code>GITHUB_TOKEN</code> do not trigger downstream workflows. The &quot;fix&quot; was technically working — a Release was created — but the next stage was built on a chain that the token could not carry across. A PAT or GitHub App token was required for the handoff.
+<strong>The lesson:</strong> §8 — verify in the environment that matters; a green release event doesn&#39;t prove the downstream workflow saw it.</p>
+<h3 id="bash-buffers-scripts-in-memory-v420">Bash Buffers Scripts In Memory (v4.2.0)</h3>
+<p><strong>What happened:</strong> The footer on the live site read <code>rev unknown</code> after deploy. The footer had displayed the git hash since v4.0.0. It worked in dev. It worked in CI. It did not work in production. We pushed fix after fix to <code>deploy.sh</code> and watched the old buggy version run to completion anyway.
+<strong>What we thought was happening:</strong> Git wasn&#39;t pulling, or the runner had a stale clone, or the <code>GIT_REV</code> export was being eaten somewhere in the compose plumbing.
+<strong>What was actually happening:</strong> Bash reads a script into a memory buffer when it starts executing. <code>git pull</code> updated the file on disk — the new bytes were right there — but the running shell kept executing its in-memory copy of the old file. Any edits after the <code>git pull</code> line never took effect on the run that pulled them. The fix is one line: after the pull, <code>exec &quot;$0&quot; &quot;$@&quot;</code> to re-read the script from disk.
+<strong>The lesson:</strong> §11 — when the obvious fix doesn&#39;t stick, stop editing and dump the raw state. <em>(See DevOps Playbook Gotcha #9 for the <code>exec &quot;$0&quot; &quot;$@&quot;</code> self-reexec pattern.)</em></p>
+<h3 id="slack-mrkdwn-is-not-markdown-v5100">Slack mrkdwn Is Not Markdown (v5.10.0)</h3>
+<p><strong>What happened:</strong> CI notifications started going out to the team channel with raw <code>**asterisks**</code> and <code>[link text](urls)</code> rendered as literal characters instead of formatting. The messages looked like a drunk bot.
+<strong>What we thought was happening:</strong> A webhook payload escaping bug — something double-encoding the Markdown before Slack got it.
+<strong>What was actually happening:</strong> Slack&#39;s mrkdwn is not Markdown. Bold is <code>*single asterisks*</code>, not <code>**double**</code>. Links are <code>&lt;url|text&gt;</code>, not <code>[text](url)</code>. The webhook was delivering exactly what we&#39;d written; we had written the wrong dialect. The fix was a full conversion to Block Kit, where the formatting contract is explicit instead of cosplaying as a familiar one.
+<strong>The lesson:</strong> §8 — verify in the environment that matters, including the one that renders your message. <em>(See DevOps Playbook Gotcha #6 and Phase 6 for the Block Kit migration.)</em></p>
+<h3 id="the-truncated-secret-case-study-6">The Truncated Secret (case study 6)</h3>
+<p><strong>What happened:</strong> A serverless function kept rejecting a signing secret that had definitely, verifiably been set. The code that validated it came under suspicion.
+<strong>What we thought was happening:</strong> A validation bug, or a subtly wrong secret.
+<strong>What was actually happening:</strong> The platform CLI&#39;s <code>env:get</code>, used to source the secret into the session, returned a <strong>20-character slice of a 64-character value</strong> — and exited zero. The function was correctly rejecting garbage; the system was working. The retro&#39;s warning: tooling can hand you a truncated value <em>&quot;and smile while it does it.&quot;</em>
+<strong>The lesson:</strong> §2 and §9 — when a sourced secret is rejected, check its <em>length</em> before doubting the code. Verify properties of secrets (length, prefix), never by printing values.</p>
+<h3 id="the-day-the-landlords-came-calling-case-study-1">The Day the Landlords Came Calling (case study 1)</h3>
+<p><strong>What happened:</strong> In one release: the CI provider refused all five jobs — a billing dispute two vendors above the project — forcing a local fast-forward merge and a by-hand run of the deploy script. An hour later, the issue tracker&#39;s free-tier cap blocked filing the regression the release had just found.
+<strong>What we thought was happening:</strong> A CI outage; then a tracker hiccup.
+<strong>What was actually happening:</strong> Two SaaS dependencies failing on the same afternoon, both unrecoverable <em>through</em> the failed service. The deploy survived because the deploy script had always been runnable by hand. The bug survived because it got written to three tracker-independent places — the changelog, memory, and the retro. The aftermath is visible in the project&#39;s instructions file: the tracker was demoted, and the backlog went local-first.
+<strong>The lesson:</strong> §3 — every automated rail needs a rehearsed manual fallback, and every found bug needs a persistence path that doesn&#39;t depend on someone else&#39;s billing department.</p>
+<h3 id="the-redirects-file-that-outranked-the-config-case-study-6">The Redirects File That Outranked the Config (case study 6)</h3>
+<p><strong>What happened:</strong> Wiring the third sibling app to the same API-endpoint pattern as the first two — &quot;muscle memory&quot; by now — produced 404s and SPA HTML from <code>/api/v1/*</code> routes that were configured identically to the working apps.
+<strong>What we thought was happening:</strong> The pattern was identical; something environmental had to be wrong.
+<strong>What was actually happening:</strong> The third app had a <code>public/_redirects</code> file whose bare catch-all <strong>outranks</strong> the <code>netlify.toml</code> redirects the pattern relied on. <em>&quot;The pattern we&#39;d called &#39;identical&#39; was identical in the code and different in the routing, and the difference lived in a file we hadn&#39;t thought to look at.&quot;</em> The third repetition is when you stop reading the instructions — and when the platform&#39;s precedence rules stop forgiving you.
+<strong>The lesson:</strong> §5 — explore before you plan applies to config, too. &quot;Identical to the last one&quot; is a claim about every layer, including the ones you didn&#39;t diff.</p>
+<h2 id="trust--blast-radius">Trust &amp; blast radius</h2>
+<p><em>Stories about authorization, denial paths, and the moments when &quot;yes&quot; in one direction quietly failed to mean &quot;yes&quot; in every other direction. The bruises here come from forgetting that the interesting rules live in what gets refused, not in what gets allowed.</em></p>
+<h3 id="the-admin-who-couldnt-fire-herself-v430">The Admin Who Couldn&#39;t Fire Herself (v4.3.0)</h3>
+<p><strong>What happened:</strong> RBAC landed for the admin panel. The interesting bugs weren&#39;t in the &quot;yes&quot; paths — those were one-liners. They were in the &quot;no&quot; paths: self-role-change, self-deactivation, self-deletion, privilege escalation via update.
+<strong>What we thought was happening:</strong> RBAC is a matrix of allows; fill it in and you&#39;re done.
+<strong>What was actually happening:</strong> Trust in one direction (&quot;you are an admin&quot;) does not generalize in every direction (&quot;therefore you may fire yourself&quot;). Half a dozen explicit refusals had to be written on purpose, one by one, because each was a line the matrix didn&#39;t draw by default. The last-superadmin protection came later still, in v5.6, because we missed it the first time too.
+<strong>The lesson:</strong> §9 — authorization is scoped, not blanket. Every yes is for one action.</p>
+<h3 id="the-default-that-was-admin-case-study-4">The Default That Was Admin (case study 4)</h3>
+<p><strong>What happened:</strong> A refactor of the edge-function pipeline introduced a shared handler signature with an optional <code>client:</code> parameter — <code>&#39;admin&#39;</code> or <code>&#39;anon&#39;</code> — that <strong>defaulted to <code>admin</code></strong> when unspecified. Existing functions were fine because they passed the right client explicitly. Every <em>new</em> endpoint written afterward silently ran with admin privileges because <em>not thinking about the client</em> meant getting the admin one.
+<strong>What we thought was happening:</strong> The new signature was ergonomic; the existing callers were correct; the new callers were also correct because they compiled.
+<strong>What was actually happening:</strong> A security review in the next release caught two endpoints (a public stats endpoint, a public leaderboard) running with admin keys for a full release cycle. No data leaked because the underlying RLS happened to cover it, but the privilege gradient was inverted. Fix: one line — change the default to <code>anon</code>.
+<strong>The lesson:</strong> §9 — the unsafe default is the one that gets used by everyone who didn&#39;t think about it. Make the safe choice the default; require explicit opt-in for elevation.</p>
+<h2 id="the-record-that-lied">The record that lied</h2>
+<p><em>Stories where the written context — memory, docs, comments, the harness itself — asserted something that was never true, and every reader repeated it with confidence. The bruises here come from treating written words as witnesses. Only a command output is a witness.</em></p>
+<h3 id="the-lock-that-wasnt-case-study-5">The Lock That Wasn&#39;t (case study 5)</h3>
+<p><strong>What happened:</strong> The instructions file said main was branch-protected. The auto-memory said so. Weeks of PR descriptions said so. During an audit, someone finally ran the API call.
+<strong>What we thought was happening:</strong> Nothing — that&#39;s the point. The gate appeared to be doing its job.
+<strong>What was actually happening:</strong> <code>404: Branch not protected</code>. The protection had never been enabled. <em>&quot;Both were lying. Not maliciously. Just confidently. For weeks.&quot;</em> The gate had appeared to work because no one had tested whether the gate existed. The fix took two minutes; the reclassification took longer — the README now treats an un-PR&#39;d commit on main as a security incident, and the belief carries its probe. The strange small joy from the retro: after enabling protection, <em>&quot;the auto-memory was not corrected. It is now correct without modification.&quot;</em>
+<strong>The lesson:</strong> §6 and §15 — a belief you&#39;ve never probed is a hypothesis. A protection you&#39;ve never tested is a protection you don&#39;t have.</p>
+<h3 id="the-header-nobody-read-case-study-1">The Header Nobody Read (case study 1)</h3>
+<p><strong>What happened:</strong> An nginx config comment confidently documented that the backend trusts an <code>X-Forwarded-By</code> header as part of the security perimeter.
+<strong>What we thought was happening:</strong> A load-bearing control, faithfully described.
+<strong>What was actually happening:</strong> <code>grep -i x-forwarded-by backend/</code> returned zero matches. No middleware had ever read the header. The comment was born false and had survived every review since, because <em>&quot;a documentation lie about a security control … looks load-bearing in code review. It survives audits&quot;</em> — audits that read the docs instead of probing the claim.
+<strong>The lesson:</strong> §11 (failure mode seven) — written context is an amplifier, not a witness. Grep the claim, not the comment.</p>
+<h3 id="the-edit-that-reported-success-case-study-5">The Edit That Reported Success (case study 5)</h3>
+<p><strong>What happened:</strong> Route components shipped to production that nothing routed to — pages that existed in the bundle and were unreachable in the app.
+<strong>What we thought was happening:</strong> The components had been wired; the harness said the edits succeeded.
+<strong>What was actually happening:</strong> The harness&#39;s edit tool had, at least once, reported success without persisting the change. The components compiled cleanly in isolation, CI stayed green, and the missing <code>&lt;Route&gt;</code> entries were invisible until a human clicked. The harness is software; software lies under load.
+<strong>The lesson:</strong> §2 — trust harness claims the way you trust &quot;tests pass&quot;: with evidence. For edits that matter, the witness is <code>git diff</code>, not the tool&#39;s return status.</p>
+<h2 id="parallel-agents--architecture">Parallel agents &amp; architecture</h2>
+<p><em>Stories where the individual agents did clean work and the result broke anyway — because the shape of the collaboration had a hidden incompatibility with the tools underneath it, or because an effect emerged from the parallel structure that no single agent could see. Fix the topology, not the agents.</em></p>
+<h3 id="parallel-work-case-study-1">Parallel Work (case study 1)</h3>
+<p><strong>What happened:</strong> Two agents dispatched to write tests in parallel — one in Python/pytest, one in TypeScript/vitest. Different directories, different build tools, no shared state. The backend agent finished in two minutes; the frontend took three.
+<strong>What we thought was happening:</strong> A risky parallel dispatch that we&#39;d have to reconcile.
+<strong>What was actually happening:</strong> There was nothing to reconcile. Both agents produced working tests on the first run. The absence of conflict wasn&#39;t luck — it was what the file map guaranteed the moment the split was drawn.
+<strong>The lesson:</strong> §13 — fan out only when tasks are independent; group by file overlap, not issue priority. The file map is the contract.</p>
+<h3 id="the-subagent-orchestra-case-study-1">The Subagent Orchestra (case study 1)</h3>
+<p><strong>What happened:</strong> Fourteen subagents dispatched across two parallel tracks on a refactor. Twenty-nine files touched, zero merge conflicts on core logic.
+<strong>What we thought was happening:</strong> Fourteen is a lot of agents. We&#39;d see conflicts.
+<strong>What was actually happening:</strong> The plan&#39;s file map — written before any agent started — assigned every file to exactly one dispatch. Conflicts weren&#39;t prevented by discipline; they were <em>impossible by construction.</em>
+<strong>The lesson:</strong> §13 — dispatch to compress process, not to avoid reading the result. Plan the file map before the fan-out.</p>
+<h3 id="the-wave-pattern-case-study-2">The Wave Pattern (case study 2)</h3>
+<p><strong>What happened:</strong> By the third release, the project had converged on a rhythm: parallelize in waves, not all at once. Trivial adapters (50 lines of stdlib) first. Moderate adapters (state machines, transport security) next. Complex adapters (hand-rolled state machines, multi-phase handshakes) last.
+<strong>What we thought was happening:</strong> A scheduling heuristic.
+<strong>What was actually happening:</strong> A load test for the harness. The trivial wave validated that the build system, config registration, and test harness all worked before the project committed agents to 150-line state machines. The retro: <em>&quot;the software equivalent of checking the parachute before jumping.&quot;</em> Seven parallel agents per release, no coordination overhead, because the first wave shook out every infrastructure surprise before the expensive work started.
+<strong>The lesson:</strong> §13 — schedule the cheapest items first as a load test for the harness. The expensive work runs on a harness you&#39;ve already debugged.</p>
+<h3 id="the-interface-that-never-needed-a-sixth-method-case-study-2">The Interface That Never Needed a Sixth Method (case study 2)</h3>
+<p><strong>What happened:</strong> A five-method adapter interface — name, start, stop, port, protocol identifier — was designed in the first release and absorbed more than seventy adapters across nine releases without ever changing. TCP, UDP, TLS, HTTP, IPC, raw sockets, binary protocols, text protocols, XML streams, binary-encoded formats, sidecar-based adapters, platform-specific adapters. Five methods. Still five methods.
+<strong>What we thought was happening:</strong> A clean abstraction designed for extension.
+<strong>What was actually happening:</strong> Something stronger. The retro: <em>&quot;the interface isn&#39;t just a software abstraction — it&#39;s an organizational one. It turns a team coordination problem into a compilation step.&quot;</em> When four agents work in parallel against the same contract, conflicts are impossible by construction — the interface refuses to permit them. The agents build in total isolation and merge without conflict because the only thing each adapter can <em>do</em> is satisfy the five methods.
+<strong>The lesson:</strong> §13 — the interface you design before the parallel work begins is the coordination protocol the parallel work runs on. Design it like it matters.</p>
+<h3 id="the-v6-worktree-experiment-case-study-3">The v6 Worktree Experiment (case study 3)</h3>
+<p><strong>What happened:</strong> Five parallel agents, five git worktrees, five feature branches, one codebase. Each agent&#39;s individual work was clean. The integration was a disaster.
+<strong>What we thought was happening:</strong> Worktrees were isolating the agents from each other. Git was handling the rest.
+<strong>What was actually happening:</strong> Worktrees isolate the <em>filesystem</em>; they do not isolate <em>branches, refs, HEAD, or merge state</em>. Agents committed to wrong branches, commits cross-contaminated between features, and orphaned refs had to be recovered by manually extracting files from abandoned commits. No agent was undisciplined. The coordination model had a hidden shared-state dimension the setup didn&#39;t anticipate. The retro: <em>&quot;parallel worktrees work best when agents are completely independent; shared git state (branch switching, merges) creates coordination problems.&quot;</em>
+<strong>The lesson:</strong> §11 — when the agents are good and the result is bad, the architecture is wrong. §13 — worktrees are workspaces, not a coordination strategy.</p>
+<h3 id="the-v7-team-pivot-case-study-3">The v7 Team Pivot (case study 3)</h3>
+<p><strong>What happened:</strong> Same project, next release, same kind of parallel work. Instead of worktree-per-agent on separate branches, the team used a team-spawning mechanism with agents in the <em>same</em> worktree, on the <em>same</em> branch, with explicit file-boundary assignments before any work started.
+<strong>What we thought was happening:</strong> A last-ditch simplification.
+<strong>What was actually happening:</strong> Three agents on three separate features merged cleanly with zero conflicts. Two more agents ran in a follow-up phase with explicit file-boundary instructions for shared files like <code>App.tsx</code> and <code>types.ts</code>. Same project, same agents, same discipline as v6. The architecture changed; the outcome changed. The retro: <em>&quot;parallel agents work well when boundaries are drawn at the feature level (different files) rather than the branch level (different git state).&quot;</em>
+<strong>The lesson:</strong> §11 — you don&#39;t out-discipline a bad topology; you change it. §13 — isolate context with worktrees; isolate work with file boundaries.</p>
+<h3 id="the-vitest-cache-incident-v500">The Vitest Cache Incident (v5.0.0)</h3>
+<p><strong>What happened:</strong> Four parallel agents wrote theme variants across several pages. The code was clean, the tests were clean, the dispatch was textbook. Then thirty-eight unrelated tests started hanging with vitest timeouts, every one of them in files nobody had touched.
+<strong>What we thought was happening:</strong> An agent had subtly broken a shared util or introduced a render loop somewhere in a component mount path.
+<strong>What was actually happening:</strong> Four agents had been writing to the same <code>node_modules</code> directory at once, and vitest&#39;s module-graph cache under <code>node_modules/.vitest</code> had corrupted itself during the concurrent writes. No individual agent&#39;s output was wrong. The failure was an emergent property of the parallel structure. <code>rm -rf node_modules/.vitest</code> fixed all thirty-eight tests.
+<strong>The lesson:</strong> §13 — subagents protect your context window, they don&#39;t hide interactions between dispatched tasks from you.</p>
+<h3 id="the-phantom-downgrade-case-study-5">The Phantom Downgrade (case study 5)</h3>
+<p><strong>What happened:</strong> Days after a four-agent report-only audit fleet ran, the working tree showed a <code>package.json</code> version <em>downgrade</em> — 1.1.0 to 1.0.3 — that no human had made and no commit explained.
+<strong>What we thought was happening:</strong> Someone fat-fingered a revert.
+<strong>What was actually happening:</strong> Most plausibly, one of the &quot;read-only&quot; auditors had run a package-manager command mid-analysis, and the tool had helpfully rewritten the manifest in the shared tree. The audit itself was a clear win — eighteen issues filed in ten minutes — but &quot;report-only&quot; described the agents&#39; <em>assignment</em>, not their <em>side effects</em>. Harmless this time; riding along in someone&#39;s next commit the time after.
+<strong>The lesson:</strong> §13 — isolate even the read-only agents. A fleet sharing your working tree is the topology failure in its mildest form, and the mild form is free to prevent.</p>
+<h3 id="the-docker-port-mappings-that-werent-case-study-2">The Docker Port Mappings That Weren&#39;t (case study 2)</h3>
+<p><strong>What happened:</strong> 180+ passing tests. Zero data races. Four clean releases. And a Docker container that had been completely unreachable from outside for every single one of those releases.
+<strong>What we thought was happening:</strong> The container was fine — CI said so, and CI had been green on every dimension we&#39;d thought to measure.
+<strong>What was actually happening:</strong> The Makefile&#39;s port mapping routed a host port to a privileged container port, and the binary inside the container ran as a non-root user that could not bind privileged ports and was listening on a different port entirely. Every port mapping was a Potemkin village pointing at an empty socket. The first manual smoke test returned an immediate TCP RST. CI had validated that the image <em>built</em>; CI had never validated that the image <em>answered</em>. Fix: fifteen lines across three files. The retro: <em>&quot;unit tests prove your code works. Integration tests prove your components work together. But nothing proves your deployment works except deploying it and poking it with a stick.&quot;</em>
+<strong>The lesson:</strong> §8 — test what you ship, not what you build. Same scar as <em>The Health Check That Wasn&#39;t</em>, two projects, two languages, two different infrastructure stacks.</p>
+<h2 id="audits-as-craft-work">Audits as craft work</h2>
+<p><em>Stories where the human decided to look at the work, systematically, with no goal but to find what was wrong — and found things no amount of feature work, bug reports, or automated tests would have surfaced. These are the bruises that exist because nobody was auditing; the audits above healed more than any feature release could have.</em></p>
+<h3 id="the-security-audit-pass-case-study-4">The Security Audit Pass (case study 4)</h3>
+<p><strong>What happened:</strong> A release was dedicated entirely to a systematic security audit — no feature work, no bug reports, no failing tests driving it. Just the human reading every endpoint, every query, every permission surface, looking for what a year of normal review had walked past.
+<strong>What we thought was happening:</strong> A nice-to-have. An hour spent sharpening the axe.
+<strong>What was actually happening:</strong> Fifteen issues surfaced, most of them category-level rather than line-level: lost-update races on entity mutation, TOCTOU on entity creation, missing UUID validation at API boundaries, regex-injection vectors in user-provided search terms, materialized views that had silently stopped being refreshed. None of these had triggered a bug report; most had been live for months; some had been live for over a year. Each one was found by slow, deliberate attention to a specific surface the normal review cycle never organized around.
+<strong>The lesson:</strong> Coda — the systematic audit is craft work the agent cannot substitute for and the pipeline cannot catch. Schedule audits on purpose.</p>
+<h3 id="the-visual-audit-pass-case-study-4">The Visual Audit Pass (case study 4)</h3>
+<p><strong>What happened:</strong> A later release walked every page of the app in both light and dark themes on both desktop and mobile, with no agenda.
+<strong>What we thought was happening:</strong> A polish pass. The design was already pretty good.
+<strong>What was actually happening:</strong> Six UX fixes surfaced that nothing else would have: inconsistent page-header sizes across sections, button overload on one page, featured content styled identically to error states, a confidence bar that took three rows to convey one piece of information, dark-mode contrast issues the automated axe suite wasn&#39;t flagging because they were at the threshold of &quot;accessible but ugly.&quot; None of these were bugs. All of them were real. The audit produced more user-visible improvement than the preceding feature release.
+<strong>The lesson:</strong> §15 — audits are a <em>different shape of attention</em> than review. A reviewer checks that a change is correct; an auditor asks what&#39;s wrong with what&#39;s already shipped. The two disciplines produce different findings and are not substitutes.</p>
+<h3 id="the-claims-that-ran-ahead-of-the-code-case-study-5">The Claims That Ran Ahead of the Code (case study 5)</h3>
+<p><strong>What happened:</strong> A &quot;ready for company&quot; release wrote the grown-up polish: a privacy policy, marketing copy, the works. Three patch releases over the following month quietly un-wrote it.
+<strong>What we thought was happening:</strong> The polish pass was the release&#39;s triumph — its retro <em>celebrated</em> the new copy.
+<strong>What was actually happening:</strong> The policy claimed paid-tier point-in-time backups (never purchased), claimed no third-party requests (a font CDN loaded on every page, leaking visitor IPs), and referenced an analytics provider (never installed). Aspirations, formatted as facts, published. The reversing retros stated the principle: <em>&quot;claims should be downstream of code, not upstream. Aspirational privacy text is a liability for exactly as long as it&#39;s unimplemented.&quot;</em> And the companion norm: a retro that praised the mistake gets corrected out loud — <em>&quot;sometimes it&#39;s &#39;we got it wrong, here&#39;s what we did instead, and here&#39;s the principle.&#39;&quot;</em>
+<strong>The lesson:</strong> §15 and §16 — publish what the system does; audit every outward claim like an assertion; and when a retro taught the wrong lesson, the correction is a retro-worthy lesson.</p>
+<h3 id="the-fleet-in-the-seams-case-study-5">The Fleet in the Seams (case study 5)</h3>
+<p><strong>What happened:</strong> Four parallel report-only agents — docs-vs-code, security, debt, devops — ran for about ten minutes and filed eighteen issues.
+<strong>What we thought was happening:</strong> A fishing expedition over a codebase that was, by every loop-level signal, healthy.
+<strong>What was actually happening:</strong> The codebase <em>was</em> healthy — <em>&quot;the debt was in the seams — between what we&#39;d written down and what was true.&quot;</em> The haul: the unprotected main branch everyone believed was protected, the backup tier that existed only in the privacy policy, a missing LICENSE, the IP-leaking font dependency, dependency drift. One-screen synthesis, eighteen tickets, one themed cleanup cycle. The next release&#39;s coda made the cadence argument: <em>&quot;The rot itemizes faster than it accumulates if you measure it at all.&quot;</em>
+<strong>The lesson:</strong> §15 — the seams mechanize. A ten-minute agent fleet, run every few weeks, keeps the gap between record and reality enumerated — which is most of the way to keeping it closed.</p>
+<hr>
+
+
+</div>
+<nav class="doc-pager" aria-label="Document sections">
+<a class="pager-prev" href="leveling-up.html"><span class="pager-dir">Previous</span><span class="pager-name">Part IV — Leveling Up</span></a>
+<a class="pager-next" href="coda.html"><span class="pager-dir">Next</span><span class="pager-name">Coda</span></a>
+</nav>
+<footer class="doc-footer">
+<p>Part of the Engineer + Agent Playbook.</p>
+<p>&copy; 2026 Home for Deranged Scientists</p>
+</footer>
+</main>
+</div>
+</body>
+</html>

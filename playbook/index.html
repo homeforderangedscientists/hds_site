@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Engineer + Agent Playbook — Home for Deranged Scientists</title>
+<meta name="description" content="Seventy-one rules for working with coding agents, drawn from six case studies.">
+<link rel="stylesheet" href="../assets/docs.css">
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+<div class="doc-layout">
+<nav class="doc-rail" aria-label="Contents">
+<a class="doc-home" href="../">&larr; Home for Deranged Scientists</a>
+<h2 class="rail-heading">Parts</h2>
+<ol class="rail-list">
+<li class="rail-l2"><a href="foundations.html">Part I — Foundations</a></li>
+<li class="rail-l2"><a href="working-together.html">Part II — Working Together</a></li>
+<li class="rail-l2"><a href="when-it-goes-wrong.html">Part III — When It Goes Wrong</a></li>
+<li class="rail-l2"><a href="leveling-up.html">Part IV — Leveling Up</a></li>
+<li class="rail-l2"><a href="field-notes.html">Part V — Field Notes</a></li>
+<li class="rail-l2"><a href="coda.html">Coda</a></li>
+<li class="rail-l2"><a href="appendix-a-agents.html">Appendix A — For Agents</a></li>
+<li class="rail-l2"><a href="appendix-b-glossary.html">Appendix B — Glossary</a></li>
+<li class="rail-l2"><a href="appendix-c-case-studies.html">Appendix C — Case Studies</a></li>
+</ol>
+<h2 class="rail-heading">Contents</h2>
+<ol class="rail-list">
+<li class="rail-l2"><a href="#what-changed-in-the-second-edition">What changed in the second edition</a></li>
+<li class="rail-l2"><a href="#the-thesis">The thesis</a></li>
+<li class="rail-l2"><a href="#the-six-case-studies-at-a-glance">The six case studies at a glance</a></li>
+<li class="rail-l2"><a href="#this-playbook-has-a-companion">This playbook has a companion</a></li>
+<li class="rail-l2"><a href="#how-to-read-this-playbook">How to read this playbook</a></li>
+<li class="rail-l3"><a href="#rule-ask-whats-in-the-response-before-you-diagnose-why-its-wrong-format-example--not-a-numbered-rule">Rule: Ask what's in the response before you diagnose why it's wrong. (format example — not a numbered rule)</a></li>
+<li class="rail-l2"><a href="#all-the-rules-at-a-glance">All the rules at a glance</a></li>
+<li class="rail-l2"><a href="#reader-routing">Reader routing</a></li>
+<li class="rail-l2"><a href="#the-premise">The premise</a></li>
+</ol>
+</nav>
+<main class="doc-main" id="content">
+<header class="doc-masthead">
+<p class="doc-eyebrow">Home for Deranged Scientists</p>
+<h1 class="doc-title" id="the-engineer--agent-playbook--second-edition">The Engineer + Agent Playbook</h1>
+<p class="doc-meta">Second edition &middot; 71 rules &middot; 6 case studies</p>
+</header>
+<div class="doc-body">
+<blockquote>
+<p>A field manual for partnering an engineer with a coding agent. Drawn from real scar tissue accumulated across six very differently-shaped efforts: a full-stack web application shipped over two years, a server built almost entirely by parallel agents against external specs, a high-velocity web app that shipped nine major versions in three days, a community-data web app driven by explicit security and visual audit passes, an epistolary journaling app whose deterministic classifier turned debugging into a laboratory discipline, and a fleet of small single-user apps that share scar tissue across repository boundaries.</p>
+<p>Between them: Python and Go and TypeScript backends, React and vanilla frontends, more than eighty narrative retrospectives, teams ranging from one human and one agent to a dozen parallel agents. All six are referenced throughout; you do not need access to any of them — every story this playbook relies on is told in full, right here. Written to be useful to humans <em>and</em> to agents loaded with this file as context — whichever model, whichever harness.</p>
+</blockquote>
+<blockquote>
+<p><strong>Agents loaded with this file as context:</strong> jump to <a href="appendix-a-agents.html#appendix-a--if-you-are-an-agent-reading-this">Appendix A</a> for the imperative-only fast path. <strong>Humans:</strong> read in order.</p>
+</blockquote>
+<h2 id="what-changed-in-the-second-edition">What changed in the second edition</h2>
+<p>The first edition was extracted from four projects&#39; retrospectives. Since then the practice kept running: a fifth project was built start-to-finish under these rules and wrote twenty retros of its own, the first case study shipped a new major version in parallel waves, and the fleet grew sideways — small single-purpose apps sharing lessons through cross-project memory. The second edition folds that evidence back in. Concretely:</p>
+<ul>
+<li><strong>Three new chapters.</strong> <a href="foundations.html#2-the-model-and-the-harness">§2 The model and the harness</a> — what changes when the reader is a different model (Claude, GPT, GLM, Qwen) or a different harness (Claude Code, Codex, opencode, Cursor), and what never changes. <a href="when-it-goes-wrong.html#10-diagnosis--build-the-lab">§10 Diagnosis — build the lab</a> — the debugging discipline the fifth case study forced into the open. <a href="leveling-up.html#15-audits">§15 Audits</a> — promoted from a coda aside to a chapter, because the evidence got too strong to leave it as an afterthought.</li>
+<li><strong>New rules where the scars demanded them</strong> — exploration before planning, the revert question, wire-level verification, probing your own guardrails, secrets hygiene in agent sessions, pre-registered experiments before touching non-negotiables, two-stage review for delegated work.</li>
+<li><strong>Qualifiers where the practice outgrew the first edition&#39;s phrasing</strong> — retros consolidate at the arc, not the tag; investigation depth follows blast radius; the instructions file is a role, not a filename.</li>
+</ul>
+<p>Everything that held, held. The load-bearing pair is still verification (§8) and retros (§16). The thesis didn&#39;t move an inch.</p>
+<h2 id="the-thesis">The thesis</h2>
+<blockquote>
+<p><em>We can create art and beauty with a computer.</em></p>
+</blockquote>
+<p>That line is why this playbook exists. Not productivity. Not velocity. Not &quot;shipping faster.&quot; Those are byproducts. The point is the art — the thing only a human can decide is worth making — and the new division of labor that frees you to do it.</p>
+<p>Here is the division of labor, in three layers:</p>
+<ul>
+<li><strong>The pipeline handles mechanics.</strong> Build, test, lint, scan, deploy, run, roll back. Boring. Automated. Invisible when it works. The discipline that makes this true is the companion to this playbook — see the DevOps playbook referenced in Appendix C. Its thesis is one line: <em>you are done when the pipeline is boring.</em> Everything below assumes you&#39;ve reached that line, or are sprinting toward it.</li>
+<li><strong>The agent handles elaboration.</strong> Breadth, consistency, mechanical translation of intent into code. Fifty call sites updated without a typo. A protocol adapter built from an RFC. A test scaffold written to spec. Fast, literal, tireless, and — crucially — not the craftsperson. The agent is the hands; it is not the taste.</li>
+<li><strong>The human handles craft.</strong> Intent. Taste. Judgment. Synthesis. The decision of <em>what</em> is worth building and <em>why</em>. The choice of which trade-off is tolerable. The recognition that a &quot;cleanup&quot; is erasing the core use case. The read of whether the work is good. The irreducible part — the part that can&#39;t be delegated because the whole reason to do the work at all lives in your head.</li>
+</ul>
+<p>Each layer exists to free the next. A flaky pipeline drags the human down into mechanics. An unsupervised agent drags the human up into correcting elaboration errors. A human who has to do laborer&#39;s work has no attention left for the art. Every rule in the rest of this playbook is, at root, a maneuver to keep each layer doing its own job so the human can spend attention on the work only a human can do.</p>
+<p><strong>If you take two chapters of this playbook seriously, take §8 (Verification) and §16 (Retros).</strong> Verification is how you catch the failure. Retros are how you make sure you catch it only once. And if you take one thing seriously before either of those: <strong>make your pipeline boring.</strong> When the pipeline is boring, verification is cheap. When verification is cheap, retros write themselves. When retros write themselves, the loop learns. When the loop learns, the human gets to be the craftsperson — which is the whole point.</p>
+<p>The tagline is the point of the project. The rest of this playbook is the apparatus that serves it.</p>
+<h2 id="the-six-case-studies-at-a-glance">The six case studies at a glance</h2>
+<p>Every field note in this playbook comes from one of six real projects. The body refers to them by number — &quot;the second case study,&quot; &quot;the fifth case study.&quot; This table orients the reader once so the shorthand works everywhere else. Long-form in <a href="appendix-c-case-studies.html#appendix-c--about-the-case-studies">Appendix C</a>.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Shape</th>
+<th>Scale</th>
+<th>Duration</th>
+<th>What it added to the rules</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Full-stack web app (Python/React), production users</td>
+<td>~30 releases, small team + agents</td>
+<td>2+ years</td>
+<td>The baseline. Every rule starts here. The v6.x waves added exploration-before-planning, the revert question, and wire-level verification.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Parallel-agent protocol server (Go + Python sidecars)</td>
+<td>9 releases, 3 → 70+ adapters, up to 12 parallel agents</td>
+<td>~6 months</td>
+<td>Interface-as-coordination-protocol, wave pattern, explicit merge points, nested cycles, explicit descoping.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>High-velocity time-tracking web app (React/TypeScript/Supabase)</td>
+<td>9 major versions in 3 days</td>
+<td>3 days</td>
+<td>Partnership-architecture failure mode (v6→v7 worktree pivot); &quot;right evidence for the wrong claim is theater.&quot;</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Community-data web app with audit cadence (React/Vite/edge functions)</td>
+<td>Scheduled security + visual audit releases</td>
+<td>Ongoing</td>
+<td>Systematic audit as craft work; duplicates-that-drift clause on &quot;write a skill after the third correction.&quot;</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Epistolary journaling PWA with a deterministic classifier (React/TypeScript/Supabase)</td>
+<td>~24 tagged releases, 20 retros, 0 → 375 tests</td>
+<td>~3 months</td>
+<td>The whole of §10 (build the lab); claims-downstream-of-code; probe-the-gate; agent-vocabulary bias; model-tier-by-task; the arc-not-tag retro qualifier.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>A fleet of small single-user &quot;instrument&quot; apps sharing lessons across repos</td>
+<td>4+ apps, one human, one agent at a time</td>
+<td>Ongoing</td>
+<td>Cross-repo memory (file your neighbor&#39;s scars); elicitation as a loop stage; secrets hygiene; pipeline-resilience clause.</td>
+</tr>
+</tbody></table>
+<p><strong>A note on names.</strong> The conventions this playbook grew up with are Claude Code&#39;s — <code>CLAUDE.md</code>, skills, hooks, <code>settings.json</code>. The practice is not. §2 maps every layer onto its equivalents in other harnesses (<code>AGENTS.md</code> is the emerging cross-tool standard for the instructions file; Codex, opencode, Cursor, and Gemini CLI each have their own names for the rest). Throughout the body, read <code>CLAUDE.md</code> as &quot;the instructions file&quot; and <code>settings.json</code> as &quot;the harness config&quot; — the field notes keep the original names because that&#39;s what the files were called when the scars formed.</p>
+<h2 id="this-playbook-has-a-companion">This playbook has a companion</h2>
+<p>This document has a sibling: the <strong>DevOps Playbook</strong>, derived from the same case study and the same retro practice. The DevOps Playbook tells you how to build the boring pipeline — the mechanics layer. This one tells you how the human and the agent work <em>inside</em> that pipeline. If the pipeline is flaky, start there; partnership rules only work when the rails underneath them do. See §3 for the pipeline-as-precondition argument in full, and Appendix C for how the two playbooks pair.</p>
+<h2 id="how-to-read-this-playbook">How to read this playbook</h2>
+<p>Every chapter has two layers. The top layer is a <strong>rule</strong> — one imperative line you could pin above your desk. Under it, a <strong>Why</strong> (the constraint or the scar that produced the rule) and a <strong>How to apply</strong> (when it fires). Then a narrative paragraph in the voice of someone who learned it the hard way. At the bottom, a <strong>field note</strong> — a short inline vignette from the case studies, naming the bug by its nickname and telling you just enough to feel the bruise.</p>
+<p>Read the rule. If you believe it, skim. If you don&#39;t, read the story — the story is where the rule earned its keep.</p>
+<p>You&#39;ll also see lines marked <code>*Pin:*</code> scattered through the chapters. A <strong>pin</strong> is the sentence the whole chapter compresses to — the line worth taping to a monitor, worth extracting into memory, worth handing to an agent when the narrative is too long. Pins are the agent-facing one-liners that survive when everything else is forgotten. When a pin contradicts its surrounding narrative, the pin wins.</p>
+<p>Here&#39;s the format in action — a worked illustration drawn from a real scar. (This is the scaffolding demonstrated on a single rule; the actual §8 rule it derives from — &quot;Evidence before assertions&quot; — lives in that chapter, and the full story lives in Part V under <em>The Health Check That Wasn&#39;t</em>.)</p>
+<h3 id="rule-ask-whats-in-the-response-before-you-diagnose-why-its-wrong-format-example--not-a-numbered-rule">Rule: Ask what&#39;s in the response before you diagnose why it&#39;s wrong. <em>(format example — not a numbered rule)</em></h3>
+<p><strong>Why:</strong> You can spend three deploys &quot;fixing&quot; a value that was never in the payload.
+<strong>How to apply:</strong> Any time a field reads <code>unknown</code>, <code>null</code>, or empty — dump the raw response before touching the producer.</p>
+<p>We spent an evening forcing <code>GIT_REV</code> through three different docker compose mechanisms because <code>git_sha</code> kept coming back <code>unknown</code>. Shell export, env file, compose override, <code>--build-arg</code>. All of it worked. The verification curl was hitting <code>/health</code>, which returns <code>{&quot;status&quot;:&quot;ok&quot;}</code> and has no <code>git_sha</code> field at all. The real endpoint was <code>/api/v1/health</code>. We&#39;d been debugging a producer that was never broken.</p>
+<blockquote>
+<p><strong>Field note — case study 1:</strong> <em>The Health Check That Wasn&#39;t.</em> Three deploys spent chasing a missing build SHA through every Docker mechanism we had. On the fourth round somebody finally dumped the raw response. The verification curl was hitting <code>/health</code>, a status endpoint that has never had a <code>git_sha</code> field. The producer was never broken. We&#39;d been fixing a hole that wasn&#39;t there.</p>
+</blockquote>
+<h2 id="all-the-rules-at-a-glance">All the rules at a glance</h2>
+<p>The spine of the playbook, listed in one pass so you can see where you&#39;re going. Seventy rules across fourteen rule-bearing chapters, plus two chapters (§11 and §12) that carry checklists rather than rules. Rules new in the second edition are marked <em>(v2)</em>. The body of the document unpacks each rule with a Why, a How, and a scar. If a rule reads as obvious, skim the chapter. If it reads as strange, read the story underneath it — that&#39;s where the rule earned its keep.</p>
+<p><strong>§1 Mental models</strong></p>
+<ul>
+<li>Brief the agent like a smart colleague who just walked into the room.</li>
+<li>Delegate the task, not the understanding.</li>
+<li>The agent is good at breadth and consistency. It is bad at judgment under ambiguity.</li>
+<li>Agent-authored domain content is a plausible first draft of the world, not the world. <em>(v2)</em></li>
+</ul>
+<p><strong>§2 The model and the harness</strong> <em>(new chapter)</em></p>
+<ul>
+<li>The disciplines are model-invariant. Only the calibration moves. <em>(v2)</em></li>
+<li>Pick the model tier by the shape of the work, not the size of the diff. <em>(v2)</em></li>
+<li>The harness is a dependency: map its layers, keep the knowledge portable. <em>(v2)</em></li>
+<li>Trust harness claims the way you trust &quot;tests pass&quot;: with evidence. <em>(v2)</em></li>
+</ul>
+<p><strong>§3 The workspace</strong></p>
+<ul>
+<li>Your pipeline is a precondition, not a feature — and every automated rail needs a rehearsed manual fallback.</li>
+<li>The instructions file is for facts that don&#39;t change. Memory is for facts that do.</li>
+<li>Skills are for procedures. The instructions file is for facts.</li>
+<li>Hooks make automation non-negotiable.</li>
+<li>The harness config configures the harness. The instructions file configures the agent. They are different layers.</li>
+</ul>
+<p><strong>§4 The first conversation</strong></p>
+<ul>
+<li>Bootstrap with the smallest context that contains the answer.</li>
+<li>Correct drift in message 2, not message 50.</li>
+<li>If the agent doesn&#39;t know something, tell it. Don&#39;t let it guess.</li>
+<li>Make the agent tell you what it thinks you&#39;re building — then grill it. <em>(v2)</em></li>
+</ul>
+<p><strong>§5 The loop</strong></p>
+<ul>
+<li>Explore before you plan. The plan is not the codebase. <em>(v2)</em></li>
+<li>Run the whole loop. Skip a step out loud or pay for it silently.</li>
+<li>Brainstorm before planning. Plan before code.</li>
+<li>Frequent commits are not optional.</li>
+<li>Retros feed the next loop.</li>
+<li>Cycles nest. Each level needs a theme, a boundary, and all three phases.</li>
+</ul>
+<p><strong>§6 Memory hygiene</strong></p>
+<ul>
+<li>Memory has four types. Use the right one or it rots.</li>
+<li>Stale memory is worse than no memory.</li>
+<li>A belief you&#39;ve never probed is a hypothesis, not a memory. <em>(v2)</em></li>
+<li>Save the why, not just the rule.</li>
+<li>Don&#39;t memorize what the code already says.</li>
+<li>File your neighbor&#39;s scars, keyed to the trigger that will make them yours. <em>(v2)</em></li>
+</ul>
+<p><strong>§7 Skills as institutional knowledge</strong></p>
+<ul>
+<li>Skills are procedures with discipline. Instructions-file notes are facts you hope get followed.</li>
+<li>Rigid skills exist for a reason. Don&#39;t adapt the discipline away.</li>
+<li>Write a skill after the third correction.</li>
+<li>Ship the cheap defense now; schedule the clean refactor for a quiet phase. <em>(v2)</em></li>
+</ul>
+<p><strong>§8 Verification before completion</strong></p>
+<ul>
+<li>&quot;Tests pass&quot; is not &quot;feature works.&quot; Verify the feature.</li>
+<li>Evidence before assertions. Always.</li>
+<li>Ask: would these tests pass if the change were reverted? <em>(v2)</em></li>
+<li>Verify in the environment that matters.</li>
+<li>When a value crosses a layer boundary, verify the wire, not the fixture. <em>(v2)</em></li>
+<li>Health checks must check health — and observability must be observed.</li>
+</ul>
+<p><strong>§9 Trust boundaries</strong></p>
+<ul>
+<li>Match the action to its blast radius. Confirm before crossing the line.</li>
+<li>Authorization is scoped, not blanket.</li>
+<li>When the agent hits an obstacle, it must investigate, not delete.</li>
+<li>Secrets never transit the transcript. <em>(v2)</em></li>
+<li>Before touching a non-negotiable, write down what would change your mind. <em>(v2)</em></li>
+</ul>
+<p><strong>§10 Diagnosis — build the lab</strong> <em>(new chapter)</em></p>
+<ul>
+<li>Build the diagnostic surface before the fix. <em>(v2)</em></li>
+<li>The ticket&#39;s diagnosis is a hypothesis. Read the trace before believing the issue. <em>(v2)</em></li>
+<li>A fixed bug&#39;s class is a search query, not a closed ticket. <em>(v2)</em></li>
+<li>Exploration mode is not production mode. <em>(v2)</em></li>
+<li>When the runner wedges, suspect the runner. <em>(v2)</em></li>
+</ul>
+<p><strong>§11 Failure modes &amp; recovery</strong> — seven failure modes (five disciplines, one topology, one epistemic), plus a closing note that every agent failure has a human antecedent. See the chapter.</p>
+<p><strong>§12 The rescue protocol</strong> — next hour, next day, next week. See the chapter.</p>
+<p><strong>§13 Parallel agents &amp; worktrees</strong></p>
+<ul>
+<li>Fan out only when tasks are independent.</li>
+<li>Worktrees are workspaces, not stashes — and they are not a coordination strategy.</li>
+<li>Designate merge points explicitly; update them last.</li>
+<li>Subagents protect your context window; they don&#39;t hide work from you.</li>
+<li>Review delegated work in two stages, with reviewers who don&#39;t trust the implementer. <em>(v2)</em></li>
+<li>Isolate even the &quot;read-only&quot; agents. <em>(v2)</em></li>
+</ul>
+<p><strong>§14 Plan quality</strong></p>
+<ul>
+<li>A plan with placeholders is a wish list.</li>
+<li>Each step is one action, two to five minutes long.</li>
+<li>The plan must cover the spec — and match the codebase.</li>
+<li>Predict the failing output before you run it. <em>(v2)</em></li>
+<li>Descope explicitly. Name what&#39;s out, and name why.</li>
+</ul>
+<p><strong>§15 Audits</strong> <em>(new chapter)</em></p>
+<ul>
+<li>Schedule audits on purpose. <em>(v2 — promoted from the first edition&#39;s coda)</em></li>
+<li>Claims must be downstream of code, not upstream. <em>(v2)</em></li>
+<li>The debt is in the seams. Diff what you wrote down against what&#39;s true. <em>(v2)</em></li>
+<li>Probe the gate. A protection you&#39;ve never tested is a protection you don&#39;t have. <em>(v2)</em></li>
+</ul>
+<p><strong>§16 The retro habit</strong></p>
+<ul>
+<li>Write retros in voice, not in bullet points.</li>
+<li>Retros are how the loop learns.</li>
+<li>Write a retro at the end of every themed cycle, and right after every surprise.</li>
+<li>A retro has an anatomy. Use it as a scaffold, not a template.</li>
+<li>A retro has three audiences: you next month, your team, and the agent next time.</li>
+<li>The retro unit is the arc, not the tag — and when a retro was wrong, write the reversal down. <em>(v2)</em></li>
+</ul>
+<h2 id="reader-routing">Reader routing</h2>
+<table>
+<thead>
+<tr>
+<th>Reader</th>
+<th>Where to start</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>You&#39;re struggling and about to give up on agent-assisted work</td>
+<td><a href="when-it-goes-wrong.html#11-failure-modes--recovery">§11 Failure modes</a>, then <a href="when-it-goes-wrong.html#12-the-rescue-protocol">§12 The rescue protocol</a>, then loop back to <a href="foundations.html#part-i--foundations">Part I</a></td>
+</tr>
+<tr>
+<td>You&#39;re new to this and want the foundations</td>
+<td><a href="foundations.html#part-i--foundations">Part I — Foundations</a>, in order, no skipping</td>
+</tr>
+<tr>
+<td>You&#39;ve been doing this a while and want to level up</td>
+<td><a href="leveling-up.html#part-iv--leveling-up">Part IV — Leveling Up</a>, then dip into <a href="working-together.html#part-ii--working-together">Part II</a> for anything that rings a bell</td>
+</tr>
+<tr>
+<td>You use a different model or harness than the one this playbook grew up with</td>
+<td><a href="foundations.html#2-the-model-and-the-harness">§2 The model and the harness</a>, then read normally — the mapping table translates the rest</td>
+</tr>
+<tr>
+<td>You are an AI agent loaded with this file as context</td>
+<td><a href="appendix-a-agents.html#appendix-a--if-you-are-an-agent-reading-this">Appendix A</a> — the imperative-only fast path</td>
+</tr>
+</tbody></table>
+<h2 id="the-premise">The premise</h2>
+<p>Most playbooks lie to you in the first paragraph. They promise the tool will change everything. It mostly doesn&#39;t. What changes is you, slowly, and only if you pay attention to the boring parts.</p>
+<p>Here is what this partnership actually is: you have an extremely fast, extremely literal colleague who has no memory of yesterday, no stake in tomorrow, infinite patience, and zero judgment about whether the work is worth doing. That combination is strange and powerful and, left unsupervised, will confidently produce nonsense in volume. Managed well, it will ship your work faster than you thought possible and catch bugs you wouldn&#39;t have caught alone.</p>
+<p>Here is what it isn&#39;t: a replacement for thinking. The agent does not know what &quot;done&quot; means on your project until you tell it. It does not know which of the four plausible fixes is the right one until you show it the scar that rules out the other three. It does not know the difference between a deploy that worked and a deploy whose verification endpoint returned <code>{&quot;status&quot;:&quot;ok&quot;}</code> and nothing else. You know those things. Your job is to transfer them, one by one, into a form the agent can act on — skills, memory files, plans, checklists — so next time neither of you has to rediscover them.</p>
+<p>The rest of this playbook is that transfer, written down. Most of it is boring. All of it is load-bearing. The agent is infinitely patient and infinitely literal; your job is to be specific enough to deserve that.</p>
+<hr>
+
+
+</div>
+<nav class="doc-pager" aria-label="Document sections">
+<a class="pager-next" href="foundations.html"><span class="pager-dir">Next</span><span class="pager-name">Part I — Foundations</span></a>
+</nav>
+<footer class="doc-footer">
+<p>How the work actually gets done.</p>
+<p>&copy; 2026 Home for Deranged Scientists</p>
+</footer>
+</main>
+</div>
+</body>
+</html>

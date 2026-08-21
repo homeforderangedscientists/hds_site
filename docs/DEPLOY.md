@@ -125,10 +125,18 @@ gh workflow run Deploy
 
 ## Continuous checks on pull requests
 
-Every push and every pull request against `main` runs a `checks` job first:
-it lints the workflow itself, validates `index.html` with `html-validate`
-(pinned to `9.7.1`), checks that referenced assets actually exist, and guards
-`.htaccess`. This job never touches secrets, so it runs safely on pull requests
+Every push and every pull request against `main` runs a `checks` job first.
+It lints the workflow itself, then over **every HTML page in the repo** (the
+homepage plus the eleven generated document pages) it runs `html-validate`
+(pinned to `9.7.1`) and verifies every referenced asset resolves. It guards
+`.htaccess`, runs the three test suites (`test-check-assets.sh`,
+`test-check-htaccess.sh`, `test-build-pages.py`), and runs
+`build-pages.py --check` so committed HTML cannot drift from `content/`.
+
+Both page-scanning gates first assert they matched at least `MIN_HTML_PAGES`
+files, so a broken glob fails loudly instead of validating nothing and passing.
+
+This job never touches secrets, so it runs safely on pull requests
 from any branch. The `deploy` job only runs after `checks` passes, and only on
 pushes to `main` — pull requests never trigger a deploy.
 
@@ -229,6 +237,56 @@ gh workflow run Deploy -f force_delete=true
 The same guard also fails closed if the deletion count it parsed isn't a plain
 number — rather than risk proceeding on a miscounted or garbled value, it
 treats an unparseable count as a reason to stop.
+
+## Updating the ethos or the playbook
+
+Both documents are authored in the separate `groundskeeper` repo. This repo holds
+hand-synced **snapshots** in `content/`, and the published HTML is generated from
+those snapshots — not from `groundskeeper` directly. Nothing detects drift across
+that boundary, so re-syncing is a deliberate act:
+
+```bash
+cp ../groundskeeper/docs/hfds-ethos.md content/
+cp ../groundskeeper/docs/engineer-agent-playbook-v2.md content/
+python3 scripts/build-pages.py
+git add content ethos playbook
+git commit -m "content: re-sync ethos and playbook from groundskeeper"
+```
+
+If you edit `content/` and forget to rebuild, CI fails with
+`FAIL: generated pages do not match committed pages:` followed by a line naming
+each stale file, e.g. `ethos/index.html: content differs from committed`. Run
+`python3 scripts/build-pages.py` and commit the result. That gate covers
+`content/` → HTML. It does **not** cover `groundskeeper` → `content/`.
+
+### If the playbook grows a new Part
+
+`PLAYBOOK_PAGES` in `scripts/build-pages.py` maps section titles to filenames. A
+**leading run** of unmatched top-level sections — the document's own title, plus
+any preface-like sections that come before the first matched Part — legitimately
+joins the front matter that becomes `playbook/index.html`. That's expected and
+not an error.
+
+But any unmatched top-level section that appears **after** the first matched Part
+now fails the build loudly: the error names the offending section and points at
+`PLAYBOOK_PAGES` in `scripts/build-pages.py`, so a new Part can't silently vanish
+into the index page instead of getting its own file. Add an entry to
+`PLAYBOOK_PAGES` for each new Part. A listed page with no matching source section
+also fails the build loudly rather than emitting an empty page.
+
+### Why `valid-id` is relaxed in `.htmlvalidate.json`
+
+`.htmlvalidate.json` sets `valid-id` to `{ "relaxed": true }` on purpose. The
+generator emits GitHub-compatible heading slugs, many of which begin with a
+digit (e.g. `id="1-mental-models"`), and the playbook pages contain 82 `href` links across 32 distinct digit-initial anchors (mostly
+in the table of contents and the appendices — count with
+`grep -oh 'href="[^"]*#[0-9][^"]*"' playbook/*.html | wc -l`). HTML5 permits
+ids that start with a digit — only HTML4 forbade it — so this is not a
+workaround for broken markup; it's the validator's default being stricter
+than the spec it's checking against. The relaxed setting still rejects ids
+containing whitespace. If someone tightens this rule later without
+understanding why it's here, it will break dozens of working
+cross-references inside the playbook.
 
 ## Rollback
 

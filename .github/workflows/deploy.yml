@@ -23,6 +23,14 @@ jobs:
   checks:
     name: Checks
     runs-on: ubuntu-latest
+    env:
+      # Floor for the HTML gates below. Without a floor they pass vacuously:
+      # xargs with empty input runs the command with no file arguments and
+      # html-validate then exits 0. (`xargs -r` does NOT fix that - it skips
+      # the command and still exits 0.) Today the repo has exactly this many
+      # pages; if a page is legitimately removed, lower this number here - it
+      # is referenced by both gate steps, so there is only one place to change.
+      MIN_HTML_PAGES: 12
     steps:
       - name: Check out
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -36,12 +44,26 @@ jobs:
       - name: Validate HTML
         run: |
           set -euo pipefail
-          npx --yes html-validate@9.7.1 index.html
+          COUNT="$(find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' | wc -l | tr -d ' ')"
+          echo "HTML pages found: $COUNT"
+          if [ "$COUNT" -lt "$MIN_HTML_PAGES" ]; then
+              echo "FAIL: expected at least $MIN_HTML_PAGES HTML pages, found $COUNT" >&2
+              exit 1
+          fi
+          find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' -print0 \
+            | xargs -0 npx --yes html-validate@9.7.1
 
       - name: Check asset references
         run: |
           set -euo pipefail
-          python3 scripts/check-assets.py index.html
+          COUNT="$(find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' | wc -l | tr -d ' ')"
+          echo "HTML pages found: $COUNT"
+          if [ "$COUNT" -lt "$MIN_HTML_PAGES" ]; then
+              echo "FAIL: expected at least $MIN_HTML_PAGES HTML pages, found $COUNT" >&2
+              exit 1
+          fi
+          find . -name '*.html' -not -path './.git/*' -not -path './.superpowers/*' -print0 \
+            | xargs -0 -n1 python3 scripts/check-assets.py
 
       - name: Guard .htaccess
         run: |
@@ -53,6 +75,16 @@ jobs:
           set -euo pipefail
           ./scripts/test-check-assets.sh
           ./scripts/test-check-htaccess.sh
+
+      - name: Run page builder tests
+        run: |
+          set -euo pipefail
+          python3 scripts/test-build-pages.py
+
+      - name: Check generated pages match their source
+        run: |
+          set -euo pipefail
+          python3 scripts/build-pages.py --check
 
   deploy:
     name: Deploy to Apache

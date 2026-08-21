@@ -31,11 +31,18 @@ def resolve(base_dir, ref):
 
     Query strings and fragments are stripped first: they are not part of the
     filesystem path (style.css?v=2 and style.css#section both mean style.css).
+
+    A reference that resolves to a directory is treated the way a web server
+    with DirectoryIndex would treat it: it resolves if that directory
+    contains an index.html, and not otherwise.
     """
     path = ref.split("#", 1)[0].split("?", 1)[0]
     path = path.lstrip("/")
     for candidate in (unquote(path), path):
-        if os.path.isfile(os.path.join(base_dir, candidate)):
+        full = os.path.join(base_dir, candidate)
+        if os.path.isfile(full):
+            return True
+        if os.path.isdir(full) and os.path.isfile(os.path.join(full, "index.html")):
             return True
     return False
 
