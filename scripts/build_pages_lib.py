@@ -6,10 +6,11 @@ in isolation. The CLI wrapper owns everything impure.
 """
 import re
 
-FENCE_RE = re.compile(r"^(```|~~~)")
+FENCE_LINE_RE = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")
 TOP_HEADING_RE = re.compile(r"^# (.+)$")
+ATX_CLOSING_HASHES_RE = re.compile(r"[ \t]+#+[ \t]*$")
 HEADING_TAG_RE = re.compile(r"<h([123])>(.*?)</h\1>", re.DOTALL)
-TAG_RE = re.compile(r"<[^>]+>")
+TAG_RE = re.compile(r"</?[A-Za-z][^>]*>")
 
 
 def split_sections(md):
@@ -19,23 +20,51 @@ def split_sections(md):
     Any text before the first top-level heading becomes a leading section whose
     title is the empty string.
 
-    Fence tracking is not defensive politeness: the playbook embeds a sample
-    CLAUDE.md inside a ```markdown fence, and its '# CLAUDE.md' line would
-    otherwise be read as a section boundary -- inventing a page and truncating
-    the section it sits in.
+    Fence tracking follows CommonMark's actual rules, not naive toggling on any
+    ``` or ~~~ line: an opening fence is a run of 3+ backticks or 3+ tildes
+    (indented at most 3 spaces); a closing fence must use the SAME character, a
+    run at least as long as the opening, and nothing but trailing whitespace
+    after it. Anything else -- a different character, a shorter run, or trailing
+    text -- is fence content, not a delimiter. This is what lets a ~~~ block
+    contain a literal ``` line, and a ````-fence wrap a ```-fence example,
+    without either one falsely toggling fence state and exposing a '# Heading'
+    inside the example as a fabricated section boundary.
+
+    A fence left open at end of file is a malformed document: this raises
+    ValueError naming the line where it opened, rather than silently truncating
+    everything after it.
     """
     lines = md.splitlines()
     in_fence = False
+    fence_char = None
+    fence_len = 0
+    fence_open_line = None  # 1-based
     starts = []  # (line_index, title)
     for i, line in enumerate(lines):
-        if FENCE_RE.match(line):
-            in_fence = not in_fence
-            continue
+        m = FENCE_LINE_RE.match(line)
         if in_fence:
+            if m:
+                run, rest = m.group(1), m.group(2)
+                if run[0] == fence_char and len(run) >= fence_len and rest.strip() == "":
+                    in_fence = False
+                    fence_char = None
+                    fence_len = 0
+                    fence_open_line = None
             continue
-        m = TOP_HEADING_RE.match(line)
         if m:
-            starts.append((i, m.group(1).strip()))
+            run, rest = m.group(1), m.group(2)
+            in_fence = True
+            fence_char = run[0]
+            fence_len = len(run)
+            fence_open_line = i + 1
+            continue
+        hm = TOP_HEADING_RE.match(line)
+        if hm:
+            title = ATX_CLOSING_HASHES_RE.sub("", hm.group(1)).strip()
+            starts.append((i, title))
+
+    if in_fence:
+        raise ValueError(f"unterminated code fence opened at line {fence_open_line}")
 
     sections = []
     if not starts:
